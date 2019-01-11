@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#FFFFFF">
+
+    <!--로고 출력 레이아웃-->
+
+
+    <ImageView
+        android:layout_marginTop="60dp"
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        android:src="@drawable/gachon_group_logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/gachon_group"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/one_see"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+
+    <RadioGroup
+        android:id="@+id/user_categoryRG"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/managerRB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/manager"/>
+
+        <RadioButton
+            android:id="@+id/userRB"
+            android:checked="true"
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user"/>
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/ID_et"
+        android:paddingLeft="10dp"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/id"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/input_backgroud"
+        android:textSize="24sp"
+        android:hint="ID"
+        android:textColor="#000000"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/PW_et"
+        android:paddingLeft="10dp"
+        android:drawableStart="@drawable/key"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/input_backgroud"
+        android:textSize="24sp"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        android:hint="********"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="90dp"
+        android:background="@drawable/btn_login"
+        android:text="@string/login"
+        android:textSize="20sp"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/find_id"
+        android:textSize="17sp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:textColor="#000000"/>
+
+</LinearLayout>
