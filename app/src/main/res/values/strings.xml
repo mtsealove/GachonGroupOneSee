@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">가천대학교 동아리\n한눈에 보자</string>
+    <string name="gachon_group">가천대학교 동아리</string>
+    <string name="one_see">한눈에 보자</string>
+    <string name="manager">관리자</string>
+    <string name="user">사용자</string>
+    <string name="login">로그인</string>
+    <string name="find_id">아이디/비밀번호 찾기</string>
+    <string name="sign_up">회원가입</string>
+</resources>
