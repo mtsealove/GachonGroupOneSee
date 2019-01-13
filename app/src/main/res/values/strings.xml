@@ -5,6 +5,103 @@
     <string name="manager">관리자</string>
     <string name="user">사용자</string>
     <string name="login">로그인</string>
-    <string name="find_id">아이디/비밀번호 찾기</string>
+
+    <string name="find_IDnPW">아이디/비밀번호 찾기</string>
     <string name="sign_up">회원가입</string>
+    <string name="find_id">아이디 찾기</string>
+    <string name="find_pw">비밀번호 찾기</string>
+    <string name="input_email">이메일을 입력하세요</string>
+    <string name="input_code">인증번호 입력</string>
+    <string name="input_id">아이디를 입력하세요</string>
+
+    <string name="verify_code">인증번호</string>
+    <string name="check_verify">인증확인</string>
+    <string name="email_err_title">이메일이 오지 않았을 때</string>
+    <string name="email_err_msg">이메일 서비스 제공자 사정에 의해 즉시 도착하지 않을 수 있으니, 10분정도 기다리신 후 다시 시도해주세요. 그래도 오지 않았다면 스팸함을 확인해보세요.</string>
+
+    <string name="name">이름</string>
+    <string name="ID">아이디</string>
+    <string name="email">이메일</string>
+    <string name="major">학과</string>
+    <string name="student_number">학번</string>
+    <string name="group">동아리</string>
+    <string name="password">비밀번호</string>
+    <string name="password_confirm">비밀번호 확인</string>
+    <string name="check_reuse">중복확인</string>
+    <string name="go_back">뒤로가기</string>
+
+    <string-array name="majors">
+        <item>학과 선택        </item>
+      <item>경영학트랙</item>
+        <item>글로벌경영학트랙</item>
+        <item>금융수학과</item>
+        <item>글로벌경제학과</item>
+        <item>관광경영학과</item>
+        <item>의료경영학과</item>
+        <item>응용통계학과</item>
+        <item>행정학과</item>
+        <item>미디어커뮤니케이션학과</item>
+        <item>사회복지학과</item>
+        <item>유아교육학과</item>
+        <item>한국어문학과</item>
+        <item>영미영문학과</item>
+        <item>동양어문학과</item>
+        <item>유럽어문학과</item>
+        <item>법학과</item>
+        <item>경찰안보학과</item>
+        <item>도시계획학과</item>
+        <item>조경학과</item>
+        <item>실내건축학과</item>
+        <item>건축학과(5년)</item>
+        <item>건축공학과(4년)</item>
+        <item>설비소방공학과</item>
+        <item>전기공학과</item>
+        <item>화공생명공학과</item>
+        <item>기계공학과</item>
+        <item>토목환경공학과</item>
+        <item>토목환경공학과(야)</item>
+        <item>산업경영공학과</item>
+        <item>바이오나노학과</item>
+        <item>생명과학과</item>
+        <item>식품영향학과</item>
+        <item>나노물리학과</item>
+        <item>나노화학과</item>
+        <item>식품생물공학과</item>
+        <item>소프트웨어학과</item>
+        <item>컴퓨터공학과</item>
+        <item>전자공학과</item>
+        <item>신소재공학과</item>
+        <item>한의예과</item>
+        <item>한의학과</item>
+        <item>회화조소</item>
+        <item>디자인</item>
+        <item>패션디자인</item>
+        <item>성악과</item>
+        <item>기악과</item>
+        <item>작곡과</item>
+        <item>체육학과</item>
+        <item>태권도학과</item>
+        <item>연기예술학과</item>
+        <item>자유전공(인문)</item>
+        <item>간호학과</item>
+        <item>의용생체공학과</item>
+        <item>치위생학과</item>
+        <item>응급구조학과</item>
+        <item>방사선학과</item>
+        <item>물리치료학과</item>
+        <item>운동재활복지학과</item>
+        <item>약학과</item>
+        <item>의예과</item>
+        <item>의학과</item>
+        <item>기타</item>
+    </string-array>
+
+    <string-array name="groups">
+        <item>동아리 선택</item>
+        <item>섹션</item>
+        <item>\@pplay</item>
+        <item>파랑새</item>
+        <item>EPU</item>
+        <item>동아리 없음</item>
+    </string-array>
 </resources>

@@ -10,8 +10,6 @@
     android:background="#FFFFFF">
 
     <!--로고 출력 레이아웃-->
-
-
     <ImageView
         android:layout_marginTop="60dp"
         android:layout_width="160dp"
@@ -55,6 +53,7 @@
             android:text="@string/user"/>
     </RadioGroup>
 
+    <!--ID, 비밀번호 입력-->
     <EditText
         android:id="@+id/ID_et"
         android:paddingLeft="10dp"
@@ -64,7 +63,7 @@
         android:layout_marginHorizontal="55dp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@drawable/input_backgroud"
+        android:background="@drawable/input_background"
         android:textSize="24sp"
         android:hint="ID"
         android:textColor="#000000"
@@ -79,7 +78,7 @@
         android:layout_marginHorizontal="55dp"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@drawable/input_backgroud"
+        android:background="@drawable/input_background"
         android:textSize="24sp"
         android:inputType="textPassword"
         android:textColor="#000000"
@@ -90,19 +89,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="90dp"
-        android:background="@drawable/btn_login"
+        android:background="@drawable/btn_color"
         android:text="@string/login"
         android:textSize="20sp"
         android:textColor="#ffffff"/>
 
+    <!--회원가입, 아이디/비밀번호 조회-->
     <TextView
+        android:onClick="Find_ID"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/find_id"
+        android:text="@string/find_IDnPW"
         android:textSize="17sp"/>
 
     <TextView
+        android:onClick="Sign_Up"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

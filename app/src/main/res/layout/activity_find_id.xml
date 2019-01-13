@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FindIdActivity"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/find_id_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_IDnPW"
+            android:textColor="#000000"
+            android:textSize="23sp"
+            android:layout_margin="20dp"/>
+
+        <!--닫기 버튼-->
+        <Button
+            android:onClick="close"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/btn_close"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#727272"
+            android:layout_below="@id/find_id_tv"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--아이디 찾기 경계선-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/find_id"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/email4IDET"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/input_email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/verify4IDBTN"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/btn_color"
+                    android:text="@string/verify_code"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/verify4IDET"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/input_code"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/check4IDBTN"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/btn_color"
+                    android:text="@string/check_verify"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <!--비밀번호 찾기 경계선-->
+            <View
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#bdbdbd"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/find_pw"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ID4PWET"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/input_id"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/email4PWET"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/input_email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/verify4PWBTN"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/btn_color"
+                    android:text="@string/verify_code"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/verfy4PWET"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/input_code"
+                    android:inputType="numberDecimal"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:visibility="invisible"
+                    android:id="@+id/check4PWBTN"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/btn_color"
+                    android:text="@string/check_verify"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <!--이메일 오류 메세지-->
+            <View
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#bdbdbd"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_err_title"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:lineSpacingExtra="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email_err_msg"
+                android:textColor="#727272"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="17sp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
