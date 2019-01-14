@@ -117,4 +117,8 @@
     <string name="performance">공연</string>
     <string name="social_science">사회과학</string>
     <string name="exhibition">전시창작</string>
+    <string name="group_pr">소개글</string>
+    <string name="request">신청</string>
+    <string name="info_board">정보게시판</string>
+    <string name="group_schedule">동아리 일정</string>
 </resources>

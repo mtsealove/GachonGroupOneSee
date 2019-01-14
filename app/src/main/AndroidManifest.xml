@@ -24,8 +24,9 @@
         <activity android:name=".FindIdActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".GroupListActivity"></activity>
-        <activity android:name=".modules.FirebaseHelper"/>
+        <activity android:name=".GroupListActivity" />
+        <activity android:name=".modules.FirebaseHelper" />
+        <activity android:name=".GroupMenuActivity"></activity>
     </application>
 
 </manifest>

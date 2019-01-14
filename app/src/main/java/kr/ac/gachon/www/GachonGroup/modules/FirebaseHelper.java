@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Handler;
@@ -318,21 +319,40 @@ public class FirebaseHelper extends Activity{
         ((Activity)context).finish();
     }
 
+    //특정 분야의 동아리 목록 표시
     public void getGroupList(final String category, final LinearLayout layout, final Context context) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").getChildren()) {
-                    //해당 카테고리의 데이터 삽입
+                    //해당 카테고리의 데이터 삽
                     if(snapshot.child("category").getValue(String.class).equals(category)) {
+                        final String groupName=snapshot.child("name").getValue(String.class);
                         LayoutInflater inflater=LayoutInflater.from(context);
                         View sub_group=inflater.inflate(R.layout.sub_group_list, null);
+
+                        //이름과 설명 설정
                         TextView groupNameTV=(TextView)sub_group.findViewById(R.id.group_name);
                         TextView groupDescriptionTV=(TextView)sub_group.findViewById(R.id.group_description);
-                        groupNameTV.setText(snapshot.child("name").getValue(String.class));
+                        LinearLayout btn=(LinearLayout)sub_group.findViewById(R.id.linearBtn);
+
+                        groupNameTV.setText(groupName);
                         groupDescriptionTV.setText(snapshot.child("description").getValue(String.class));
+                        //화면에 추가
                         layout.addView(sub_group);
+
+                        //클릭으로 이동 메서드 추가
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent groupMenu=new Intent();
+                                groupMenu.setClass(context, kr.ac.gachon.www.GachonGroup.GroupMenuActivity.class);
+                                groupMenu.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                groupMenu.putExtra("groupName",groupName);
+                                context.startActivity(groupMenu);
+                            }
+                        });
                     }
                 }
             }
