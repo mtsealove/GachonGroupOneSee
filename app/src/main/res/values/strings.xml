@@ -32,7 +32,7 @@
 
     <string-array name="majors">
         <item>학과 선택        </item>
-      <item>경영학트랙</item>
+        <item>경영학트랙</item>
         <item>글로벌경영학트랙</item>
         <item>금융수학과</item>
         <item>글로벌경제학과</item>
@@ -104,4 +104,17 @@
         <item>EPU</item>
         <item>동아리 없음</item>
     </string-array>
+
+    <string name="group_list">동아리 목록</string>
+    <string name="pr_list">홍보게시판</string>
+    <string name="federation_notice">연합회 공지사항</string>
+    <string name="QnA">Q&amp;A</string>
+
+    <string name="acadmeic">학술</string>
+    <string name="music">음악</string>
+    <string name="religion">종교</string>
+    <string name="athletic">체육</string>
+    <string name="performance">공연</string>
+    <string name="social_science">사회과학</string>
+    <string name="exhibition">전시창작</string>
 </resources>

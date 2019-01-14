@@ -1,6 +1,10 @@
 package kr.ac.gachon.www.GachonGroup.modules;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -11,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Handler;
@@ -29,11 +35,15 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 
 import kr.ac.gachon.www.GachonGroup.Account;
+import kr.ac.gachon.www.GachonGroup.FindIdActivity;
+import kr.ac.gachon.www.GachonGroup.HomeActivity;
+import kr.ac.gachon.www.GachonGroup.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.SignUpActivity;
 
-public class FirebaseHelper extends AppCompatActivity {
+public class FirebaseHelper extends Activity{
     FirebaseDatabase database;
+    GmailSender gmailSender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
 
     public FirebaseHelper() {
         database=FirebaseDatabase.getInstance();
@@ -77,12 +87,12 @@ public class FirebaseHelper extends AppCompatActivity {
                     Alert alert=new Alert();
                     alert.MsgDialog("이미 사용중인 이메일입니다", context);
                 } else {
-                    GmailSender gMailSender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
-                    SignUpActivity.verify_code=gMailSender.CreateVerifyCode();
+
+                    SignUpActivity.verify_code=gmailSender.CreateVerifyCode();
                     String msg = "가천대학교 동아리 한눈에 보자 회원가입 인증번호는 " + SignUpActivity.verify_code + " 입니다";
                     //GMailSender.sendMail(제목, 본문내용, 보내는사람, 받는사람);
                     try {
-                        gMailSender.sendMail("가천대학교 동아리 한눈에 보자 인증메일입니다", msg, "mtsealove0927@gmail.com", email);
+                        gmailSender.sendMail("가천대학교 동아리 한눈에 보자 회원가입 인증메일입니다", msg, "werqtt18@gmail.com", email);
                             VerifyCode(context);
                      } catch (SendFailedException e) {
                     Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
@@ -154,57 +164,183 @@ public class FirebaseHelper extends AppCompatActivity {
 
     }
     //계정 생성 메서드
-    public void CreateAccount(Account account) {
-        String ID=account.ID;
+    public void CreateAccount(final Account account) {
+        final String ID=account.ID;
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.child("Manager").getChildren()) {
+                    if(snapshot.child("phone").getValue(String.class).equals(account.phone))
+                        account.is_manager=true;
+                }
+                reference.child("Account").child(ID).setValue(account);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    //아이디 찾기 인증번호 발송 메서드
+    public void Find_ID_mail(final String email, final Context context) {
         DatabaseReference reference=database.getReference();
-        reference.child("Account").child(ID).setValue(account);
-    }
-
-    //메일을 매개변수로 찾아 ID찾기
-    String ID;
-    String email;
-    public String Find_ID(final String email) {
-        ID="NotFound";
-        this.email=email;
-        GetID getID=new GetID();
-        getID.start();
-        synchronized (getID) {
-            try {
-                getID.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String ID=null;
+                for(DataSnapshot snapshot:dataSnapshot.child("Account").getChildren()) {
+                    if (snapshot.child("email").getValue(String.class).equals(email)) {
+                        ID=snapshot.child("ID").getValue(String.class);
+                        break;
+                    }
+                }
+                if(ID==null) Toast.makeText(context, "존재하지 않는 이메일입니다", Toast.LENGTH_SHORT).show();
+                else {
+                    String verifyCode=gmailSender.CreateVerifyCode();
+                    try {
+                        gmailSender.sendMail("가천대학교 동아리 한눈에보자 ID 찾기 인증번호",
+                                "가천대학교 동아리 ID 찾기 인증번호는 "+verifyCode+"입니다.",
+                                "werqtt18@gmail.com",
+                                email);
+                        Toast.makeText(context, "인증번호가 발송되었습니다", Toast.LENGTH_SHORT).show();
+                        FindIdActivity.VerifyCode=verifyCode;
+                        FindIdActivity.ID=ID;
+                        FindIdActivity.check_4_ID_btn.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
 
-        return ID;
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
-    class GetID extends Thread{
-        @Override
-        public void run() {
-            synchronized (this) {
-                DatabaseReference reference = database.getReference();
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        boolean done = false;
-                        for (DataSnapshot snapshot : dataSnapshot.child("Account").getChildren()) {
-                            if (snapshot.child("email").getValue(String.class).equals(email)) {
-                                ID = snapshot.child("ID").getValue(String.class);
-                                Log.d("ID", ID);
-                                done = true;
-                                break;
+    //비밀번호 찾기 메서드
+    public void Find_PW_mail(final String email, final String ID, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String PW=null;
+                for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) {
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
+                        if(snapshot.child("email").getValue(String.class).equals(email)) {
+                            PW=snapshot.child("password").getValue(String.class);
+                            break;
+                        } else Toast.makeText(context, "메일 주소가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if(PW==null) Toast.makeText(context, "ID가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                else {
+                    String verifyCode=gmailSender.CreateVerifyCode();
+                    try {
+                        gmailSender.sendMail("가천대학교 동아리 한눈에보자 비밀번호 찾기 인증번호",
+                                "가천대학교 동아리 비밀번호 찾기 인증번호는 "+verifyCode+" 입니다.",
+                                "werqtt18@gmail.com",
+                                email);
+                        Toast.makeText(context, "인증번호가 발송되었습니다" ,Toast.LENGTH_SHORT).show();
+                        FindIdActivity.VerifyCode=verifyCode;
+                        FindIdActivity.password=PW;
+                        FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //로그인 메서드
+    public void Login(final String ID, final String PW, final boolean isManager, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean find=false;
+                for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) {
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
+                        find=true;
+                        if(snapshot.child("password").getValue(String.class).equals(PW)) {
+                            if(isManager) {
+                                if(snapshot.child("is_manager").getValue(Boolean.class)==isManager) {
+                                    String name=snapshot.child("name").getValue(String.class);
+                                    String email=snapshot.child("email").getValue(String.class);
+                                    String major=snapshot.child("major").getValue(String.class);
+                                    int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
+                                    String group=snapshot.child("group").getValue(String.class);
+                                    String phone=snapshot.child("phone").getValue(String.class);
+                                    LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
+                                    moveHome(ID, context);
+                                } else Toast.makeText(context, "관리자 계정이 아닙니다", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String name=snapshot.child("name").getValue(String.class);
+                                String email=snapshot.child("email").getValue(String.class);
+                                String major=snapshot.child("major").getValue(String.class);
+                                int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
+                                String group=snapshot.child("group").getValue(String.class);
+                                String phone=snapshot.child("phone").getValue(String.class);
+                                LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
+                                moveHome(ID, context);
                             }
-                        }
-                        if (!done) ID = "NotFound";
+                        } else Toast.makeText(context, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                notify();
+                }
+                if(!find) Toast.makeText(context, "일치하는 ID를 찾지 못했습니다", Toast.LENGTH_SHORT).show();
             }
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //홈화면 이동
+    private void moveHome(String ID, Context context) {
+        Intent home=new Intent();
+        home.putExtra("ID", ID);
+        home.setClass(context, kr.ac.gachon.www.GachonGroup.HomeActivity.class);
+        home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(home);
+
+        ((Activity)context).finish();
+    }
+
+    public void getGroupList(final String category, final LinearLayout layout, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.child("Groups").getChildren()) {
+                    //해당 카테고리의 데이터 삽입
+                    if(snapshot.child("category").getValue(String.class).equals(category)) {
+                        LayoutInflater inflater=LayoutInflater.from(context);
+                        View sub_group=inflater.inflate(R.layout.sub_group_list, null);
+                        TextView groupNameTV=(TextView)sub_group.findViewById(R.id.group_name);
+                        TextView groupDescriptionTV=(TextView)sub_group.findViewById(R.id.group_description);
+                        groupNameTV.setText(snapshot.child("name").getValue(String.class));
+                        groupDescriptionTV.setText(snapshot.child("description").getValue(String.class));
+                        layout.addView(sub_group);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

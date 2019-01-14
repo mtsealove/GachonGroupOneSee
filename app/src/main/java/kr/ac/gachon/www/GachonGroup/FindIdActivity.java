@@ -15,17 +15,18 @@ public class FindIdActivity extends AppCompatActivity {
     EditText email_4_ID_et;
     EditText verify_4_ID_et;
     Button verify_4_ID_btn;
-    Button check_4_ID_btn;
+    public static Button check_4_ID_btn;
 
     EditText email_4_PW_et;
     EditText ID_4_PW_et;
     EditText verify_4_PW_et;
     Button verify_4_PW_btn;
-    Button check_4_PW_btn;
+    public static Button check_4_PW_btn;
     Alert alert;
 
-    private String ID;
-    private String VerifyCode;
+    public static String ID; //찾을 ID
+    public static String VerifyCode; //인증번호
+    public static String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +49,73 @@ public class FindIdActivity extends AppCompatActivity {
         verify_4_ID_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Send_Code_4_ID();
+                Send_ID_mail();
+            }
+        });
+        check_4_ID_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Check_VerifyCode_4_ID();
+            }
+        });
+        verify_4_PW_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Send_PW_email();
+            }
+        });
+        check_4_PW_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Check_VerifyCode_4_PW();
             }
         });
     }
 
-    //아이디 찾기 메서드
-    private void Send_Code_4_ID() {
+
+    //아이디 메일 메서드
+    private void Send_ID_mail() {
         String email=email_4_ID_et.getText().toString();
-        FirebaseHelper helper=new FirebaseHelper();
-        ID=helper.Find_ID(email);
-        if(ID.equals("NotFound")) {
-            alert.MsgDialog("일치하는 계정이 없습니다", FindIdActivity.this);
-        } else {
-            GmailSender gmailSender=new GmailSender("mtsealove0927@gmail.com","fzdgbxjnfozylztv");
-            VerifyCode=gmailSender.CreateVerifyCode();
-            try {
-                gmailSender.sendMail("가천대학교 동아리 한번에 보자 ID 인증메일입니다",
-                        "인증번호는 "+VerifyCode+" 입니다",
-                        "mtsealove0927@gmail.com",
-                        email);
-                Toast.makeText(FindIdActivity.this, "인증번호가 발송되었습니다", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(email.length()==0) Toast.makeText(FindIdActivity.this, "이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
+            Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else {
+            FirebaseHelper helper = new FirebaseHelper();
+            helper.Find_ID_mail(email, FindIdActivity.this);
+        }
+    }
+
+    //아이디 인증번호 대조 메서드
+    private void Check_VerifyCode_4_ID() {
+        String newCode=verify_4_ID_et.getText().toString();
+        if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+        else {
+            alert.MsgDialog("회원님의 아이디는\n"+ID+" 입니다", FindIdActivity.this);
+       }
+    }
+
+    //비밀번호 메일 메서드
+    private void Send_PW_email() {
+        String ID=ID_4_PW_et.getText().toString();
+        String email=email_4_PW_et.getText().toString();
+        if(ID.length()==0) Toast.makeText(FindIdActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else if(email.length()==0) Toast.makeText(FindIdActivity.this, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show();
+        else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
+            Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else {
+            FirebaseHelper helper=new FirebaseHelper();
+            helper.Find_PW_mail(email, ID, FindIdActivity.this);
+        }
+    }
+
+    //비밀번호 인증번호 대조 메서드
+    private void Check_VerifyCode_4_PW() {
+        String newCode=verify_4_PW_et.getText().toString();
+        if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+        else {
+            alert.MsgDialog("회원님의 비밀번호는\n"+password+" 입니다", FindIdActivity.this);
         }
     }
     public void close(View v) {

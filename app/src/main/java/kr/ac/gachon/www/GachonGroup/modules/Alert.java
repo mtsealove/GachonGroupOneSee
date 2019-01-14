@@ -2,6 +2,7 @@ package kr.ac.gachon.www.GachonGroup.modules;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;

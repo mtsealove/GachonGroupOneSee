@@ -1,11 +1,16 @@
 package kr.ac.gachon.www.GachonGroup;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.StrictMode;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.InputMismatchException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,7 +35,7 @@ public class SignUpActivity extends AppCompatActivity {
     //회원가입에 사용할 입력창들
     EditText nameET;
     EditText IDET;
-    public  static EditText emailET;
+    public static EditText emailET;
     Spinner majorSP;
     EditText StudentNumberET;
     Spinner groupSP;
@@ -42,10 +48,10 @@ public class SignUpActivity extends AppCompatActivity {
     Button sendVerifyBTN;
     Button checkReuseBTN;
 
-    private String major="";
-    private String group="";
+    private String major = "";
+    private String group = "";
 
-    Alert alert=new Alert();
+    Alert alert = new Alert();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +64,18 @@ public class SignUpActivity extends AppCompatActivity {
                 .permitNetwork().build());
 
         //뷰 매칭
-        nameET=(EditText)findViewById(R.id.nameET);
-        IDET=(EditText)findViewById(R.id.ID_ET);
-        emailET=(EditText)findViewById(R.id.email_ET);
-        majorSP=(Spinner)findViewById(R.id.major_SP);
-        majorET=(EditText)findViewById(R.id.major_ET);
-        StudentNumberET=(EditText)findViewById(R.id.StdNumber_ET);
-        groupSP=(Spinner)findViewById(R.id.group_SP);
-        passwordET=(EditText)findViewById(R.id.password_ET);
-        password_confirmET=(EditText)findViewById(R.id.password_confirm_ET);
-        signUpBTN=(Button)findViewById(R.id.sign_up_btn);
-        checkReuseBTN=(Button)findViewById(R.id.check_id_reuse_btn);
-        sendVerifyBTN=(Button)findViewById(R.id.send_verify_btn);
+        nameET = (EditText) findViewById(R.id.nameET);
+        IDET = (EditText) findViewById(R.id.ID_ET);
+        emailET = (EditText) findViewById(R.id.email_ET);
+        majorSP = (Spinner) findViewById(R.id.major_SP);
+        majorET = (EditText) findViewById(R.id.major_ET);
+        StudentNumberET = (EditText) findViewById(R.id.StdNumber_ET);
+        groupSP = (Spinner) findViewById(R.id.group_SP);
+        passwordET = (EditText) findViewById(R.id.password_ET);
+        password_confirmET = (EditText) findViewById(R.id.password_confirm_ET);
+        signUpBTN = (Button) findViewById(R.id.sign_up_btn);
+        checkReuseBTN = (Button) findViewById(R.id.check_id_reuse_btn);
+        sendVerifyBTN = (Button) findViewById(R.id.send_verify_btn);
 
         checkReuseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +95,12 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //기타 설정 시 EditText활성화
-               if(parent.getItemAtPosition(position).equals("기타"))
-                   majorET.setVisibility(View.VISIBLE);
-               else { //나머지 경우 학과 Str에 저장
-                   majorET.setVisibility(View.INVISIBLE);
-                   major=parent.getItemAtPosition(position).toString();
-               }
+                if (parent.getItemAtPosition(position).equals("기타"))
+                    majorET.setVisibility(View.VISIBLE);
+                else { //나머지 경우 학과 Str에 저장
+                    majorET.setVisibility(View.INVISIBLE);
+                    major = parent.getItemAtPosition(position).toString();
+                }
             }
 
             @Override
@@ -107,8 +113,9 @@ public class SignUpActivity extends AppCompatActivity {
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                group=parent.getItemAtPosition(position).toString();
+                group = parent.getItemAtPosition(position).toString();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -124,41 +131,62 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //아이디 중복 확인 메서드
-    boolean IDreuse[]={false}; //메서드의 결과를 반환할 변수
+    boolean IDreuse[] = {false}; //메서드의 결과를 반환할 변수
+
     private void CheckIDReuse() {
-        String IDstr=IDET.getText().toString();
-        if(IDstr.length()==0) { //미입력 시 입력 요구 토스트 출력
+        String IDstr = IDET.getText().toString();
+        if (IDstr.length() == 0) { //미입력 시 입력 요구 토스트 출력
             shortToast("아이디를 입력해주세요");
-            IDreuse[0]=false;
+            IDreuse[0] = false;
         } else {
-            FirebaseHelper firebaseHelper=new FirebaseHelper();
+            FirebaseHelper firebaseHelper = new FirebaseHelper();
             firebaseHelper.Check_ID_Reuse(IDstr, IDreuse, SignUpActivity.this);
         }
     }
 
     //인증메일 발송 메서드
     public static String verify_code; //인증번호
+
     private void SendVerifyCode() {
-        String email=emailET.getText().toString();
-        if(email.length()==0) shortToast("이메일을 입력해주세요");
-        else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))) { //가천대학교 메일이 아닌 경우 알림 출력
+        String email = emailET.getText().toString();
+        if (email.length() == 0) shortToast("이메일을 입력해주세요");
+        else if ((!email.contains("@gachon.ac.kr")) && (!email.contains("@mc.gachon.ac.kr")) && (!email.contains("@gc.gachon.ac.kr"))) { //가천대학교 메일이 아닌 경우 알림 출력
             alert.MsgDialog("올바른 이메일을\n입력해주세요", SignUpActivity.this);
         } else {
-                boolean reuse[]={true};
-                FirebaseHelper helper=new FirebaseHelper();
-                helper.Check_Email_Reuse(email, reuse, SignUpActivity.this);
+            boolean reuse[] = {true};
+            FirebaseHelper helper = new FirebaseHelper();
+            helper.Check_Email_Reuse(email, reuse, SignUpActivity.this);
         }
     }
 
-    public static boolean Verified=false;
+    public static boolean Verified = false;
 
     private void SignUp() {
-        String name=nameET.getText().toString();
-        String ID=IDET.getText().toString();
-        String email=emailET.getText().toString();
-        int stdNumber=Integer.parseInt(StudentNumberET.getText().toString());
-        String password=passwordET.getText().toString();
-        String password_confirm=password_confirmET.getText().toString();
+        final String name = nameET.getText().toString();
+        final String ID = IDET.getText().toString();
+        final String email = emailET.getText().toString();
+
+        int stdNumberTry;
+        try {
+            stdNumberTry = Integer.parseInt(StudentNumberET.getText().toString());
+        } catch (InputMismatchException e) {
+            stdNumberTry = 0;
+        }
+        final int stdNumber = stdNumberTry;
+        final String password = passwordET.getText().toString();
+        String password_confirm = password_confirmET.getText().toString();
+
+        String myNumber = null;
+        TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            myNumber = mgr.getLine1Number();
+            myNumber = myNumber.replace("+82", "0");
+
+        }catch(Exception e){}
+
 
         if(name.length()==0) shortToast("이름을 입력하세요");
         else if(!IDreuse[0]) shortToast("아이디 중복을 확인하세요");
@@ -171,10 +199,32 @@ public class SignUpActivity extends AppCompatActivity {
         else if(!password.equals(password_confirm)) shortToast("비밀번호가 일치하지 않습니다");
         else  {
             //모든 조건이 만족하면 계정 생성
-            Account account=new Account(name, ID, email, major, stdNumber, group, password);
-            FirebaseHelper firebaseHelper=new FirebaseHelper();
-            firebaseHelper.CreateAccount(account);
-            alert.MsgDialogEnd("회원가입이\n완료되었습니다", SignUpActivity.this);
+            AlertDialog.Builder builder=new AlertDialog.Builder(SignUpActivity.this);
+            LayoutInflater inflater=getLayoutInflater();
+            View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
+            builder.setView(layout);
+            TextView msgTV=(TextView)layout.findViewById(R.id.dialog_msgTV);
+            msgTV.setText("회원가입을 하시겠습니까?");
+            Button negativeBtn=(Button)layout.findViewById(R.id.negative);
+            Button positiveBtn=(Button)layout.findViewById(R.id.positive);
+            final AlertDialog dialog=builder.create();
+            negativeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+            final String finalMyNumber = myNumber;
+            positiveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Account account=new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber, false);
+                    FirebaseHelper firebaseHelper=new FirebaseHelper();
+                    firebaseHelper.CreateAccount(account);
+                    alert.MsgDialogEnd("회원가입이\n완료되었습니다", SignUpActivity.this);
+                }
+            });
+            dialog.show();
         }
     }
 
