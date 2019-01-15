@@ -13,9 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -308,6 +310,28 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+    public void GetAccount(final String ID, final Account account) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String name=dataSnapshot.child("Account").child(ID).child("name").getValue(String.class);
+                String email=dataSnapshot.child("Account").child(ID).child("email").getValue(String.class);
+                String major=dataSnapshot.child("Account").child(ID).child("major").getValue(String.class);
+                int StudentNumber=dataSnapshot.child("Account").child(ID).child("StudentNumber").getValue(Integer.class);
+                String group=dataSnapshot.child("Account").child(ID).child("group").getValue(String.class);
+                String password=dataSnapshot.child("Account").child(ID).child("password").getValue(String.class);
+                String phone=dataSnapshot.child("Account").child(ID).child("phone").getValue(String.class);
+                boolean is_manager=dataSnapshot.child("Account").child(ID).child("is_manager").getValue(Boolean.class);
+                account.CopyAccount(new Account(name, ID, email, major, StudentNumber, group, password, phone, is_manager));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     //홈화면 이동
     private void moveHome(String ID, Context context) {
         Intent home=new Intent();
@@ -317,6 +341,22 @@ public class FirebaseHelper extends Activity{
         context.startActivity(home);
 
         ((Activity)context).finish();
+    }
+    public void setTextView(final String child, final String ID, final TextView textView) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String result=dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
+                if(child.equals("name")) result+=" 님";
+                textView.setText(result);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //특정 분야의 동아리 목록 표시
@@ -355,6 +395,30 @@ public class FirebaseHelper extends Activity{
                         });
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //모든 동아리 이름 가져와서 ArrayList에 넣기
+    public void getAllGroupName(final Spinner spinner, final Context context) {
+        final ArrayList<String> arrayList=new ArrayList<>();
+        arrayList.add("동아리 선택");
+        arrayList.add("동아리 없음");
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.child("Groups").getChildren()) {
+                    String name=snapshot.child("name").getValue(String.class);
+                    arrayList.add(name);
+                }
+                ArrayAdapter<String> adapter=new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, arrayList);
+                spinner.setAdapter(adapter);
             }
 
             @Override

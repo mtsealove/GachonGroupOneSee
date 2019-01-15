@@ -22,4 +22,27 @@ public class Account {
         this.phone=phone;
         this.is_manager=is_manager;
     }
+    public Account() {
+        name=null;
+        ID=null;
+        email=null;
+        major=null;
+        StudentNumber=0;
+        group=null;
+        password=null;
+        phone=null;
+        is_manager=false;
+    }
+
+    public void CopyAccount(Account account) {
+        this.name=account.name;
+        this.ID=account.ID;
+        this.email=account.email;
+        this.major=account.major;
+        this.StudentNumber=account.StudentNumber;
+        this.group=account.group;
+        this.password=account.password;
+        this.phone=account.phone;
+        this.is_manager=account.is_manager;
+    }
 }

@@ -14,12 +14,15 @@
         android:background="@color/colorPrimary">
 
         <Button
-            android:id="@+id/infoBtn"
-            android:layout_margin="10dp"
+            android:id="@+id/myInfoBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/btn_preference"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/btn_preference" />
     </RelativeLayout>
 
 
@@ -85,6 +88,7 @@
             android:orientation="vertical">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/academicBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +101,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/musicBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,6 +114,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/religionBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -121,6 +127,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/athleticBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -133,6 +140,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/performanceBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,6 +153,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/social_scienceBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -157,6 +166,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/exhibitionBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,6 +175,19 @@
                 android:background="@drawable/btn_list"
                 android:paddingVertical="10dp"
                 android:text="@string/exhibition"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/volunteerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_list"
+                android:paddingVertical="10dp"
+                android:text="@string/volunteer"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 

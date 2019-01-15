@@ -14,12 +14,14 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -109,6 +111,8 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseHelper helper=new FirebaseHelper();
+        helper.getAllGroupName(groupSP, SignUpActivity.this);
         //동아리 선택 스피너
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

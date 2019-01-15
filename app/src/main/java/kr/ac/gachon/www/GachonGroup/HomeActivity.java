@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.Button;
 
 import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
+import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class HomeActivity extends AppCompatActivity {
     //동아리 리스트 버튼
-    Button GroupBtn[]=new Button[7];
-    int buttonID[]=new int[7];
+    Button GroupBtn[]=new Button[8];
+    int buttonID[]=new int[8];
+    Account account;
+    Button myInfo;
 
     private BackPressCloseHandler backPressCloseHandler;
     @Override
@@ -19,7 +22,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Intent intent=getIntent();
-
+        String ID=intent.getStringExtra("ID");
+        FirebaseHelper helper=new FirebaseHelper();
+        account=new Account();
+        helper.GetAccount(ID, account);
 
         backPressCloseHandler=new BackPressCloseHandler(this);
 
@@ -30,12 +36,14 @@ public class HomeActivity extends AppCompatActivity {
         buttonID[4]=R.id.performanceBtn;
         buttonID[5]=R.id.social_scienceBtn;
         buttonID[6]=R.id.exhibitionBtn;
+        buttonID[7]=R.id.volunteerBtn;
+        myInfo=(Button)findViewById(R.id.myInfoBtn);
 
         //버튼 매칭
-        for(int i=0; i<7; i++)
+        for(int i=0; i<8; i++)
             GroupBtn[i] = (Button) findViewById(buttonID[i]);
         //각 버튼 리스너 지정
-        for(int i=0; i<7; i++) {
+        for(int i=0; i<8; i++) {
             final int finalI = i;
             GroupBtn[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,6 +74,9 @@ public class HomeActivity extends AppCompatActivity {
                         case 6: category="exhibition";
                         categoryKR="전시창작";
                         break;
+                        case 7: category="volunteer";
+                        categoryKR="취미봉사";
+                        break;
                     }
                     groupList.putExtra("category", category);
                     groupList.putExtra("categorykr", categoryKR);
@@ -73,6 +84,18 @@ public class HomeActivity extends AppCompatActivity {
                 }
             });
         }
+
+        myInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyInformation();
+            }
+        });
+    }
+    private void MyInformation() {
+        Intent intent=new Intent(HomeActivity.this, MyInformationActivity.class);
+        intent.putExtra("ID", account.ID);
+        startActivity(intent);
     }
     @Override
     public void onBackPressed() {

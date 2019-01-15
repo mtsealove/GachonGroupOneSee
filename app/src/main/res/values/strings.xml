@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">가천대학교 동아리\n한눈에 보자</string>
+    <string name="app_name">가천 동아리 한눈에 보자</string>
     <string name="gachon_group">가천대학교 동아리</string>
     <string name="one_see">한눈에 보자</string>
     <string name="manager">관리자</string>
@@ -117,8 +117,17 @@
     <string name="performance">공연</string>
     <string name="social_science">사회과학</string>
     <string name="exhibition">전시창작</string>
+    <string name="volunteer">취미봉사</string>
     <string name="group_pr">소개글</string>
     <string name="request">신청</string>
     <string name="info_board">정보게시판</string>
     <string name="group_schedule">동아리 일정</string>
+
+    <string name="requset_log">동아리 신청 내역</string>
+    <string name="my_group">내 동아리 바로가기</string>
+    <string name="my_group_schedule">내 동아리 일정 보기</string>
+    <string name="faq">문의사항</string>
+    <string name="service_legal">서비스 약관</string>
+    <string name="current_version">현재 버전 1.0</string>
+    <string name="out">회원탈퇴</string>
 </resources>
