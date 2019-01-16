@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         read_ID();
+        if(ID_et.length()!=0&&PW_et.length()!=0) LoginBtn.performClick();
     }
     //로그인 버튼 이벤트
     private void Login() {

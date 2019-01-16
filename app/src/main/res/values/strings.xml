@@ -130,4 +130,6 @@
     <string name="service_legal">서비스 약관</string>
     <string name="current_version">현재 버전 1.0</string>
     <string name="out">회원탈퇴</string>
+    <string name="edit_my_information">회원정보 수정</string>
+    <string name="edit">수정하기</string>
 </resources>

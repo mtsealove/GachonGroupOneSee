@@ -64,12 +64,13 @@
             android:layout_marginRight="20dp">
 
             <Button
-                android:layout_weight="1"
+                android:id="@+id/EditInfoBtn"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/input_background"
-                android:text="정보수정"
-                android:layout_marginRight="5dp"/>
+                android:text="정보수정" />
 
             <Button
                 android:layout_marginLeft="5dp"
@@ -84,7 +85,7 @@
             android:layout_marginTop="30dp"
             android:background="#bdbdbd"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
             android:layout_below="@id/btnsL" />
     </RelativeLayout>
 
@@ -98,15 +99,18 @@
             android:orientation="vertical">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:gravity="left|center_vertical"
                 android:padding="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_background"
                 android:text="@string/requset_log"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_marginTop="-6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -117,6 +121,7 @@
                 android:textSize="20sp" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_marginTop="-6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,6 +132,7 @@
                 android:textSize="20sp" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -137,6 +143,7 @@
                 android:textSize="20sp" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
@@ -147,6 +154,7 @@
                 android:textSize="20sp" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
@@ -157,6 +165,7 @@
                 android:textSize="20sp" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_marginTop="20dp"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"

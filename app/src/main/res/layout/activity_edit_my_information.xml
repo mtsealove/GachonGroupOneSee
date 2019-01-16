@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditMyInformationActivity"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:gravity="center_horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/Group_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_my_information"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            android:layout_margin="20dp"/>
+
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/btn_close"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:onClick="close"/>
+
+        <View
+            android:layout_below="@id/Group_category"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <FrameLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ProfileIcon"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/user_icon" />
+
+                <ImageView
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/plus"/>
+            </FrameLayout>
+
+            <!--이름 입력-->
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:text="@string/name"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/nameET"
+                    android:inputType="textPersonName"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp"
+                    android:clickable="false"/>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--ID 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:text="@string/ID"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/IDET"
+                    android:inputType="textPersonName"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp"
+                    android:clickable="false"/>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--Mail 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/email"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/emailET"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp"
+                    android:layout_marginRight="20dp"
+                    android:clickable="false"/>
+
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--학과 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/major"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/major_SP"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp"
+                    android:entries="@array/majors"
+                    />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--학번 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:text="@string/student_number"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/studentNumberET"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp"/>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--동아리 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/group"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/group_SP"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:padding="3dp" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+            <ImageView
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/dash_line"
+                android:layerType="software"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp" />
+
+            <!--비밀번호 입력-->
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:text="@string/password"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:gravity="center"
+                    android:id="@+id/PWET"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_background"
+                    android:inputType="textPassword"
+                    android:padding="3dp"
+                    android:textSize="16sp" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_color"
+                android:paddingHorizontal="20dp"
+                android:text="@string/edit"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
