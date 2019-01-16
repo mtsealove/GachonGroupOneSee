@@ -1,5 +1,6 @@
 package kr.ac.gachon.www.GachonGroup;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,11 +17,14 @@ public class HomeActivity extends AppCompatActivity {
     Account account;
     Button myInfo;
 
+    public static Activity _Home_Activity;
+
     private BackPressCloseHandler backPressCloseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        _Home_Activity=HomeActivity.this;
         Intent intent=getIntent();
         String ID=intent.getStringExtra("ID");
         FirebaseHelper helper=new FirebaseHelper();

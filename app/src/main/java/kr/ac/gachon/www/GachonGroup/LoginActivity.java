@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,8 +44,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        read_ID();
-        if(ID_et.length()!=0&&PW_et.length()!=0) LoginBtn.performClick();
+        Intent intent=getIntent();
+        boolean logout=intent.getBooleanExtra("logout", false);
+        if(!logout) {
+            read_ID();
+            if (ID_et.length() != 0 && PW_et.length() != 0) LoginBtn.performClick();
+        } else {
+            Alert alert=new Alert();
+            alert.MsgDialog("로그아웃 되었습니다", LoginActivity.this);
+        }
     }
     //로그인 버튼 이벤트
     private void Login() {

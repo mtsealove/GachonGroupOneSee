@@ -73,12 +73,13 @@
                 android:text="정보수정" />
 
             <Button
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
+                android:id="@+id/logoutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/input_background"
-                android:text="로그아웃"/>
+                android:text="로그아웃" />
         </LinearLayout>
 
         <View

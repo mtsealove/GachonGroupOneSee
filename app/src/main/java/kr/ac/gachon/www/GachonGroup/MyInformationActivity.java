@@ -8,11 +8,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class MyInformationActivity extends AppCompatActivity {
     TextView nameTV, groupTV;
-    Button EditInfoBtn;
+    Button EditInfoBtn, logoutBtn;
     ImageView profileIcon;
     private String ID;
 
@@ -25,6 +26,7 @@ public class MyInformationActivity extends AppCompatActivity {
         nameTV=(TextView)findViewById(R.id.nameTV);
         groupTV=(TextView)findViewById(R.id.groupTV);
         EditInfoBtn=(Button)findViewById(R.id.EditInfoBtn);
+        logoutBtn=(Button)findViewById(R.id.logoutBtn);
         profileIcon=(ImageView)findViewById(R.id.userIcon);
 
         account=new Account();
@@ -41,12 +43,25 @@ public class MyInformationActivity extends AppCompatActivity {
                 Edit_information();
             }
         });
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogOut();
+            }
+        });
     }
 
     //정보 수정 활동
     private void Edit_information() {
         Intent intent=new Intent(MyInformationActivity.this, EditMyInformationActivity.class);
         intent.putExtra("ID", ID);
+        startActivity(intent);
+    }
+    private void LogOut() {
+        HomeActivity HA=(HomeActivity)HomeActivity._Home_Activity;
+        HA.finish();
+        Intent intent=new Intent(MyInformationActivity.this, LoginActivity.class);
+        intent.putExtra("logout", true);
         startActivity(intent);
     }
 
