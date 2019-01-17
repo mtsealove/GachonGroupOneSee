@@ -15,7 +15,8 @@ public class HomeActivity extends AppCompatActivity {
     Button GroupBtn[]=new Button[8];
     int buttonID[]=new int[8];
     Account account;
-    Button myInfo;
+    Button myInfo, PRbaordBtn;
+    int curent_page=0;
 
     public static Activity _Home_Activity;
 
@@ -42,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonID[6]=R.id.exhibitionBtn;
         buttonID[7]=R.id.volunteerBtn;
         myInfo=(Button)findViewById(R.id.myInfoBtn);
+        PRbaordBtn=(Button)findViewById(R.id.PRboardBtn);
 
         //버튼 매칭
         for(int i=0; i<8; i++)
@@ -95,10 +97,20 @@ public class HomeActivity extends AppCompatActivity {
                 MyInformation();
             }
         });
+        PRbaordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PRBoard();
+            }
+        });
     }
     private void MyInformation() {
         Intent intent=new Intent(HomeActivity.this, MyInformationActivity.class);
         intent.putExtra("ID", account.ID);
+        startActivity(intent);
+    }
+    private void PRBoard() {
+        Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);
         startActivity(intent);
     }
     @Override

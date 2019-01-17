@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -42,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +52,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Handler;
@@ -58,9 +62,11 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 
 import kr.ac.gachon.www.GachonGroup.Account;
+import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.FindIdActivity;
 import kr.ac.gachon.www.GachonGroup.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.PRFragment;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.SignUpActivity;
 
@@ -549,13 +555,129 @@ public class FirebaseHelper extends Activity{
                 .into(icon);
     }
 
+    //계정 정보 수정
     public void UpdateAccountData(final String ID, final String child, final String value) {
         DatabaseReference reference=database.getReference();
         reference.child("Account").child(ID).child(child).setValue(value);
     }
+    //계정 정보 수정(int값)
     public void UpdateAccountData(final String ID, final String child, final int value) {
         DatabaseReference reference=database.getReference();
         reference.child("Account").child(ID).child(child).setValue(value);
     }
 
+    //계정 삭제
+    public void RemoveAccount(String ID) {
+        DatabaseReference reference=database.getReference();
+        reference.child("Account").child(ID).setValue(null);
+    }
+
+    //달력에 이벤트 닷 추가
+    public void Add_EventDay(final String GroupName, final MaterialCalendarView calendarView) {
+        final HashSet<CalendarDay> days=new HashSet<>();
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(GroupName).child("Schedule").getChildren()) {
+                    String eventDate=snapshot.child("EventDate").getValue(String.class);
+                    String dates[]=eventDate.split(",");
+                    int year=Integer.parseInt(dates[0]);
+                    int month=Integer.parseInt(dates[1])-1;
+                    int day=Integer.parseInt(dates[2]);
+                    days.add(CalendarDay.from(year, month, day));
+                }
+                calendarView.addDecorators(new EventdayDecorator(days));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //달력에 이벤트 리스너 추가
+    public void Add_EventDayEvent(final String GroupName, final String Day, final LinearLayout layout, final TextView no_Schedule, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean exist=false;
+                layout.removeAllViews();
+                layout.addView(no_Schedule);
+                for(DataSnapshot snapshot:dataSnapshot.child("Groups").child(GroupName).child("Schedule").getChildren()) {
+                    if(snapshot.child("EventDate").getValue(String.class).equals(Day)) {
+                        String date=(snapshot.child("EventDate").getValue(String.class).split(","))[2];
+                        String name=snapshot.child("EventName").getValue(String.class);
+                        LayoutInflater inflater=LayoutInflater.from(context);
+                        View sub=inflater.inflate(R.layout.sub_schedule, null);
+                        TextView SchDate=(TextView)sub.findViewById(R.id.schdateTV);
+                        TextView SchName=(TextView)sub.findViewById(R.id.schNameTV);
+                        SchDate.setText(date+"일");
+                        SchName.setText(name);
+                        layout.addView(sub);
+                        exist=true;
+                    }
+                }
+                if (exist) no_Schedule.setVisibility(View.GONE);
+                else no_Schedule.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getPRtitles(final ArrayList<String> title, final ArrayList<PRFragment> prFragments) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("PublicRelation").exists()) prFragments.remove(0);
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.child("PublicRelation").getChildren()) {
+                    String titleStr=snapshot.child("title").getValue(String.class);
+                    title.add(titleStr);
+
+                    Bundle bundle=new Bundle(1);
+                    bundle.putString("pageCount", Integer.toString(count));
+                    PRFragment fragment=new PRFragment();
+                    fragment.setArguments(bundle);
+                    prFragments.add(fragment);
+                    count++;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //버튼에 타이틀 새겨주기
+    public void setTitleBtn(final Button[] buttons, final String child, final int pageCount, final int maxInOne) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int i=0;
+                int btnIndex=0;
+                for(DataSnapshot snapshot:dataSnapshot.child(child).getChildren()) {
+                    if(i>pageCount*maxInOne&&i<(pageCount+1)*maxInOne) {
+                        String title=snapshot.child("title").getValue(String.class);
+                        buttons[btnIndex].setText(title);
+                        btnIndex++;
+                    }
+                    i++;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

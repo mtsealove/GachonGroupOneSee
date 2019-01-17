@@ -111,10 +111,11 @@
                 />
 
             <Button
+                android:id="@+id/myGroupBtn"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_marginTop="-6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
                 android:padding="20dp"
@@ -122,10 +123,11 @@
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/MyGroupSchduleBtn"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_marginTop="-6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
                 android:padding="20dp"
@@ -166,15 +168,16 @@
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/removeAccountBtn"
                 style="?android:attr/borderlessButtonStyle"
-                android:layout_marginTop="20dp"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_normal"
                 android:text="@string/out"
-                android:textSize="20sp"
                 android:textColor="#FFFFFF"
-                android:layout_gravity="center_horizontal"/>
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -47,11 +47,12 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/PRboardBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tab_btn"
-                android:paddingVertical="20dp"
                 android:paddingHorizontal="5dp"
+                android:paddingVertical="20dp"
                 android:text="@string/pr_list"
                 android:textSize="17sp"
                 android:textStyle="bold" />

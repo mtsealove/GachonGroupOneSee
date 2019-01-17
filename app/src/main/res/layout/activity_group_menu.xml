@@ -72,13 +72,14 @@
             android:background="@drawable/btn_rhombus_gray"/>
 
         <Button
-            android:layout_marginTop="-70dp"
-            android:layout_marginRight="40dp"
+            android:id="@+id/groupScheduleBtn"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginTop="-70dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn_rhombus_purple"
             android:text="@string/group_schedule"
-            android:textSize="20sp"
-            android:background="@drawable/btn_rhombus_purple"/>
+            android:textSize="20sp" />
 
         <Button
             android:layout_marginTop="-70dp"
