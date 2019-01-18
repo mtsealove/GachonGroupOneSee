@@ -22,10 +22,10 @@
             android:id="@+id/Group_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:text="@string/group_schedule"
             android:textColor="#000000"
-            android:textSize="25sp"
-            android:layout_margin="20dp"/>
+            android:textSize="22sp" />
 
         <Button
             android:layout_width="20dp"

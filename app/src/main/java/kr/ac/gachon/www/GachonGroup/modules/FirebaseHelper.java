@@ -1,6 +1,7 @@
 package kr.ac.gachon.www.GachonGroup.modules;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -66,9 +67,15 @@ import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.FindIdActivity;
 import kr.ac.gachon.www.GachonGroup.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.PRBoardActivity;
 import kr.ac.gachon.www.GachonGroup.PRFragment;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.SignUpActivity;
+
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+
+import static android.app.PendingIntent.getActivity;
 
 public class FirebaseHelper extends Activity{
     FirebaseDatabase database;
@@ -149,9 +156,9 @@ public class FirebaseHelper extends Activity{
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_verify_code, null);
         //각 뷰 매칭
-        final TextView timeTV=(TextView)layout.findViewById(R.id.timeTV);
-        final EditText verifyET=(EditText)layout.findViewById(R.id.verify_code_ET);
-        Button okay=(Button)layout.findViewById(R.id.okay);
+        final TextView timeTV= layout.findViewById(R.id.timeTV);
+        final EditText verifyET= layout.findViewById(R.id.verify_code_ET);
+        Button okay= layout.findViewById(R.id.okay);
 
         //남은 시간 표시
         TimerTask timerTask=new TimerTask() {
@@ -422,9 +429,9 @@ public class FirebaseHelper extends Activity{
                         View sub_group=inflater.inflate(R.layout.sub_group_list, null);
 
                         //이름과 설명 설정
-                        TextView groupNameTV=(TextView)sub_group.findViewById(R.id.group_name);
-                        TextView groupDescriptionTV=(TextView)sub_group.findViewById(R.id.group_description);
-                        LinearLayout btn=(LinearLayout)sub_group.findViewById(R.id.linearBtn);
+                        TextView groupNameTV= sub_group.findViewById(R.id.group_name);
+                        TextView groupDescriptionTV= sub_group.findViewById(R.id.group_description);
+                        LinearLayout btn= sub_group.findViewById(R.id.linearBtn);
 
                         groupNameTV.setText(groupName);
                         groupDescriptionTV.setText(snapshot.child("description").getValue(String.class));
@@ -611,8 +618,8 @@ public class FirebaseHelper extends Activity{
                         String name=snapshot.child("EventName").getValue(String.class);
                         LayoutInflater inflater=LayoutInflater.from(context);
                         View sub=inflater.inflate(R.layout.sub_schedule, null);
-                        TextView SchDate=(TextView)sub.findViewById(R.id.schdateTV);
-                        TextView SchName=(TextView)sub.findViewById(R.id.schNameTV);
+                        TextView SchDate= sub.findViewById(R.id.schdateTV);
+                        TextView SchName= sub.findViewById(R.id.schNameTV);
                         SchDate.setText(date+"일");
                         SchName.setText(name);
                         layout.addView(sub);
@@ -647,30 +654,6 @@ public class FirebaseHelper extends Activity{
                     fragment.setArguments(bundle);
                     prFragments.add(fragment);
                     count++;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-    //버튼에 타이틀 새겨주기
-    public void setTitleBtn(final Button[] buttons, final String child, final int pageCount, final int maxInOne) {
-        DatabaseReference reference=database.getReference();
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int i=0;
-                int btnIndex=0;
-                for(DataSnapshot snapshot:dataSnapshot.child(child).getChildren()) {
-                    if(i>pageCount*maxInOne&&i<(pageCount+1)*maxInOne) {
-                        String title=snapshot.child("title").getValue(String.class);
-                        buttons[btnIndex].setText(title);
-                        btnIndex++;
-                    }
-                    i++;
                 }
             }
 

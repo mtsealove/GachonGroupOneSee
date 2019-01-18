@@ -17,19 +17,18 @@
             android:id="@+id/Group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:text="@string/pr_list"
             android:textColor="#000000"
-            android:textSize="25sp"
-            android:layout_margin="20dp"/>
+            android:textSize="22sp" />
 
         <Button
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/back"
-            android:layout_centerVertical="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            />
+            android:background="@drawable/back" />
 
         <View
             android:layout_below="@id/Group_name"
@@ -39,7 +38,8 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:id="@+id/container"
+        android:layout_marginTop="15dp"
+        android:id="@+id/fragmentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/nextNprev"
@@ -51,7 +51,7 @@
     <LinearLayout
         android:id="@+id/nextNprev"
         android:layout_above="@id/searchNenroll"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="40dp"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,6 +87,7 @@
             android:textStyle="normal" />
     </LinearLayout>
 
+    <!--검색 및 등록-->
     <LinearLayout
         android:id="@+id/searchNenroll"
         android:layout_alignParentBottom="true"
@@ -96,8 +97,8 @@
         android:layout_marginBottom="30dp">
 
         <Button
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -107,14 +108,15 @@
             android:textSize="16sp"/>
 
         <Button
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="80dp"
-            android:layout_weight="1"
+            android:id="@+id/searchBtn"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_normal_gray"
             android:text="@string/search"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </LinearLayout>
 </RelativeLayout>

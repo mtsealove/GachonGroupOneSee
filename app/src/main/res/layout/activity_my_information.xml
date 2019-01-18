@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="홍길동 님"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="섹션"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -100,9 +100,11 @@
             android:orientation="vertical">
 
             <Button
+                android:layout_marginTop="10dp"
                 style="?android:attr/borderlessButtonStyle"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_background"
@@ -118,7 +120,8 @@
                 android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:text="@string/my_group"
                 android:textSize="20sp" />
 
@@ -130,7 +133,8 @@
                 android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:text="@string/my_group_schedule"
                 android:textSize="20sp" />
 
@@ -141,7 +145,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:text="@string/faq"
                 android:textSize="20sp" />
 
@@ -152,7 +157,8 @@
                 android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:text="@string/service_legal"
                 android:textSize="20sp" />
 
@@ -163,7 +169,8 @@
                 android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingVertical="15dp"
                 android:text="@string/current_version"
                 android:textSize="20sp" />
 

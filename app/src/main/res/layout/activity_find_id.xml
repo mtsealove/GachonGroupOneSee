@@ -11,14 +11,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/find_id_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:text="@string/find_IDnPW"
             android:textColor="#000000"
-            android:textSize="23sp"
-            android:layout_margin="20dp"/>
+            android:textSize="22sp" />
 
         <!--닫기 버튼-->
         <Button
@@ -53,7 +54,7 @@
                 android:layout_margin="15dp"
                 android:text="@string/find_id"
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +70,8 @@
                     android:background="@drawable/input_background"
                     android:hint="@string/input_email"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/verify4IDBTN"
@@ -97,7 +99,8 @@
                     android:background="@drawable/input_background"
                     android:hint="@string/input_code"
                     android:inputType="textPersonName"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="16sp" />
 
                 <Button
                     android:visibility="invisible"
@@ -124,7 +127,7 @@
                 android:layout_margin="15dp"
                 android:text="@string/find_pw"
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,7 +143,8 @@
                     android:background="@drawable/input_background"
                     android:hint="@string/input_id"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="wrap_content"
@@ -163,7 +167,8 @@
                     android:background="@drawable/input_background"
                     android:hint="@string/input_email"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/verify4PWBTN"
@@ -191,7 +196,8 @@
                     android:background="@drawable/input_background"
                     android:hint="@string/input_code"
                     android:inputType="textPersonName"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textSize="16sp" />
 
                 <Button
                     android:visibility="invisible"
@@ -215,20 +221,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:text="@string/email_err_title"
                 android:textColor="#000000"
-                android:textStyle="bold"
-                android:textSize="17sp"
-                android:layout_margin="10dp"/>
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:lineSpacingExtra="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:lineSpacingExtra="5dp"
                 android:text="@string/email_err_msg"
                 android:textColor="#727272"
-                android:layout_marginHorizontal="10dp"
-                android:textSize="17sp"/>
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 

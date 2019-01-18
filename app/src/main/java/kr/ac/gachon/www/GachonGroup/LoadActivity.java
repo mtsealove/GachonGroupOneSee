@@ -46,10 +46,14 @@ public class LoadActivity extends AppCompatActivity {
             }, 1000);
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED){
-            Move_Login();
+        int phonePermission=ContextCompat.checkSelfPermission(LoadActivity.this, Manifest.permission.READ_PHONE_NUMBERS);
+
+        if(phonePermission==PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(LoadActivity.this,
+                    new String[]{Manifest.permission.READ_PHONE_NUMBERS},
+                    PERMISSION_READ_PHONE_NUMBER);
         } else {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_PHONE_NUMBERS},PERMISSION_READ_PHONE_NUMBER);
+            Move_Login();
         }
 
 
@@ -86,24 +90,20 @@ public class LoadActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult){
         super.onRequestPermissionsResult(requestCode, permissions, grantResult);
-        //위 예시에서 requestPermission 메서드를 썼을시 , 마지막 매개변수에 0을 넣어 줬으므로, 매칭
-        if(requestCode == PERMISSION_READ_PHONE_NUMBER) {
-            // requestPermission의 두번째 매개변수는 배열이므로 아이템이 여러개 있을 수 있기 때문에 결과를 배열로 받는다.
-            // 해당 예시는 요청 퍼미션이 한개 이므로 i=0 만 호출한다.
-            if (grantResult[0] == 0) {
-                //해당 권한이 승낙된 경우.
-                Move_Login();
-            } else {
-                //해당 권한이 거절된 경우.
-                Toast.makeText(getApplicationContext(), "전화번호 읽기 권한을 설정하지 않으면 회원가입을 할 수 없습니다\n곧 애플리케이션이 종료됩니다", Toast.LENGTH_SHORT).show();
-                Handler handler=new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.exit(0);
-                    }
-                }, 2000);
-            }
+        switch (requestCode) {
+            case PERMISSION_READ_PHONE_NUMBER:
+                if(grantResult.length>0) {
+                    Move_Login();
+                } else {
+                    Toast.makeText(getApplicationContext(), "전화번호 읽기 권한을 설정하지 않으면 회원가입을 할 수 없습니다\n곧 애플리케이션이 종료됩니다", Toast.LENGTH_SHORT).show();
+                    Handler handler=new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.exit(0);
+                        }
+                    }, 2000);
+                }
         }
     }
 }

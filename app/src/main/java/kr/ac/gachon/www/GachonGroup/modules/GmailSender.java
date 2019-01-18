@@ -63,7 +63,7 @@ public class GmailSender extends javax.mail.Authenticator {
     }
 
     public synchronized void sendMail(String subject, String body,
-                                      String sender, String recipients) throws Exception {
+                                      String sender, String recipients) {
         try {
             message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(
@@ -94,7 +94,6 @@ public class GmailSender extends javax.mail.Authenticator {
             try {
                 Transport.send(message);
             } catch (MessagingException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return null;
@@ -133,7 +132,7 @@ public class GmailSender extends javax.mail.Authenticator {
                 return type;
         }
 
-        public InputStream getInputStream() throws IOException {
+        public InputStream getInputStream() {
             return new ByteArrayInputStream(data);
         }
 

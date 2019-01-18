@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupListActivity"
+    tools:context=".PRSearchActivity"
     android:orientation="vertical"
     android:background="#FFFFFF">
 
     <RelativeLayout
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/Group_category"
+            android:id="@+id/Group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="동아리 분류"
+            android:text="@string/pr_list"
             android:textColor="#000000"
             android:textSize="22sp" />
 
@@ -27,25 +28,24 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:background="@drawable/back"
-            android:onClick="back" />
-        
+            android:background="@drawable/back" />
+
         <View
-            android:layout_below="@id/Group_category"
+            android:layout_below="@id/Group_name"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000000" />
     </RelativeLayout>
 
-    <ScrollView
+    <EditText
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:hint="검색어를 입력해주세요"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/group_list_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        android:layout_height="45dp"
+        android:layout_marginHorizontal="30dp"
+        android:background="@drawable/input_background"
+        android:drawableRight="@drawable/search"/>
 
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>
