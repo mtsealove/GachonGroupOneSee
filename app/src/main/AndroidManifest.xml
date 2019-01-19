@@ -33,7 +33,8 @@
         <activity android:name=".GroupScheduleActivity" />
         <activity android:name=".PRBoardActivity" />
         <activity android:name=".PRSearchActivity" />
-        <activity android:name=".BoardActivity"></activity>
+        <activity android:name=".BoardActivity" />
+        <activity android:name=".IntroduceActivity"></activity>
     </application>
 
 </manifest>

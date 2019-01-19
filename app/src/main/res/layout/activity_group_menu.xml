@@ -47,12 +47,13 @@
         android:gravity="center">
 
         <Button
-            android:layout_marginLeft="40dp"
+            android:id="@+id/introduceBtn"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/btn_rhombus_gray"
             android:text="@string/group_pr"
-            android:textSize="20sp"
-            android:background="@drawable/btn_rhombus_gray"/>
+            android:textSize="20sp" />
         <Button
             android:layout_marginTop="-70dp"
             android:layout_marginRight="40dp"

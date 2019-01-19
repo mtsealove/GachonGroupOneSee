@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -106,11 +107,7 @@ public class FirebaseHelper extends Activity{
                     try {
                         gmailSender.sendMail("가천대학교 동아리 한눈에 보자 회원가입 인증메일입니다", msg, "werqtt18@gmail.com", email);
                             VerifyCode(context);
-                     } catch (SendFailedException e) {
-                    Toast.makeText(getApplicationContext(), "이메일 형식이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-                } catch (MessagingException e) {
-                    Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주십시오", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
+                     } catch (Exception e) {
                     e.printStackTrace();
                 }
                 }
@@ -654,6 +651,25 @@ public class FirebaseHelper extends Activity{
                 author.setText("작성자: "+authorStr);
                 title.setText("제목: "+titleStr);
                 content.setText(contentStr);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void setStringTextView(final TextView textView, final String child1, final String child2, final String child3, final String alt) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try {
+                    String value = dataSnapshot.child(child1).child(child2).child(child3).getValue(String.class);
+                    textView.setText(value);
+                } catch (DatabaseException e) {
+                    textView.setText(alt);
+                }
             }
 
             @Override
