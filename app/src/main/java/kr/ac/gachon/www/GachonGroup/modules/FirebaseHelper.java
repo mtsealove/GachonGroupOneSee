@@ -1,22 +1,14 @@
 package kr.ac.gachon.www.GachonGroup.modules;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,16 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -47,17 +35,10 @@ import com.google.firebase.storage.UploadTask;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
@@ -65,15 +46,10 @@ import javax.mail.SendFailedException;
 import kr.ac.gachon.www.GachonGroup.Account;
 import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.FindIdActivity;
-import kr.ac.gachon.www.GachonGroup.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.PRBoardActivity;
-import kr.ac.gachon.www.GachonGroup.PRFragment;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.SignUpActivity;
-
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -218,7 +194,6 @@ public class FirebaseHelper extends Activity{
 
             }
         });
-
     }
 
 
@@ -637,24 +612,48 @@ public class FirebaseHelper extends Activity{
         });
     }
 
-    public void getPRtitles(final ArrayList<String> title, final ArrayList<PRFragment> prFragments) {
+    public void SearchPRBoard(final String input, final Context context) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("PublicRelation").exists()) prFragments.remove(0);
-                int count=0;
+                ArrayList<String> titles=new ArrayList<>();
+                ArrayList<Integer> ids=new ArrayList<>();
                 for(DataSnapshot snapshot:dataSnapshot.child("PublicRelation").getChildren()) {
-                    String titleStr=snapshot.child("title").getValue(String.class);
-                    title.add(titleStr);
-
-                    Bundle bundle=new Bundle(1);
-                    bundle.putString("pageCount", Integer.toString(count));
-                    PRFragment fragment=new PRFragment();
-                    fragment.setArguments(bundle);
-                    prFragments.add(fragment);
-                    count++;
+                    if(snapshot.child("title").getValue(String.class).contains(input)) {
+                        titles.add(snapshot.child("title").getValue(String.class));
+                        ids.add(snapshot.child("id").getValue(Integer.class));
+                    }
                 }
+                PRBoardActivity activity=(PRBoardActivity)PRBoardActivity.PRBActivity;
+                activity.finish();
+                Intent intent=new Intent(context, PRBoardActivity.class);
+                intent.putStringArrayListExtra("titles", titles);
+                intent.putIntegerArrayListExtra("ids", ids);
+
+                context.startActivity(intent);
+                ((Activity)context).finish();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void setTextViewBoard(final TextView author, final TextView title, final TextView content, final String boardName , final int id) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String authorStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("author").getValue(String.class);
+                String titleStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("title").getValue(String.class);
+                String contentStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("content").getValue(String.class);
+                author.setText("작성자: "+authorStr);
+                title.setText("제목: "+titleStr);
+                content.setText(contentStr);
             }
 
             @Override

@@ -42,12 +42,12 @@ public class HomeActivity extends AppCompatActivity {
         buttonID[5]=R.id.social_scienceBtn;
         buttonID[6]=R.id.exhibitionBtn;
         buttonID[7]=R.id.volunteerBtn;
-        myInfo=(Button)findViewById(R.id.myInfoBtn);
-        PRbaordBtn=(Button)findViewById(R.id.PRboardBtn);
+        myInfo= findViewById(R.id.myInfoBtn);
+        PRbaordBtn= findViewById(R.id.PRboardBtn);
 
         //버튼 매칭
         for(int i=0; i<8; i++)
-            GroupBtn[i] = (Button) findViewById(buttonID[i]);
+            GroupBtn[i] = findViewById(buttonID[i]);
         //각 버튼 리스너 지정
         for(int i=0; i<8; i++) {
             final int finalI = i;
@@ -111,6 +111,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void PRBoard() {
         Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);
+        intent.putExtra("is_manager", account.is_manager);
         startActivity(intent);
     }
     @Override

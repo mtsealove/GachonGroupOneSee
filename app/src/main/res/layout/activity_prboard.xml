@@ -14,6 +14,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+
             android:id="@+id/Group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,6 +24,7 @@
             android:textSize="22sp" />
 
         <Button
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
@@ -31,6 +33,7 @@
             android:background="@drawable/back" />
 
         <View
+            style="?android:attr/borderlessButtonStyle"
             android:layout_below="@id/Group_name"
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -97,15 +100,16 @@
         android:layout_marginBottom="30dp">
 
         <Button
+            android:id="@+id/addBtn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
             android:background="@drawable/btn_color"
             android:text="@string/enrollment"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/searchBtn"

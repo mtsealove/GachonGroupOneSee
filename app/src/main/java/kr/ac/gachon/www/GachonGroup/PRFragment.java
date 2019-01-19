@@ -1,6 +1,7 @@
 package kr.ac.gachon.www.GachonGroup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,15 +18,25 @@ import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class PRFragment extends Fragment {
     ArrayList<String> titles;
+    ArrayList<Integer> ids;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle si) {
         View view=inflater.inflate(R.layout.fragment_pr, container,false);
         titles=new ArrayList<>();
+        ids=new ArrayList<>();
+
+        int page;
         try {
             titles = getArguments().getStringArrayList("titles");
         } catch (Exception e) {
 
         }
+        try {
+            ids=getArguments().getIntegerArrayList("ids");
+        } catch (Exception e) {
+
+        }
+
         int buttonID[]=new int[8];
         buttonID[0]=R.id.board0;
         buttonID[1]=R.id.board1;
@@ -49,6 +60,42 @@ public class PRFragment extends Fragment {
         } catch (NullPointerException e) {
 
         }
+        if(ids==null) {
+            //페이지로 아이디 설정
+            try {
+                page = getArguments().getInt("page");
+                for (int i = 0; i < titles.size(); i++) {
+                    final int id = page * 8 + i;
+                    boards[i].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            OpenBoard(id);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        else {
+            for(int i=0; i<titles.size(); i++) {
+                final int id=ids.get(i);
+                boards[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OpenBoard(id);
+                    }
+                });
+            }
+        }
+
         return view;
+    }
+    private void OpenBoard(int id) {
+        String boardName="PublicRelation";
+        Intent intent=new Intent(getContext(), BoardActivity.class);
+        intent.putExtra("boardName", boardName);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 }

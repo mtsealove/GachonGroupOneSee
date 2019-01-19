@@ -138,5 +138,6 @@
     <string name="search">검색하기</string>
     <string name="previous">&lt;prev</string>
     <string name="next">next&gt;</string>
-
+    <string name="report">신고</string>
+    <string name="test_explain">1.우리 동아리는 이런 활동을 합니다!\n1)어플제작\n2)분기별 엠티\n3)프로그래밍 스터디\n\n2. 우리 동아리는 이런 수상경력이 있습니다!\n1)교내 해커톤 수상\n2)경리도 프로그래밍 대회 수상\n3)다수의 졸업 프로젝트 도움</string>
 </resources>

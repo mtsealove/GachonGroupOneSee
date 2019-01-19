@@ -32,7 +32,8 @@
         <activity android:name=".EditMyInformationActivity" />
         <activity android:name=".GroupScheduleActivity" />
         <activity android:name=".PRBoardActivity" />
-        <activity android:name=".PRSearchActivity"></activity>
+        <activity android:name=".PRSearchActivity" />
+        <activity android:name=".BoardActivity"></activity>
     </application>
 
 </manifest>
