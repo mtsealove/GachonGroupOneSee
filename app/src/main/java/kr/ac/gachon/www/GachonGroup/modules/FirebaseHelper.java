@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -670,6 +671,30 @@ public class FirebaseHelper extends Activity{
                 } catch (DatabaseException e) {
                     textView.setText(alt);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void setListView(final ListView listView, final String board_name, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> titles=new ArrayList<>();
+                ArrayList<Integer> ids=new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.child(board_name).getChildren()) {
+                    String title=snapshot.child("title").getValue(String.class);
+                    int id=snapshot.child("id").getValue(Integer.class);
+                    titles.add(title);
+                    ids.add(id);
+                }
+                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                listView.setAdapter(adapter);
+
             }
 
             @Override

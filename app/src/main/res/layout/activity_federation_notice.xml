@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PRSearchActivity"
+    tools:context=".FederationNoticeActivity"
     android:orientation="vertical"
     android:background="#FFFFFF">
 
     <RelativeLayout
-        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="@string/pr_list"
+            android:text="@string/federation_notice"
             android:textColor="#000000"
             android:textSize="22sp" />
 
@@ -28,7 +27,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            />
 
         <View
             android:layout_below="@id/federationNoticeTV"
@@ -37,31 +37,41 @@
             android:background="#000000" />
     </RelativeLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/searchET"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/boardLV"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/input_background"
-            android:hint="검색어를 입력해주세요"
-            android:padding="5dp"
-            android:textSize="20sp" />
-
-        <Button
-            android:layout_gravity="right"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="35dp"
-            android:id="@+id/searchBtn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/search"/>
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="@drawable/dash_line"></ListView>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:gravity="center"
+            >
 
+            <Button
+                android:id="@+id/sendBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/btn_normal_gray"
+                android:paddingHorizontal="30dp"
+                android:text="@string/search"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

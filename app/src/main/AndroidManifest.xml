@@ -34,7 +34,9 @@
         <activity android:name=".PRBoardActivity" />
         <activity android:name=".PRSearchActivity" />
         <activity android:name=".BoardActivity" />
-        <activity android:name=".IntroduceActivity"></activity>
+        <activity android:name=".IntroduceActivity" />
+        <activity android:name=".RequirementsActivity" />
+        <activity android:name=".FederationNoticeActivity"></activity>
     </application>
 
 </manifest>

@@ -15,7 +15,7 @@
 
         <TextView
 
-            android:id="@+id/Group_name"
+            android:id="@+id/federationNoticeTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
@@ -34,7 +34,7 @@
 
         <View
             style="?android:attr/borderlessButtonStyle"
-            android:layout_below="@id/Group_name"
+            android:layout_below="@id/federationNoticeTV"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000000" />

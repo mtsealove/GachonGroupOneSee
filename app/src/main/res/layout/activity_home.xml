@@ -58,6 +58,7 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/federation_noticeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tab_btn"

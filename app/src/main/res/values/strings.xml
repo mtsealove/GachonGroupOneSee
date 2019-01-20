@@ -126,7 +126,7 @@
     <string name="requset_log">동아리 신청 내역</string>
     <string name="my_group">내 동아리 바로가기</string>
     <string name="my_group_schedule">내 동아리 일정 보기</string>
-    <string name="faq">문의사항</string>
+    <string name="requirement">문의사항</string>
     <string name="service_legal">서비스 약관</string>
     <string name="current_version">현재 버전 1.0</string>
     <string name="out">회원탈퇴</string>
@@ -139,4 +139,6 @@
     <string name="previous">&lt;prev</string>
     <string name="next">next&gt;</string>
     <string name="report">신고</string>
+    <string name="title">제목</string>
+    <string name="send">보내기</string>
 </resources>

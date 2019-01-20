@@ -16,7 +16,7 @@ public class GroupMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_menu);
 
-        groupNameTV= findViewById(R.id.Group_name);
+        groupNameTV= findViewById(R.id.federationNoticeTV);
         groupScheduleBtn= findViewById(R.id.groupScheduleBtn);
         groupIntroduceBtn= findViewById(R.id.introduceBtn);
 

@@ -17,7 +17,7 @@ import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class MyInformationActivity extends AppCompatActivity {
     TextView nameTV, groupTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn, requirementsBtn;
     ImageView profileIcon;
     private String ID;
 
@@ -27,14 +27,16 @@ public class MyInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_information);
-        nameTV=(TextView)findViewById(R.id.nameTV);
-        groupTV=(TextView)findViewById(R.id.groupTV);
-        EditInfoBtn=(Button)findViewById(R.id.EditInfoBtn);
-        logoutBtn=(Button)findViewById(R.id.logoutBtn);
-        profileIcon=(ImageView)findViewById(R.id.userIcon);
-        removeAccountBtn=(Button)findViewById(R.id.removeAccountBtn);
-        myGroupBtn=(Button)findViewById(R.id.myGroupBtn);
-        myGroupScheduleBtn=(Button)findViewById(R.id.MyGroupSchduleBtn);
+        nameTV= findViewById(R.id.nameTV);
+        groupTV= findViewById(R.id.groupTV);
+        EditInfoBtn= findViewById(R.id.EditInfoBtn);
+        logoutBtn= findViewById(R.id.logoutBtn);
+        profileIcon= findViewById(R.id.userIcon);
+        removeAccountBtn= findViewById(R.id.removeAccountBtn);
+        myGroupBtn= findViewById(R.id.myGroupBtn);
+        myGroupScheduleBtn= findViewById(R.id.MyGroupSchduleBtn);
+        removeAccountBtn= findViewById(R.id.requirementsBtn);
+        requirementsBtn= findViewById(R.id.requirementsBtn);
 
         account=new Account();
         Intent intent=getIntent();
@@ -74,6 +76,12 @@ public class MyInformationActivity extends AppCompatActivity {
                 MyGroupSchedule();
             }
         });
+        requirementsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Requirements();
+            }
+        });
     }
 
     //정보 수정 활동
@@ -97,10 +105,10 @@ public class MyInformationActivity extends AppCompatActivity {
         AlertDialog.Builder builder=new AlertDialog.Builder(MyInformationActivity.this);
         LayoutInflater inflater=getLayoutInflater();
         View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
-        TextView msg=(TextView)layout.findViewById(R.id.dialog_msgTV);
+        TextView msg= layout.findViewById(R.id.dialog_msgTV);
         msg.setText("회원을 탈퇴하십니까?");
-        Button negative=(Button)layout.findViewById(R.id.negative);
-        Button positive=(Button)layout.findViewById(R.id.positive);
+        Button negative= layout.findViewById(R.id.negative);
+        Button positive= layout.findViewById(R.id.positive);
         builder.setView(layout);
         final AlertDialog dialog=builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
@@ -128,9 +136,16 @@ public class MyInformationActivity extends AppCompatActivity {
         intent.putExtra("groupName", account.group);
         startActivity(intent);
     }
+    //내 동아리 일정 바로가기
     private void MyGroupSchedule() {
         Intent intent=new Intent(MyInformationActivity.this, GroupScheduleActivity.class);
         intent.putExtra("groupName", account.group);
+        startActivity(intent);
+    }
+    //문의사항
+    private void Requirements() {
+        Intent intent=new Intent(MyInformationActivity.this, RequirementsActivity.class);
+        intent.putExtra("ID", ID);
         startActivity(intent);
     }
 
