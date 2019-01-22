@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:background="#FFFFFF">
 
     <!--로고 출력 레이아웃-->
     <ImageView
-        android:layout_marginTop="60dp"
         android:layout_width="160dp"
         android:layout_height="120dp"
         android:src="@drawable/gachon_group_logo"/>

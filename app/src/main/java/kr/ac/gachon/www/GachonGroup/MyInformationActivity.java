@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
@@ -92,6 +97,13 @@ public class MyInformationActivity extends AppCompatActivity {
     }
     //로그아웃
     private void LogOut() {
+        try {
+            BufferedWriter bw=new BufferedWriter(new FileWriter(new File(getFilesDir()+"login.dat"), false));
+            bw.write("");
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         HomeActivity HA=(HomeActivity)HomeActivity._Home_Activity;
         HA.finish();
         Intent intent=new Intent(MyInformationActivity.this, LoginActivity.class);

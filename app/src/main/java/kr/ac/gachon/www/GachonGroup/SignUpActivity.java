@@ -60,24 +60,19 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .permitDiskReads()
-                .permitDiskWrites()
-                .permitNetwork().build());
-
         //뷰 매칭
-        nameET = (EditText) findViewById(R.id.nameET);
-        IDET = (EditText) findViewById(R.id.ID_ET);
-        emailET = (EditText) findViewById(R.id.email_ET);
-        majorSP = (Spinner) findViewById(R.id.major_SP);
-        majorET = (EditText) findViewById(R.id.major_ET);
-        StudentNumberET = (EditText) findViewById(R.id.StdNumber_ET);
-        groupSP = (Spinner) findViewById(R.id.group_SP);
-        passwordET = (EditText) findViewById(R.id.password_ET);
-        password_confirmET = (EditText) findViewById(R.id.password_confirm_ET);
-        signUpBTN = (Button) findViewById(R.id.sign_up_btn);
-        checkReuseBTN = (Button) findViewById(R.id.check_id_reuse_btn);
-        sendVerifyBTN = (Button) findViewById(R.id.send_verify_btn);
+        nameET = findViewById(R.id.nameET);
+        IDET = findViewById(R.id.ID_ET);
+        emailET = findViewById(R.id.email_ET);
+        majorSP =findViewById(R.id.major_SP);
+        majorET = findViewById(R.id.major_ET);
+        StudentNumberET =findViewById(R.id.StdNumber_ET);
+        groupSP =findViewById(R.id.group_SP);
+        passwordET =findViewById(R.id.password_ET);
+        password_confirmET =findViewById(R.id.password_confirm_ET);
+        signUpBTN = findViewById(R.id.sign_up_btn);
+        checkReuseBTN =findViewById(R.id.check_id_reuse_btn);
+        sendVerifyBTN =findViewById(R.id.send_verify_btn);
 
         checkReuseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,10 +179,10 @@ public class SignUpActivity extends AppCompatActivity {
         TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return;
+                myNumber = mgr.getLine1Number();
+                myNumber = myNumber.replace("+82", "0");
+                Toast.makeText(SignUpActivity.this, "전화번호:" + myNumber, Toast.LENGTH_SHORT).show();
             }
-            myNumber = mgr.getLine1Number();
-            myNumber = myNumber.replace("+82", "0");
 
         }catch(Exception e){}
 
@@ -201,7 +196,19 @@ public class SignUpActivity extends AppCompatActivity {
         else if(password.length()==0) shortToast("비밀번호를 입력해주세요");
         else if(password_confirm.length()==0) shortToast("비밀번호를 확인해주세요");
         else if(!password.equals(password_confirm)) shortToast("비밀번호가 일치하지 않습니다");
-        else  {
+        else {
+            final Alert alert = new Alert();
+            final String finalMyNumber1 = myNumber;
+            alert.MsgDialogChoice("회원가입을 하시겠습니까?", SignUpActivity.this, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Account account = new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber1, false);
+                    FirebaseHelper firebaseHelper = new FirebaseHelper();
+                    firebaseHelper.CreateAccount(account);
+                    alert.MsgDialogEnd("회원가입이\n완료되었습니다", SignUpActivity.this);
+                }
+            });
+            /*
             //모든 조건이 만족하면 계정 생성
             AlertDialog.Builder builder=new AlertDialog.Builder(SignUpActivity.this);
             LayoutInflater inflater=getLayoutInflater();
@@ -229,6 +236,8 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
             dialog.show();
+        }
+        */
         }
     }
 

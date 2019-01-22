@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
@@ -134,25 +136,32 @@ public class FirebaseHelper extends Activity{
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_verify_code, null);
         //각 뷰 매칭
-        final TextView timeTV= layout.findViewById(R.id.timeTV);
-        final EditText verifyET= layout.findViewById(R.id.verify_code_ET);
+        final TextView timeTV=layout.findViewById(R.id.timeTV);
+        final EditText verifyET=layout.findViewById(R.id.verify_code_ET);
         Button okay= layout.findViewById(R.id.okay);
 
         //남은 시간 표시
         TimerTask timerTask=new TimerTask() {
             @Override
             public void run() {
-                if(time<0) Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show();
-                else {
-                    time--;
-                    int min = time / 60;
-                    int sec = time % 60;
-                    timeTV.setText(min + "분 " + sec + "초 남음");
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(time<0) Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show();
+                        else {
+                            time--;
+                            int min = time / 60;
+                            int sec = time % 60;
+                            timeTV.setText(min + "분 " + sec + "초 남음");
+                        }
+                    }
+                });
             }
         };
         Timer timer=new Timer();
         timer.schedule(timerTask, 0, 1000);
+
+
 
         //다이얼로그 생성
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
