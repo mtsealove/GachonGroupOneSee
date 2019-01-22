@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/federationNoticeTV"
+            android:id="@+id/titleTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
@@ -32,7 +32,7 @@
             android:onClick="back" />
 
         <View
-            android:layout_below="@id/federationNoticeTV"
+            android:layout_below="@id/titleTV"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#000000" />

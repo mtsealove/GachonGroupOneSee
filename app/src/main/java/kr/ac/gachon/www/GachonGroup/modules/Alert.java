@@ -75,4 +75,24 @@ public class Alert extends AppCompatActivity {
         //출력
         dialog.show();
     }
+    public void MsgDialogChoice(String msg, final Context context, View.OnClickListener positiveListener) {
+        LayoutInflater inflater=LayoutInflater.from(context);
+        View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setView(layout);
+        TextView msgTV=layout.findViewById(R.id.dialog_msgTV);
+        msgTV.setText(msg);
+        Button negative=layout.findViewById(R.id.negative);
+        Button positive=layout.findViewById(R.id.positive);
+        final AlertDialog dialog=builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        negative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+        positive.setOnClickListener(positiveListener);
+        dialog.show();
+    }
 }

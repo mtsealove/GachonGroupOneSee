@@ -14,8 +14,9 @@ public class HomeActivity extends AppCompatActivity {
     //동아리 리스트 버튼
     Button GroupBtn[]=new Button[8];
     int buttonID[]=new int[8];
-    Account account;
-    Button myInfo, PRbaordBtn, FederationNoticeBtn;
+    private Account account;
+    private String ID;
+    Button myInfo, PRbaordBtn, FederationNoticeBtn, QnABtn;
     int curent_page=0;
 
     public static Activity _Home_Activity;
@@ -27,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         _Home_Activity=HomeActivity.this;
         Intent intent=getIntent();
-        String ID=intent.getStringExtra("ID");
+        ID=intent.getStringExtra("ID");
         FirebaseHelper helper=new FirebaseHelper();
         account=new Account();
         helper.GetAccount(ID, account);
@@ -45,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         myInfo= findViewById(R.id.myInfoBtn);
         PRbaordBtn= findViewById(R.id.PRboardBtn);
         FederationNoticeBtn= findViewById(R.id.federation_noticeBtn);
+        QnABtn= findViewById(R.id.QnABtn);
 
         //버튼 매칭
         for(int i=0; i<8; i++)
@@ -110,6 +112,12 @@ public class HomeActivity extends AppCompatActivity {
                 FederationNotice();
             }
         });
+        QnABtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QnA();
+            }
+        });
     }
     private void MyInformation() {
         Intent intent=new Intent(HomeActivity.this, MyInformationActivity.class);
@@ -123,6 +131,12 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void FederationNotice() {
         Intent intent=new Intent(HomeActivity.this, FederationNoticeActivity.class);
+        intent.putExtra("userID", ID);
+        startActivity(intent);
+    }
+    private void QnA() {
+        Intent intent=new Intent(HomeActivity.this, QnAActivity.class);
+        intent.putExtra("userID", ID);
         startActivity(intent);
     }
     @Override

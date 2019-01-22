@@ -14,6 +14,7 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AccuseActivity"></activity>
         <activity android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +37,10 @@
         <activity android:name=".BoardActivity" />
         <activity android:name=".IntroduceActivity" />
         <activity android:name=".RequirementsActivity" />
-        <activity android:name=".FederationNoticeActivity"></activity>
+        <activity android:name=".FederationNoticeActivity" />
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".QnAActivity" />
+        <activity android:name=".AddPostActivity" />
     </application>
 
 </manifest>

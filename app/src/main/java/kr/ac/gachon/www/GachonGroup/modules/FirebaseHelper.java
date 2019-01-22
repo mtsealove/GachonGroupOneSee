@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,9 @@ import com.google.firebase.storage.UploadTask;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,6 +49,7 @@ import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 
 import kr.ac.gachon.www.GachonGroup.Account;
+import kr.ac.gachon.www.GachonGroup.BoardActivity;
 import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.FindIdActivity;
 import kr.ac.gachon.www.GachonGroup.LoginActivity;
@@ -641,12 +645,14 @@ public class FirebaseHelper extends Activity{
         });
     }
 
+    //게시판 내용 설정
     public void setTextViewBoard(final TextView author, final TextView title, final TextView content, final String boardName , final int id) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String authorStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("author").getValue(String.class);
+                String authorID=dataSnapshot.child(boardName).child(Integer.toString(id)).child("author").getValue(String.class);
+                String authorStr=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
                 String titleStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("title").getValue(String.class);
                 String contentStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("content").getValue(String.class);
                 author.setText("작성자: "+authorStr);
@@ -660,6 +666,7 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+    //child기반으로 Textview 설정
     public void setStringTextView(final TextView textView, final String child1, final String child2, final String child3, final String alt) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -679,7 +686,8 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
-    public void setListView(final ListView listView, final String board_name, final Context context) {
+    //리스트뷰에 게시판의 타이틀 설정
+    public void setListView(final String userID, final ListView listView, final String board_name, final Context context) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -694,7 +702,144 @@ public class FirebaseHelper extends Activity{
                 }
                 ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
                 listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent=new Intent(context, BoardActivity.class);
+                        intent.putExtra("boardName", board_name);
+                        intent.putExtra("id", position);
+                        intent.putExtra("userID", userID);
+                        context.startActivity(intent);
+                    }
+                });
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //리스트뷰에 게시판의 타이틀 설정, 검색 값 설정
+    public void setListView(final String userID, final ListView listView, final String board_name, final Context context, final String value) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> titles=new ArrayList<>();
+                final ArrayList<Integer> ids=new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.child(board_name).getChildren()) {
+                    String title=snapshot.child("title").getValue(String.class);
+                    if(title.contains(value)) {
+                        int id = snapshot.child("id").getValue(Integer.class);
+                        titles.add(title);
+                        ids.add(id);
+                    }
+                }
+                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent=new Intent(context, BoardActivity.class);
+                        intent.putExtra("boardName", board_name);
+                        intent.putExtra("id", ids.get(position));
+                        intent.putExtra("userID", userID);
+                        context.startActivity(intent);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //화면에 댓글 표시
+    public void AddReply(final LinearLayout layout,final String boardName, final int BoardID, final Context context) {
+        final DatabaseReference reference=database.getReference();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LayoutInflater inflater=LayoutInflater.from(context);
+                layout.removeAllViews();
+                for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
+                    View reply=inflater.inflate(R.layout.sub_reply, null);
+                    TextView authorTV=reply.findViewById(R.id.authorTV);
+                    TextView timeTV=reply.findViewById(R.id.timeTV);
+                    TextView contentTV=reply.findViewById(R.id.contentTV);
+
+                    String authorID=snapshot.child("author").getValue(String.class);
+                    String authorName=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
+                    authorTV.setText(authorName);
+                    timeTV.setText(snapshot.child("time").getValue(String.class));
+                    contentTV.setText(snapshot.child("content").getValue(String.class));
+                    layout.addView(reply);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void CommitReply(final String boardName, final String boardID, final String userID, final String Content) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=(int)(dataSnapshot.child(boardName).child(boardID).child("reply").getChildrenCount());
+                reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
+                reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
+                Date date=new Date();
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
+                String dateStr=dateFormat.format(date);
+                reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("time").setValue(dateStr);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void Post(final String boardName,final String ID,final String title,final String content) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=(int)(dataSnapshot.child(boardName).getChildrenCount());
+                reference.child(boardName).child(Integer.toString(count)).child("author").setValue(ID);
+                reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);
+                reference.child(boardName).child(Integer.toString(count)).child("title").setValue(title);
+                reference.child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void Accuse(final String boardName, final String boardID, final String userID, final String reason) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
+                reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
+                reference.child("Accuse").child(count).child("UserID").setValue(userID);
+                reference.child("Accuse").child(count).child("Reason").setValue(reason);
             }
 
             @Override

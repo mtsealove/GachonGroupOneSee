@@ -16,7 +16,7 @@ public class GroupMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_menu);
 
-        groupNameTV= findViewById(R.id.federationNoticeTV);
+        groupNameTV= findViewById(R.id.titleTV);
         groupScheduleBtn= findViewById(R.id.groupScheduleBtn);
         groupIntroduceBtn= findViewById(R.id.introduceBtn);
 
@@ -40,14 +40,27 @@ public class GroupMenuActivity extends AppCompatActivity {
 
     private void GroupSchedule() {
         Intent intent=new Intent(GroupMenuActivity.this, GroupScheduleActivity.class);
+        trimName();
         intent.putExtra("groupName", groupName);
         startActivity(intent);
     }
 
     private void Introduce() {
+        trimName();
         Intent intent=new Intent(GroupMenuActivity.this, IntroduceActivity.class);
         intent.putExtra("group", groupName);
         startActivity(intent);
+    }
+
+    //데이터베이스 상에 .이라는 이름을 사용할 수 없기 때문에 .제거
+    private void trimName() {
+        if(groupName.contains(".")) {
+            String newName="";
+            String[] parts=groupName.split(".");
+            for(int i=0; i<parts.length; i++)
+                newName+=parts[i];
+            groupName=newName;
+        }
     }
 
     public void back(View v) {

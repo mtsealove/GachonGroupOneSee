@@ -17,18 +17,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="@string/federation_notice"
+            android:text="@string/QnA"
             android:textColor="#000000"
             android:textSize="22sp" />
 
         <Button
+            android:id="@+id/closeBtn"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:background="@drawable/back"
-            />
+            android:onClick="close"/>
 
         <View
             android:layout_below="@id/titleTV"
@@ -43,6 +44,7 @@
         android:orientation="vertical">
 
         <ListView
+
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="5dp"
             android:id="@+id/boardLV"
@@ -59,17 +61,40 @@
             android:gravity="center"
             >
 
-            <Button
-                android:id="@+id/searchBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/btn_normal_gray"
-                android:paddingHorizontal="30dp"
-                android:text="@string/search"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/postBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_color"
+                    android:paddingHorizontal="30dp"
+                    android:text="@string/enrollment"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+
+                <Button
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/searchBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/btn_normal_gray"
+                    android:paddingHorizontal="30dp"
+                    android:text="@string/search"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

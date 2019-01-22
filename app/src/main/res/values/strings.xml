@@ -141,4 +141,16 @@
     <string name="report">신고</string>
     <string name="title">제목</string>
     <string name="send">보내기</string>
+    <string name="input_reply">댓글을 입력해 주세요</string>
+    <string name="commit">등록</string>
+    <string name="tmpCommit">임시저장</string>
+    <string name="accuse">신고하기</string>
+    <string name="accuse1">욕설/비하</string>
+    <string name="accuse2">유출/사칭/사기</string>
+    <string name="accuse3">낚시/놀림/도배</string>
+    <string name="accuse4">상업적 광고 및 판매</string>
+    <string name="accuse5">음란물/불건전한 내용</string>
+    <string name="accuse6">게시판 성격에 부적적함</string>
+    <string name="etc">기타</string>
+
 </resources>

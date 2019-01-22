@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,83 +8,130 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_above="@id/InputReplyLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/BoardNameTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:text="게시판 이름"
-            android:textColor="#000000"
-            android:textSize="22sp" />
-
-        <Button
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/back" />
-
-        <View
-            android:layout_below="@id/BoardNameTV"
+        <RelativeLayout
+            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/titleTV"
+                android:id="@+id/BoardNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:text="제목: 게시글 제목"
+                android:layout_margin="15dp"
+                android:text="게시판 이름"
                 android:textColor="#000000"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/authorTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="글쓴이: 게시글 작성자"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
             <Button
-                android:id="@+id/reportBtn"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/btn_gray_round"
-                android:text="@string/report"
-                android:textSize="16sp" />
+                android:background="@drawable/back" />
 
-            <TextView
-                android:id="@+id/contentTV"
+            <View
+                android:layout_below="@id/BoardNameTV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:background="@drawable/input_background"
-                android:padding="20dp"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:layout_height="1dp"
+                android:background="#000000" />
+        </RelativeLayout>
 
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="제목: 게시글 제목"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/authorTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="글쓴이: 게시글 작성자"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/functionBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/btn_gray_round"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/contentTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ShowReplyLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/InputReplyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="#FFFFFF">
+
+        <EditText
+            android:id="@+id/replyET"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/input_background"
+            android:hint="@string/input_reply"
+            android:padding="10dp"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/replyBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/write" />
+    </FrameLayout>
+</RelativeLayout>
