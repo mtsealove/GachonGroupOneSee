@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,17 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
 
 public class RequirementsActivity extends AppCompatActivity {
     EditText titleET, emailET, contentET;
     Button sendBtn, closeBtn;
     private String title, email, content, ID;
+    Alert alert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requirements);
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
+        alert=new Alert();
         //뷰 매칭
         titleET= findViewById(R.id.titleET);
         emailET= findViewById(R.id.emailET);
@@ -55,33 +59,19 @@ public class RequirementsActivity extends AppCompatActivity {
         if(title.length()==0) Toast.makeText(RequirementsActivity.this, "제목을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(email.length()==0) Toast.makeText(RequirementsActivity.this, "이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(content.length()==0) Toast.makeText(RequirementsActivity.this, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else if((!email.contains("@"))||((!email.contains(".com"))&&(!email.contains(".kr"))&&(!email.contains(".net"))))
+            Toast.makeText(RequirementsActivity.this, "이메일 형식을 확인해 주세요", Toast.LENGTH_SHORT).show();
         else {
             SendRequirement();
         }
     }
     //보내기 버튼
     private void SendRequirement() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(RequirementsActivity.this);
-        LayoutInflater inflater=getLayoutInflater();
-        View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
-        TextView msg= layout.findViewById(R.id.dialog_msgTV);
-        msg.setText("문의하신 내용을\n보내시겠습니까?");
-        Button negative= layout.findViewById(R.id.negative);
-        Button positive= layout.findViewById(R.id.positive);
-        builder.setView(layout);
-        final AlertDialog dialog=builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-        dialog.show();
-        negative.setOnClickListener(new View.OnClickListener() {
+        alert.MsgDialogChoice("문의하신 내용을 보내시겠습니까?", RequirementsActivity.this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //내용을 전달할 메서드 추가
+                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다", RequirementsActivity.this);
+                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요", RequirementsActivity.this);
             }
         });
     }
@@ -98,30 +88,26 @@ public class RequirementsActivity extends AppCompatActivity {
         }
     }
     private void setCloseDialog() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(RequirementsActivity.this);
-        LayoutInflater inflater=getLayoutInflater();
-        View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
-        builder.setView(layout);
-        TextView msg= layout.findViewById(R.id.dialog_msgTV);
-        msg.setText("작성을 취소하시겠습니까?");
-        Button positive= layout.findViewById(R.id.positive);
-        Button negative= layout.findViewById(R.id.negative);
-        final AlertDialog dialog=builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-        positive.setOnClickListener(new View.OnClickListener() {
+        alert.MsgDialogChoice("작성을 취소하시겠습니까?", RequirementsActivity.this, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
                 finish();
             }
         });
-        negative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-        dialog.show();
+    }
+
+    //메일 보내기
+    private boolean SendMail() {
+        GmailSender sender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
+        try {
+            String MailContent="보낸 사람: "+email;
+            MailContent+="\n내용:\n"+content;
+            sender.sendMail(title, MailContent,"werqtt18@gmail.com", "werqtt18@gmail.com");
+            return true;
+        }catch (Exception e) {
+            Log.d("RequirementActiviy", "메일 발송 실패");
+            return false;
+        }
     }
     @Override
     public void onBackPressed() {

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RequirementsActivity"
-    android:orientation="vertical"
     android:background="#FFFFFF">
 
+    <LinearLayout
+        android:id="@+id/titles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -56,12 +60,13 @@
             android:id="@+id/titleET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="60dp"
             android:layout_weight="3"
             android:background="@drawable/input_background"
             android:padding="5dp"
             android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            android:inputType="textPersonName"/>
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -82,62 +87,44 @@
             android:id="@+id/emailET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="60dp"
             android:layout_weight="3"
             android:background="@drawable/input_background"
             android:padding="5dp"
             android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            android:inputType="textEmailAddress"/>
+    </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_marginTop="20dp"
+    <EditText
+        android:id="@+id/contentET"
+        android:layout_below="@id/titles"
+        android:layout_above="@id/sendBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="top"
+        android:background="@drawable/input_background"
+        android:padding="10dp"
+        android:inputType="textMultiLine"/>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/input_background"
-            android:layout_marginHorizontal="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <EditText
-                    android:id="@+id/contentET"
-                    android:layout_width="match_parent"
-                    android:layout_height="600dp"
-                    android:background="#00FFFFFF"
-                    android:inputType="textMultiLine"
-                    android:textSize="16sp"
-                    android:padding="5dp"/>
-            </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-            android:layout_weight="6"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            >
             <Button
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:id="@+id/sendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/btn_color"
                 android:paddingHorizontal="30dp"
                 android:text="@string/send"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
-        </LinearLayout>
 
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

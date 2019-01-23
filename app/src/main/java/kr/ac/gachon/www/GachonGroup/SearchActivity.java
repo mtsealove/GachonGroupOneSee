@@ -16,7 +16,8 @@ public class SearchActivity extends AppCompatActivity {
     EditText searchET;
     FederationNoticeActivity federationNoticeActivity;
     QnAActivity  QnAActivity;
-    private String BoardName;
+    InformationBoardActivity InformationActivity;
+    private String BoardName, groupName, userID;
     @Override
     protected void onCreate(Bundle si) {
         super.onCreate(si);
@@ -27,9 +28,12 @@ public class SearchActivity extends AppCompatActivity {
 
         federationNoticeActivity=(FederationNoticeActivity)FederationNoticeActivity._FederationNoticeActivity;
         QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.QnAActivity._QnAActivity;
+        InformationActivity=(InformationBoardActivity)InformationBoardActivity._InformationActivity;
 
         Intent intent=getIntent();
         BoardName=intent.getStringExtra("BoardName");
+        groupName=intent.getStringExtra("groupName");
+        userID=intent.getStringExtra("userID");
         String BoardNameKR=null;
 
         switch (BoardName) {
@@ -38,6 +42,9 @@ public class SearchActivity extends AppCompatActivity {
                 break;
             case "QnA":
                 BoardNameKR="Q&A";
+                break;
+            case "Information":
+                BoardNameKR="정보게시판";
                 break;
         }
         titleTV.setText(BoardNameKR);
@@ -64,6 +71,15 @@ public class SearchActivity extends AppCompatActivity {
                 QnAActivity.finish();
                 intent=new Intent(SearchActivity.this, QnAActivity.class);
                 intent.putExtra("value", value);
+                startActivity(intent);
+                finish();
+                break;
+            case "Information":
+                InformationActivity.finish();
+                intent=new Intent(SearchActivity.this, InformationBoardActivity.class);
+                intent.putExtra("value", value);
+                intent.putExtra("groupName", groupName);
+                intent.putExtra("ID", userID);
                 startActivity(intent);
                 finish();
                 break;

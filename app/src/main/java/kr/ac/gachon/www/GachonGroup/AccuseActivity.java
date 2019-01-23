@@ -74,4 +74,7 @@ public class AccuseActivity extends AppCompatActivity {
             });
         }
     }
+    public void close(View v) {
+        finish();
+    }
 }

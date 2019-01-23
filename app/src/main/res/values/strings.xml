@@ -152,5 +152,10 @@
     <string name="accuse5">음란물/불건전한 내용</string>
     <string name="accuse6">게시판 성격에 부적적함</string>
     <string name="etc">기타</string>
-
+    <string name="contact">연락처</string>
+    <string name="age">나이</string>
+    <string name="able_time">가능한 시간</string>
+    <string name="self_introduce">자기소개</string>
+    <string name="input_content">내용을 입력해 주세요</string>
+    <string name="do_request">신청하기</string>
 </resources>

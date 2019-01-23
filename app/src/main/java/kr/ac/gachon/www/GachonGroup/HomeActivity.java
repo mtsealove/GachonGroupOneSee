@@ -89,6 +89,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     groupList.putExtra("category", category);
                     groupList.putExtra("categorykr", categoryKR);
+                    groupList.putExtra("ID", ID);
                     startActivity(groupList);
                 }
             });

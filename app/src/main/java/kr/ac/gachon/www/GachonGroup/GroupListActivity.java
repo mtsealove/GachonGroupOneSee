@@ -16,18 +16,19 @@ public class GroupListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_list);
-        group_list_layout=(LinearLayout)findViewById(R.id.group_list_layout);
+        group_list_layout= findViewById(R.id.group_list_layout);
         //이전 액티비티에서 분과를 받아옴
         Intent intent=getIntent();
         String category=intent.getStringExtra("category");
         String categorykr=intent.getStringExtra("categorykr");
+        String ID=intent.getStringExtra("ID");
 
         //분과 표시
-        categoryTV=(TextView)findViewById(R.id.Group_category);
+        categoryTV= findViewById(R.id.Group_category);
         categoryTV.setText(categorykr);
 
         FirebaseHelper helper=new FirebaseHelper();
-        helper.getGroupList(category, group_list_layout, GroupListActivity.this);
+        helper.getGroupList(category, group_list_layout, GroupListActivity.this, ID);
     }
     public void back(View v) {
         onBackPressed();

@@ -12,7 +12,7 @@ import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class AddPostActivity extends AppCompatActivity {
-    private String boardName, userID;
+    private String boardName, userID, groupName;
     EditText titleET, contentET;
     Button commitBtn, tmpCommitBtn;
     @Override
@@ -22,6 +22,7 @@ public class AddPostActivity extends AppCompatActivity {
         Intent intent=getIntent();
         boardName=intent.getStringExtra("boardName");
         userID=intent.getStringExtra("userID");
+        groupName=intent.getStringExtra("groupName");
 
         titleET=findViewById(R.id.titleET);
         contentET=findViewById(R.id.contentET);
@@ -34,9 +35,8 @@ public class AddPostActivity extends AppCompatActivity {
                 Post();
             }
         });
+        if(groupName!=null) contentET.setHint("내용을 입력해주세요");
     }
-
-
     private String title, content;
     private void Post() {
         title=titleET.getText().toString();
@@ -45,7 +45,10 @@ public class AddPostActivity extends AppCompatActivity {
         else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else {
             Alert alert=new Alert();
+            if(groupName==null)
             alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", AddPostActivity.this, postListener);
+            else
+                alert.MsgDialogChoice("작성한 내용을 등록하시겠습니까?", AddPostActivity.this, GroupPostListener);
         }
     }
     View.OnClickListener postListener=new View.OnClickListener() {
@@ -53,6 +56,14 @@ public class AddPostActivity extends AppCompatActivity {
         public void onClick(View v) {
             FirebaseHelper helper=new FirebaseHelper();
             helper.Post(boardName, userID, title, content);
+            finish();
+        }
+    };
+    View.OnClickListener GroupPostListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FirebaseHelper helper=new FirebaseHelper();
+            helper.Post(groupName, boardName, userID, title, content);
             finish();
         }
     };

@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AccuseActivity"></activity>
+        <activity android:name=".JoinRequestActivity"></activity>
+        <activity android:name=".AccuseActivity" />
         <activity android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +42,7 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".QnAActivity" />
         <activity android:name=".AddPostActivity" />
+        <activity android:name=".InformationBoardActivity" />
     </application>
 
 </manifest>

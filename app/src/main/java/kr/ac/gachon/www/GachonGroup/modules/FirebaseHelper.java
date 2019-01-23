@@ -44,12 +44,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
-
 import kr.ac.gachon.www.GachonGroup.Account;
 import kr.ac.gachon.www.GachonGroup.BoardActivity;
 import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
@@ -59,7 +53,6 @@ import kr.ac.gachon.www.GachonGroup.PRBoardActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.SignUpActivity;
 
-import static android.app.PendingIntent.getActivity;
 
 public class FirebaseHelper extends Activity{
     FirebaseDatabase database;
@@ -402,7 +395,7 @@ public class FirebaseHelper extends Activity{
     }
 
     //특정 분야의 동아리 목록 표시
-    public void getGroupList(final String category, final LinearLayout layout, final Context context) {
+    public void getGroupList(final String category, final LinearLayout layout, final Context context, final String ID) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -432,6 +425,7 @@ public class FirebaseHelper extends Activity{
                                 groupMenu.setClass(context, kr.ac.gachon.www.GachonGroup.GroupMenuActivity.class);
                                 groupMenu.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 groupMenu.putExtra("groupName",groupName);
+                                groupMenu.putExtra("ID", ID);
                                 context.startActivity(groupMenu);
                             }
                         });
@@ -675,6 +669,29 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+
+    //동아리 게시판 보드
+    public void setTextViewBoard(final String GroupName, final TextView author, final TextView title, final TextView content, final String boardName , final int id) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String authorID=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("author").getValue(String.class);
+                String authorStr=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
+                String titleStr=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("title").getValue(String.class);
+                String contentStr=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("content").getValue(String.class);
+                author.setText("작성자: "+authorStr);
+                title.setText("제목: "+titleStr);
+                content.setText(contentStr);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     //child기반으로 Textview 설정
     public void setStringTextView(final TextView textView, final String child1, final String child2, final String child3, final String alt) {
         DatabaseReference reference=database.getReference();
@@ -730,6 +747,44 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+    //특정 그룹의 게시판 설정
+    public void setListView(final String groupName, final String userID, final ListView listView, final String board_name, final Context context) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> titles=new ArrayList<>();
+                ArrayList<Integer> ids=new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(board_name).getChildren()) {
+                    String title=snapshot.child("title").getValue(String.class);
+                    int id=snapshot.child("id").getValue(Integer.class);
+                    titles.add(title);
+                    ids.add(id);
+                }
+                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent=new Intent(context, BoardActivity.class);
+                        intent.putExtra("groupName", groupName);
+                        intent.putExtra("boardName", board_name);
+                        intent.putExtra("id", position);
+                        intent.putExtra("userID", userID);
+                        context.startActivity(intent);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 
     //리스트뷰에 게시판의 타이틀 설정, 검색 값 설정
     public void setListView(final String userID, final ListView listView, final String board_name, final Context context, final String value) {
@@ -753,6 +808,45 @@ public class FirebaseHelper extends Activity{
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent=new Intent(context, BoardActivity.class);
+                        intent.putExtra("boardName", board_name);
+                        intent.putExtra("id", ids.get(position));
+                        intent.putExtra("userID", userID);
+                        context.startActivity(intent);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //특정 그룹의 리스트뷰에 게시판의 타이틀 설정, 검색 값 설정
+    public void setListView(final String groupName, final String userID, final ListView listView, final String board_name, final Context context, final String value) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> titles=new ArrayList<>();
+                final ArrayList<Integer> ids=new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(board_name).getChildren()) {
+                    String title=snapshot.child("title").getValue(String.class);
+                    if(title.contains(value)) {
+                        int id = snapshot.child("id").getValue(Integer.class);
+                        titles.add(title);
+                        ids.add(id);
+                    }
+                }
+                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent=new Intent(context, BoardActivity.class);
+                        intent.putExtra("groupName", groupName);
                         intent.putExtra("boardName", board_name);
                         intent.putExtra("id", ids.get(position));
                         intent.putExtra("userID", userID);
@@ -799,14 +893,51 @@ public class FirebaseHelper extends Activity{
         });
     }
 
+    //동아리 게시판 화면에 댓글 표시
+    //동아리 이름, 댓글이 추가될 LinearLayout, 게시판 이름, 게시글 ID, Context
+    public void AddReply(final String groupName, final LinearLayout layout,final String boardName, final int BoardID, final Context context) {
+        final DatabaseReference reference=database.getReference();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LayoutInflater inflater=LayoutInflater.from(context);
+                //데이터가 업데이트 되면 모든 뷰를 추가하기 때문에 모든 뷰 삭제
+                layout.removeAllViews();
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
+                    View reply=inflater.inflate(R.layout.sub_reply, null);
+                    TextView authorTV=reply.findViewById(R.id.authorTV);
+                    TextView timeTV=reply.findViewById(R.id.timeTV);
+                    TextView contentTV=reply.findViewById(R.id.contentTV);
+                    //댓글을 작성한 유저의 ID를 기반으로 유저의 이름 파악
+                    String authorID=snapshot.child("author").getValue(String.class);
+                    String authorName=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
+                    //작성자, 작성 시간, 댓글 내용 출력
+                    authorTV.setText(authorName);
+                    timeTV.setText(snapshot.child("time").getValue(String.class));
+                    contentTV.setText(snapshot.child("content").getValue(String.class));
+                    layout.addView(reply);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //일반 게시판 댓글 작성
+    //게시판 이름, 게시글 ID, 유저 ID, 내용
     public void CommitReply(final String boardName, final String boardID, final String userID, final String Content) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //마지막 글로
                 int count=(int)(dataSnapshot.child(boardName).child(boardID).child("reply").getChildrenCount());
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
+                //현재 시간을 불러와 간단한 형식으로 추가
                 Date date=new Date();
                 SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
                 String dateStr=dateFormat.format(date);
@@ -819,12 +950,40 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+    //동아리 게시판에 댓글 작성
+    //동아리 이름, 게시판 이름, 게시글 ID, 유저 ID, 내용
+    //동아리 회원 이외 접근 불가
+    public void CommitReply(final String groupName, final String boardName, final String boardID, final String userID, final String Content) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //해당 게시글의 마지막 댓글로
+                int count=(int)(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").getChildrenCount());
+                reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
+                reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
+                //현재 시간을 불러와 간단한 형식으로 데이터 추가
+                Date date=new Date();
+                SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
+                String dateStr=dateFormat.format(date);
+                reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("time").setValue(dateStr);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //전체 게시판(연합회 공지사항, QnA)에 게시글 작성
+    //게시판 이름, 유저 ID, 제목, 내용
+    //관리자 이외에는 접근 불가하게 타 크래스에서 설정
     public void Post(final String boardName,final String ID,final String title,final String content) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //해당 게시판의 마지막 글로
                 int count=(int)(dataSnapshot.child(boardName).getChildrenCount());
                 reference.child(boardName).child(Integer.toString(count)).child("author").setValue(ID);
                 reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);
@@ -838,12 +997,36 @@ public class FirebaseHelper extends Activity{
             }
         });
     }
+    //동아리의 게시판에 게시글 작성
+    //동아리 이름, 게시판 제목, 유저ID, 제목, 내용
+    public void Post(final String groupName, final String boardName,final String ID,final String title,final String content) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //해당 게시판의 마지막 글로
+                int count=(int)(dataSnapshot.child("Groups").child(groupName).child(boardName).getChildrenCount());
+                //내용 삽입
+                reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("author").setValue(ID);
+                reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("content").setValue(content);
+                reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("title").setValue(title);
+                reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //게시글 신고, 게시판 이름, 게시글 ID, 신고한 유저의 ID, 신고 사유
     public void Accuse(final String boardName, final String boardID, final String userID, final String reason) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Accuse에 새로운 데이터 추가
                 String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
                 reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
                 reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
@@ -856,5 +1039,14 @@ public class FirebaseHelper extends Activity{
 
             }
         });
+    }
+
+    //동아리 가입 요청
+    public void MakeJoinRequest(JoinRequest joinRequest, String GroupName, Context context) {
+        DatabaseReference reference=database.getReference();
+        //동아리 안의 JoinRequest에 데이터 삽입
+        reference.child("Groups").child(GroupName).child("JoinRequest").push().setValue(joinRequest);
+        Toast.makeText(context, "신청이 완료되었습니다", Toast.LENGTH_SHORT).show();
+        ((Activity)context).finish();
     }
 }

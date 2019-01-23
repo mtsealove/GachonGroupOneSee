@@ -54,23 +54,26 @@
             android:background="@drawable/btn_rhombus_gray"
             android:text="@string/group_pr"
             android:textSize="20sp" />
-        <Button
-            android:layout_marginTop="-70dp"
-            android:layout_marginRight="40dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:text="@string/request"
-            android:textSize="20sp"
-            android:background="@drawable/btn_rhombus_purple"/>
 
         <Button
-            android:layout_marginTop="-70dp"
-            android:layout_marginLeft="40dp"
+            android:id="@+id/groupJoinBtn"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginTop="-70dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn_rhombus_purple"
+            android:text="@string/request"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/informationBtn"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="-70dp"
+            android:background="@drawable/btn_rhombus_gray"
             android:text="@string/info_board"
-            android:textSize="20sp"
-            android:background="@drawable/btn_rhombus_gray"/>
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/groupScheduleBtn"

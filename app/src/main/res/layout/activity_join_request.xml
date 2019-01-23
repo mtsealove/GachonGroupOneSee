@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".JoinRequestActivity"
+    android:background="#FFFFFF">
+
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/requirementTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/request"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/closeBtn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_close" />
+
+        <View
+            android:layout_below="@id/requirementTV"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_below="@id/titleLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupNameTV"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:text="동아리 이름"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/groupNameTV"
+        android:layout_above="@id/requestBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp">
+
+
+    <!--이름 입력-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:paddingVertical="3dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:background="#e0e0e0"
+            android:layout_weight="5"/>
+
+        <EditText
+            android:id="@+id/nameET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="80dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_background"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <!--연락처 입력-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:paddingVertical="3dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/contact"
+            android:textColor="#000000"
+            android:background="#e0e0e0"
+            android:layout_weight="5"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/contactET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="80dp"
+            android:layout_weight="1"
+            android:background="@drawable/input_background"
+            android:inputType="phone"
+            android:padding="5dp"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+        <!--연락처 입력-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:paddingVertical="3dp"
+                android:text="@string/student_number"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/studentNumberET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="80dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_background"
+                android:inputType="numberDecimal"
+                android:padding="5dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!--연락처 입력-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:paddingVertical="3dp"
+                android:text="@string/major"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/majorET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="80dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_background"
+                android:inputType="textPersonName"
+                android:padding="5dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!--연락처 입력-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:paddingVertical="3dp"
+                android:text="@string/age"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/ageET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="80dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_background"
+                android:inputType="numberDecimal"
+                android:padding="5dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!--연락처 입력-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:paddingVertical="3dp"
+                android:text="@string/able_time"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/ableTimeET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="80dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_background"
+                android:padding="5dp"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!--연락처 입력-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:paddingVertical="3dp"
+                android:text="@string/self_introduce"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/selfIntoduceET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/input_background"
+            android:gravity="top"
+            android:hint="@string/input_content"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/requestBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_color"
+        android:text="@string/do_request"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:paddingHorizontal="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
+</RelativeLayout>
