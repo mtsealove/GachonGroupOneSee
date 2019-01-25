@@ -29,6 +29,8 @@ import java.util.TimerTask;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
@@ -53,13 +55,15 @@ public class SignUpActivity extends AppCompatActivity {
     private String major = "";
     private String group = "";
 
-    Alert alert = new Alert();
+    Alert alert;
+    FirebaseAccount firebaseAccount;
+    FirebaseView firebaseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        alert=new Alert(SignUpActivity.this);
         //뷰 매칭
         nameET = findViewById(R.id.nameET);
         IDET = findViewById(R.id.ID_ET);
@@ -86,6 +90,8 @@ public class SignUpActivity extends AppCompatActivity {
                 SendVerifyCode();
             }
         });
+        firebaseAccount =new FirebaseAccount(SignUpActivity.this);
+        firebaseView=new FirebaseView(SignUpActivity.this);
 
         //학과 선택 스피너
         majorSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -107,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         FirebaseHelper helper=new FirebaseHelper();
-        helper.getAllGroupName(groupSP, SignUpActivity.this);
+        firebaseView.getAllGroupName(groupSP);
         //동아리 선택 스피너
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -138,8 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
             shortToast("아이디를 입력해주세요");
             IDreuse[0] = false;
         } else {
-            FirebaseHelper firebaseHelper = new FirebaseHelper();
-            firebaseHelper.Check_ID_Reuse(IDstr, IDreuse, SignUpActivity.this);
+            firebaseAccount.Check_ID_Reuse(IDstr, IDreuse);
         }
     }
 
@@ -150,11 +155,10 @@ public class SignUpActivity extends AppCompatActivity {
         String email = emailET.getText().toString();
         if (email.length() == 0) shortToast("이메일을 입력해주세요");
         else if ((!email.contains("@gachon.ac.kr")) && (!email.contains("@mc.gachon.ac.kr")) && (!email.contains("@gc.gachon.ac.kr"))) { //가천대학교 메일이 아닌 경우 알림 출력
-            alert.MsgDialog("올바른 이메일을\n입력해주세요", SignUpActivity.this);
+            alert.MsgDialog("올바른 이메일을\n입력해주세요");
         } else {
             boolean reuse[] = {true};
-            FirebaseHelper helper = new FirebaseHelper();
-            helper.Check_Email_Reuse(email, reuse, SignUpActivity.this);
+            firebaseAccount.Check_Email_Reuse(email, reuse);
         }
     }
 
@@ -186,7 +190,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         }catch(Exception e){}
 
-
         if(name.length()==0) shortToast("이름을 입력하세요");
         else if(!IDreuse[0]) shortToast("아이디 중복을 확인하세요");
         else if(!Verified) shortToast("이메일 인증이 완료되지 않았습니다");
@@ -197,50 +200,17 @@ public class SignUpActivity extends AppCompatActivity {
         else if(password_confirm.length()==0) shortToast("비밀번호를 확인해주세요");
         else if(!password.equals(password_confirm)) shortToast("비밀번호가 일치하지 않습니다");
         else {
-            final Alert alert = new Alert();
             final String finalMyNumber1 = myNumber;
-            alert.MsgDialogChoice("회원가입을 하시겠습니까?", SignUpActivity.this, new View.OnClickListener() {
+            alert.MsgDialogChoice("회원가입을 하시겠습니까?",  new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Account account = new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber1, false);
-                    FirebaseHelper firebaseHelper = new FirebaseHelper();
-                    firebaseHelper.CreateAccount(account);
-                    alert.MsgDialogEnd("회원가입이\n완료되었습니다", SignUpActivity.this);
+                    firebaseAccount.CreateAccount(account);
+                    alert.MsgDialogEnd("회원가입이\n완료되었습니다");
                 }
             });
-            /*
-            //모든 조건이 만족하면 계정 생성
-            AlertDialog.Builder builder=new AlertDialog.Builder(SignUpActivity.this);
-            LayoutInflater inflater=getLayoutInflater();
-            View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
-            builder.setView(layout);
-            TextView msgTV=(TextView)layout.findViewById(R.id.dialog_msgTV);
-            msgTV.setText("회원가입을 하시겠습니까?");
-            Button negativeBtn=(Button)layout.findViewById(R.id.negative);
-            Button positiveBtn=(Button)layout.findViewById(R.id.positive);
-            final AlertDialog dialog=builder.create();
-            negativeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.cancel();
-                }
-            });
-            final String finalMyNumber = myNumber;
-            positiveBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Account account=new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber, false);
-                    FirebaseHelper firebaseHelper=new FirebaseHelper();
-                    firebaseHelper.CreateAccount(account);
-                    alert.MsgDialogEnd("회원가입이\n완료되었습니다", SignUpActivity.this);
-                }
-            });
-            dialog.show();
-        }
-        */
         }
     }
-
 
     //뒤로가기 메서드/화면상의 버튼에 매칭
     public void GoBack(View v) {

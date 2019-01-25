@@ -100,17 +100,17 @@
             android:orientation="vertical">
 
             <Button
-                android:layout_marginTop="10dp"
+                android:id="@+id/joinRequestLogBtn"
                 style="?android:attr/borderlessButtonStyle"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingVertical="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/list_background"
+                android:gravity="left|center_vertical"
+                android:paddingVertical="15dp"
+                android:paddingLeft="20dp"
                 android:text="@string/requset_log"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/myGroupBtn"
@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/btn_normal"
+                android:background="@drawable/btn_color"
                 android:text="@string/out"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />

@@ -20,8 +20,12 @@ import android.widget.TextView;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class Alert extends AppCompatActivity {
+    final Context context;
+    public Alert(Context context) {
+        this.context=context;
+    }
     //메세지 다이얼로그 출력 메서드
-    public void MsgDialog(String msg, Context context) {
+    public void MsgDialog(String msg) {
         //레이아웃을 inflate함
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_msg, null);
@@ -48,7 +52,7 @@ public class Alert extends AppCompatActivity {
     }
 
     //OK버튼으로 액티비티 종료
-    public void MsgDialogEnd(String msg, final Context context) {
+    public void MsgDialogEnd(String msg) {
         //레이아웃을 inflate함
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_msg, null);
@@ -75,7 +79,8 @@ public class Alert extends AppCompatActivity {
         //출력
         dialog.show();
     }
-    public void MsgDialogChoice(String msg, final Context context, View.OnClickListener positiveListener) {
+    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 지정 가능
+    public void MsgDialogChoice(String msg, View.OnClickListener positiveListener) {
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
         AlertDialog.Builder builder=new AlertDialog.Builder(context);

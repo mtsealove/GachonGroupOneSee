@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class PRSearchActivity extends AppCompatActivity {
@@ -44,8 +46,8 @@ public class PRSearchActivity extends AppCompatActivity {
 
     private void Search() {
         String input=searchET.getText().toString();
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.SearchPRBoard(input, PRSearchActivity.this);
+        FirebaseBoard firebaseBoard=new FirebaseBoard(PRSearchActivity.this);
+        firebaseBoard.SearchPRBoard(input);
 
     }
 

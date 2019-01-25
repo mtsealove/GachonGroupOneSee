@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class GroupListActivity extends AppCompatActivity {
@@ -27,8 +29,8 @@ public class GroupListActivity extends AppCompatActivity {
         categoryTV= findViewById(R.id.Group_category);
         categoryTV.setText(categorykr);
 
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.getGroupList(category, group_list_layout, GroupListActivity.this, ID);
+        FirebaseView firebaseView=new FirebaseView(GroupListActivity.this);
+        firebaseView.getGroupList(category, group_list_layout, ID);
     }
     public void back(View v) {
         onBackPressed();

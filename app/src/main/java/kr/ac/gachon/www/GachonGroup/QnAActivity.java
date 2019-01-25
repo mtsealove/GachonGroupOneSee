@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class QnAActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class QnAActivity extends AppCompatActivity {
     private final String BoardName="QnA";
     public static Activity _QnAActivity;
     private String userID, value;
-    FirebaseHelper helper;
+    FirebaseList firebaseList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +30,12 @@ public class QnAActivity extends AppCompatActivity {
         searchBtn=findViewById(R.id.searchBtn);
         postBtn=findViewById(R.id.postBtn);
 
-        helper=new FirebaseHelper();
+        firebaseList=new FirebaseList(QnAActivity.this);
         //검색어가 존재하지 않으면 모든 리스트
         if(value==null)
-            helper.setListView(userID, boardLV, BoardName, QnAActivity.this);
+            firebaseList.setListView(userID, boardLV, BoardName);
         //존재하면 검색어를 포함하는 리스트
-        else helper.setListView(userID, boardLV, BoardName, QnAActivity.this, value);
+        else firebaseList.setListView(userID, boardLV, BoardName,  value);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,9 +66,9 @@ public class QnAActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if(value==null)
-            helper.setListView(userID, boardLV, BoardName, QnAActivity.this);
+            firebaseList.setListView(userID, boardLV, BoardName);
             //존재하면 검색어를 포함하는 리스트
-        else helper.setListView(userID, boardLV, BoardName, QnAActivity.this, value);
+        else firebaseList.setListView(userID, boardLV, BoardName, value);
     }
     public void close(View v) {
         finish();

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
@@ -28,23 +29,26 @@ public class FindIdActivity extends AppCompatActivity {
     public static String VerifyCode; //인증번호
     public static String password;
 
+    FirebaseAccount firebaseAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_id);
-        alert=new Alert();
+        alert=new Alert(FindIdActivity.this);
+        firebaseAccount=new FirebaseAccount(FindIdActivity.this);
 
         //각 객체 매칭
-        email_4_ID_et=(EditText)findViewById(R.id.email4IDET);
-        verify_4_ID_et=(EditText)findViewById(R.id.verify4IDET);
-        verify_4_ID_btn=(Button)findViewById(R.id.verify4IDBTN);
-        check_4_ID_btn=(Button)findViewById(R.id.check4IDBTN);
+        email_4_ID_et= findViewById(R.id.email4IDET);
+        verify_4_ID_et= findViewById(R.id.verify4IDET);
+        verify_4_ID_btn= findViewById(R.id.verify4IDBTN);
+        check_4_ID_btn= findViewById(R.id.check4IDBTN);
 
-        email_4_PW_et=(EditText)findViewById(R.id.email4PWET);
-        ID_4_PW_et=(EditText)findViewById(R.id.ID4PWET);
-        verify_4_PW_et=(EditText)findViewById(R.id.verfy4PWET);
-        verify_4_PW_btn=(Button)findViewById(R.id.verify4PWBTN);
-        check_4_PW_btn=(Button)findViewById(R.id.check4PWBTN);
+        email_4_PW_et= findViewById(R.id.email4PWET);
+        ID_4_PW_et= findViewById(R.id.ID4PWET);
+        verify_4_PW_et= findViewById(R.id.verfy4PWET);
+        verify_4_PW_btn= findViewById(R.id.verify4PWBTN);
+        check_4_PW_btn= findViewById(R.id.check4PWBTN);
 
         verify_4_ID_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +84,7 @@ public class FindIdActivity extends AppCompatActivity {
         else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
             Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            FirebaseHelper helper = new FirebaseHelper();
-            helper.Find_ID_mail(email, FindIdActivity.this);
+            firebaseAccount.Find_ID_mail(email);
         }
     }
 
@@ -91,7 +94,7 @@ public class FindIdActivity extends AppCompatActivity {
         if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
         else {
-            alert.MsgDialog("회원님의 아이디는\n"+ID+" 입니다", FindIdActivity.this);
+            alert.MsgDialog("회원님의 아이디는\n"+ID+" 입니다");
        }
     }
 
@@ -105,7 +108,7 @@ public class FindIdActivity extends AppCompatActivity {
             Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
             FirebaseHelper helper=new FirebaseHelper();
-            helper.Find_PW_mail(email, ID, FindIdActivity.this);
+            firebaseAccount.Find_PW_mail(email, ID);
         }
     }
 
@@ -115,7 +118,7 @@ public class FindIdActivity extends AppCompatActivity {
         if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
         else {
-            alert.MsgDialog("회원님의 비밀번호는\n"+password+" 입니다", FindIdActivity.this);
+            alert.MsgDialog("회원님의 비밀번호는\n"+password+" 입니다");
         }
     }
     public void close(View v) {

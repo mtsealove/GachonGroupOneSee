@@ -6,11 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.internal.AccountType;
+
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 
 public class GroupMenuActivity extends AppCompatActivity {
     TextView groupNameTV;
-    Button groupScheduleBtn, groupIntroduceBtn, groupJoinRequestBtn, informationBtn;
+    Button groupScheduleBtn, groupIntroduceBtn, groupJoinRequestBtn, informationBtn, groupQnABtn;
     private String groupName, ID;
+    private Account account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,11 +27,17 @@ public class GroupMenuActivity extends AppCompatActivity {
         groupIntroduceBtn= findViewById(R.id.introduceBtn);
         groupJoinRequestBtn=findViewById(R.id.groupJoinBtn);
         informationBtn=findViewById(R.id.informationBtn);
+        groupQnABtn=findViewById(R.id.groupQnABtn);
 
         //동아리 이름을 받아와 설정
         Intent intent=getIntent();
         groupName=intent.getStringExtra("groupName");
         ID=intent.getStringExtra("ID");
+        //계정 복사
+        account=new Account();
+        FirebaseAccount firebaseAccount=new FirebaseAccount(GroupMenuActivity.this);
+        firebaseAccount.GetAccount(ID, account);
+
         groupNameTV.setText(groupName);
         groupScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,46 +63,58 @@ public class GroupMenuActivity extends AppCompatActivity {
                 InformationBoard();
             }
         });
+        groupQnABtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupQnA();
+            }
+        });
     }
 
     private void GroupSchedule() {
         Intent intent=new Intent(GroupMenuActivity.this, GroupScheduleActivity.class);
-        trimName();
+        groupName=TrimName(groupName);
         intent.putExtra("groupName", groupName);
         startActivity(intent);
     }
 
     private void Introduce() {
-        trimName();
         Intent intent=new Intent(GroupMenuActivity.this, IntroduceActivity.class);
+        groupName=TrimName(groupName);
         intent.putExtra("group", groupName);
         startActivity(intent);
     }
 
     private void JoinRequest() {
-        Intent intent=new Intent(GroupMenuActivity.this, JoinRequestActivity.class);
-        intent.putExtra("groupName", groupName);
-        intent.putExtra("ID", ID);
-        startActivity(intent);
+        if(groupName.equals(account.group))
+            Toast.makeText(GroupMenuActivity.this, "자신이 속한 동아리는 신청할 수 없습니다", Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(GroupMenuActivity.this, JoinRequestActivity.class);
+            groupName=TrimName(groupName);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("ID", ID);
+            startActivity(intent);
+        }
     }
     private void InformationBoard() {
         Intent intent=new Intent(GroupMenuActivity.this, InformationBoardActivity.class);
+        groupName=TrimName(groupName);
+        intent.putExtra("groupName", groupName);
+        intent.putExtra("ID", ID);
+        startActivity(intent);
+    }
+    private void GroupQnA() {
+        Intent intent=new Intent(GroupMenuActivity.this, GroupQnAActivity.class);
+        groupName=TrimName(groupName);
         intent.putExtra("groupName", groupName);
         intent.putExtra("ID", ID);
         startActivity(intent);
     }
 
-    //데이터베이스 상에 .이라는 이름을 사용할 수 없기 때문에 .제거
-    private void trimName() {
-        if(groupName.contains(".")) {
-            String newName="";
-            String[] parts=groupName.split(".");
-            for(int i=0; i<parts.length; i++)
-                newName+=parts[i];
-            groupName=newName;
-        }
+    private String TrimName(String name) {
+        name.replace(".", "");
+        return name;
     }
-
     public void back(View v) {
         onBackPressed();
     }

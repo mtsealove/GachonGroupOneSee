@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class BoardActivity extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class BoardActivity extends AppCompatActivity {
     Button replyBtn;
     private String userID, boardName, groupName;
     int id;
+    FirebasePost firebasePost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class BoardActivity extends AppCompatActivity {
         replyET=findViewById(R.id.replyET);
         replyBtn=findViewById(R.id.replyBtn);
 
-        FirebaseHelper helper=new FirebaseHelper();
+        firebasePost=new FirebasePost(BoardActivity.this);
 
         Intent intent=getIntent();
         boardName=intent.getStringExtra("boardName");
@@ -55,6 +58,12 @@ public class BoardActivity extends AppCompatActivity {
             case "PublicRelation":
                 boardNameKR="홍보게시판";
                 functionBtn.setText("신고");
+                functionBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Accuse();
+                    }
+                });
                 break;
             case "FederationNotice":
                 boardNameKR="연합회 공지사항";
@@ -67,7 +76,7 @@ public class BoardActivity extends AppCompatActivity {
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
-                helper.AddReply(ReplyShowLayout, boardName, id, BoardActivity.this);
+                firebasePost.AddReply(ReplyShowLayout, boardName, id);
                 replyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,11 +93,36 @@ public class BoardActivity extends AppCompatActivity {
             case "Information":
                 boardNameKR="정보게시판";
                 functionBtn.setText("신고");
+                functionBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Accuse();
+                    }
+                });
                 //댓글 기능 활성화
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
-                helper.AddReply(groupName,ReplyShowLayout, boardName, id, BoardActivity.this);
+                firebasePost.AddReply(groupName,ReplyShowLayout, boardName, id);
+                replyBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        InputReply();
+                    }
+                });
+            case "GroupQnA":
+                boardNameKR="Q&A";
+                functionBtn.setText("신고");
+                functionBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Accuse();
+                    }
+                });
+                ReplyShowLayout.setVisibility(View.VISIBLE);
+                ReplyInputLayout.setVisibility(View.VISIBLE);
+                //댓글 추가
+                firebasePost.AddReply(groupName, ReplyShowLayout, boardName, id);
                 replyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -97,10 +131,11 @@ public class BoardActivity extends AppCompatActivity {
                 });
         }
         boardNameTV.setText(boardNameKR);
+        FirebaseBoard firebaseBoard=new FirebaseBoard(BoardActivity.this);
         if(groupName==null)
-        helper.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
+        firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
         else
-            helper.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
+            firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
     }
 
     //댓글 입력
@@ -112,9 +147,9 @@ public class BoardActivity extends AppCompatActivity {
             FirebaseHelper helper=new FirebaseHelper();
             //동아리의 게시판아니면
             if(groupName==null)
-                helper.CommitReply(boardName, Integer.toString(id), userID, content);
+                firebasePost.CommitReply(boardName, Integer.toString(id), userID, content);
             else //동아리게시판 명시
-                helper.CommitReply(groupName,boardName, Integer.toString(id), userID, content);
+                firebasePost.CommitReply(groupName,boardName, Integer.toString(id), userID, content);
             //댓글 입력창 초기화
             replyET.setText("");
             //키보드 내리기

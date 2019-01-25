@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
@@ -32,10 +33,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ID_et=(EditText)findViewById(R.id.ID_et);
-        PW_et=(EditText)findViewById(R.id.PW_et);
-        LoginBtn=(Button)findViewById(R.id.LoginBtn);
-        UserCategoryRg=(RadioGroup)findViewById(R.id.user_categoryRG);
+        ID_et= findViewById(R.id.ID_et);
+        PW_et= findViewById(R.id.PW_et);
+        LoginBtn= findViewById(R.id.LoginBtn);
+        UserCategoryRg= findViewById(R.id.user_categoryRG);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
             read_ID();
             if (ID_et.length() != 0 && PW_et.length() != 0) LoginBtn.performClick();
         } else {
-            Alert alert=new Alert();
-            alert.MsgDialog("로그아웃 되었습니다", LoginActivity.this);
+            Alert alert=new Alert(LoginActivity.this);
+            alert.MsgDialog("로그아웃 되었습니다");
         }
     }
     //로그인 버튼 이벤트
@@ -59,16 +60,15 @@ public class LoginActivity extends AppCompatActivity {
         int radioID=UserCategoryRg.getCheckedRadioButtonId();
         String UserCategoryKR=((RadioButton)findViewById(radioID)).getText().toString();
         boolean isManager;
-        if(UserCategoryKR.equals("관리자")) isManager=true;
-        else isManager=false;
+        isManager = UserCategoryKR.equals("관리자");
         String ID=ID_et.getText().toString();
         String password=PW_et.getText().toString();
         //아이디, 비밀번호 미입력 체크
         if(ID.length()==0) Toast.makeText(LoginActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(password.length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
         else {
-            FirebaseHelper helper=new FirebaseHelper();
-            helper.Login(ID, password, isManager, LoginActivity.this);
+            FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
+            firebaseAccount.Login(ID, password, isManager);
             write_ID(ID, password);
         }
     }

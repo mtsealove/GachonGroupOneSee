@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
@@ -44,26 +45,26 @@ public class AddPostActivity extends AppCompatActivity {
         if(title.length()==0) Toast.makeText(AddPostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
         else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else {
-            Alert alert=new Alert();
+            Alert alert=new Alert(AddPostActivity.this);
             if(groupName==null)
-            alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", AddPostActivity.this, postListener);
+            alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", postListener);
             else
-                alert.MsgDialogChoice("작성한 내용을 등록하시겠습니까?", AddPostActivity.this, GroupPostListener);
+                alert.MsgDialogChoice("작성한 내용을 등록하시겠습니까?", GroupPostListener);
         }
     }
     View.OnClickListener postListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebaseHelper helper=new FirebaseHelper();
-            helper.Post(boardName, userID, title, content);
+            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
+            firebasePost.Post(boardName, userID, title, content);
             finish();
         }
     };
     View.OnClickListener GroupPostListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebaseHelper helper=new FirebaseHelper();
-            helper.Post(groupName, boardName, userID, title, content);
+            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
+            firebasePost.Post(groupName, boardName, userID, title, content);
             finish();
         }
     };

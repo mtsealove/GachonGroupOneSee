@@ -28,7 +28,7 @@ public class RequirementsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requirements);
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
-        alert=new Alert();
+        alert=new Alert(RequirementsActivity.this);
         //뷰 매칭
         titleET= findViewById(R.id.titleET);
         emailET= findViewById(R.id.emailET);
@@ -67,11 +67,11 @@ public class RequirementsActivity extends AppCompatActivity {
     }
     //보내기 버튼
     private void SendRequirement() {
-        alert.MsgDialogChoice("문의하신 내용을 보내시겠습니까?", RequirementsActivity.this, new View.OnClickListener() {
+        alert.MsgDialogChoice("문의하신 내용을 보내시겠습니까?",  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다", RequirementsActivity.this);
-                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요", RequirementsActivity.this);
+                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다");
+                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요");
             }
         });
     }
@@ -88,7 +88,7 @@ public class RequirementsActivity extends AppCompatActivity {
         }
     }
     private void setCloseDialog() {
-        alert.MsgDialogChoice("작성을 취소하시겠습니까?", RequirementsActivity.this, new View.OnClickListener() {
+        alert.MsgDialogChoice("작성을 취소하시겠습니까?",  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

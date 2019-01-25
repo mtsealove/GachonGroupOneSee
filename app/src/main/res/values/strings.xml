@@ -158,4 +158,6 @@
     <string name="self_introduce">자기소개</string>
     <string name="input_content">내용을 입력해 주세요</string>
     <string name="do_request">신청하기</string>
+    <string name="join_request_log">동아리 신청 내역</string>
+    <string name="remove">삭제하기</string>
 </resources>

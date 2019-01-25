@@ -11,23 +11,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class MyInformationActivity extends AppCompatActivity {
     TextView nameTV, groupTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn, requirementsBtn;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn, requirementsBtn, joinRequestLogBtn;
     ImageView profileIcon;
     private String ID;
 
     Account account;
-    FirebaseHelper helper;
+    FirebaseAccount firebaseAccount;
+    FirebaseView firebaseView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +44,19 @@ public class MyInformationActivity extends AppCompatActivity {
         removeAccountBtn= findViewById(R.id.removeAccountBtn);
         myGroupBtn= findViewById(R.id.myGroupBtn);
         myGroupScheduleBtn= findViewById(R.id.MyGroupSchduleBtn);
-        removeAccountBtn= findViewById(R.id.requirementsBtn);
+        removeAccountBtn= findViewById(R.id.removeAccountBtn);
         requirementsBtn= findViewById(R.id.requirementsBtn);
+        joinRequestLogBtn=findViewById(R.id.joinRequestLogBtn);
 
         account=new Account();
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
-        helper=new FirebaseHelper();
-        helper.GetAccount(ID, account);
-        helper.setTextView("name", ID, nameTV);
-        helper.setTextView("group", ID, groupTV);
+        firebaseAccount=new FirebaseAccount(MyInformationActivity.this);
+        firebaseAccount.GetAccount(ID, account);
+
+        firebaseView=new FirebaseView(MyInformationActivity.this);
+        firebaseView.setTextView("name", ID, nameTV);
+        firebaseView.setTextView("group", ID, groupTV);
 
         EditInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +94,12 @@ public class MyInformationActivity extends AppCompatActivity {
                 Requirements();
             }
         });
+        joinRequestLogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JoinRequestLog();
+            }
+        });
     }
 
     //정보 수정 활동
@@ -114,39 +127,26 @@ public class MyInformationActivity extends AppCompatActivity {
 
     //회원 탈퇴 메서드
     private void Remove_Account() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(MyInformationActivity.this);
-        LayoutInflater inflater=getLayoutInflater();
-        View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
-        TextView msg= layout.findViewById(R.id.dialog_msgTV);
-        msg.setText("회원을 탈퇴하십니까?");
-        Button negative= layout.findViewById(R.id.negative);
-        Button positive= layout.findViewById(R.id.positive);
-        builder.setView(layout);
-        final AlertDialog dialog=builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-        dialog.show();
-        negative.setOnClickListener(new View.OnClickListener() {
+        final Alert alert=new Alert(MyInformationActivity.this);
+        alert.MsgDialogChoice("회원을 탙퇴하십니까?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
-        positive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helper.RemoveAccount(ID);
-                Alert alert=new Alert();
-                alert.MsgDialogEnd("회원 탈퇴가 완료되었습니다", MyInformationActivity.this);
-                dialog.cancel();
+                firebaseAccount.RemoveAccount(ID);
+                alert.MsgDialogEnd("회원 탈퇴가 완료되었습니다");
             }
         });
     }
 
     //내 동아리 바로가기
     private void MyGroup() {
-        Intent intent=new Intent(MyInformationActivity.this, GroupMenuActivity.class);
-        intent.putExtra("groupName", account.group);
-        startActivity(intent);
+        if (account.group.equals("동아리 없음"))
+            Toast.makeText(MyInformationActivity.this, "가입된 동아리가 없습니다", Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(MyInformationActivity.this, GroupMenuActivity.class);
+            intent.putExtra("ID", ID);
+            intent.putExtra("groupName", account.group);
+            startActivity(intent);
+        }
     }
     //내 동아리 일정 바로가기
     private void MyGroupSchedule() {
@@ -160,11 +160,17 @@ public class MyInformationActivity extends AppCompatActivity {
         intent.putExtra("ID", ID);
         startActivity(intent);
     }
+    //동아리 신청 내역 조회
+    private void JoinRequestLog() {
+        Intent intent=new Intent(MyInformationActivity.this, JoinRequestLogActivity.class);
+        intent.putExtra("userID", ID);
+        startActivity(intent);
+    }
 
     @Override
     protected void onResume() {
-        helper.setTextView("name", ID, nameTV);
-        helper.setTextView("group", ID, groupTV);
+        firebaseView.setTextView("name", ID, nameTV);
+        firebaseView.setTextView("group", ID, groupTV);
         super.onResume();
     }
 }

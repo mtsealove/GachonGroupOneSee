@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class FederationNoticeActivity extends AppCompatActivity {
@@ -28,12 +29,12 @@ public class FederationNoticeActivity extends AppCompatActivity {
         boardLV= findViewById(R.id.boardLV);
         searchBtn=findViewById(R.id.searchBtn);
 
-        FirebaseHelper helper=new FirebaseHelper();
+        FirebaseList firebaseList=new FirebaseList(FederationNoticeActivity.this);
         //검색어가 존재하지 않으면 모든 리스트
         if(value==null)
-            helper.setListView(ID, boardLV, BoardName, FederationNoticeActivity.this);
+            firebaseList.setListView(ID, boardLV, BoardName);
         //존재하면 검색어를 포함하는 리스트
-        else helper.setListView(ID, boardLV, BoardName, FederationNoticeActivity.this, value);
+        else firebaseList.setListView(ID, boardLV, BoardName, value);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
@@ -51,30 +53,29 @@ public class EditMyInformationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_my_information);
-        nameET=(EditText)findViewById(R.id.nameET);
-        IDET=(EditText)findViewById(R.id.IDET);
-        emailET=(EditText)findViewById(R.id.emailET);
-        studentNumberET=(EditText)findViewById(R.id.studentNumberET);
-        passwordET=(EditText)findViewById(R.id.PWET);
-        majorSP=(Spinner)findViewById(R.id.major_SP);
-        groupSP=(Spinner)findViewById(R.id.group_SP);
-        profileIcon=(ImageView)findViewById(R.id.ProfileIcon);
-        editBtn=(Button)findViewById(R.id.edit_btn);
+        nameET= findViewById(R.id.nameET);
+        IDET= findViewById(R.id.IDET);
+        emailET= findViewById(R.id.emailET);
+        studentNumberET= findViewById(R.id.studentNumberET);
+        passwordET= findViewById(R.id.PWET);
+        majorSP= findViewById(R.id.major_SP);
+        groupSP= findViewById(R.id.group_SP);
+        profileIcon= findViewById(R.id.ProfileIcon);
+        editBtn= findViewById(R.id.edit_btn);
 
         //아이디 가져와서
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
         //다른 정보들을 EditText 또는 Spinner로 출력
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.setEditText("name", ID, nameET);
-        helper.setEditText("ID", ID, IDET);
-        helper.setEditText("email", ID, emailET);
-        helper.setEditText("StudentNumber", ID, studentNumberET);
-        helper.getAllGroupName(groupSP, EditMyInformationActivity.this);
-        helper.setSpinnerMatch(groupSP, "group", ID);
-        helper.setSpinnerMatch(majorSP, "major", ID);
-        helper.setEditText("password", ID, passwordET);
-
+        FirebaseView firebaseView=new FirebaseView(EditMyInformationActivity.this);
+        firebaseView.setEditText("name", ID, nameET);
+        firebaseView.setEditText("ID", ID, IDET);
+        firebaseView.setEditText("email", ID, emailET);
+        firebaseView.setEditText("StudentNumber", ID, studentNumberET);
+        firebaseView.getAllGroupName(groupSP);
+        firebaseView.setSpinnerMatch(groupSP, "group", ID);
+        firebaseView.setSpinnerMatch(majorSP, "major", ID);
+        firebaseView.setEditText("password", ID, passwordET);
 
         profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +97,7 @@ public class EditMyInformationActivity extends AppCompatActivity {
 
             }
         });
+        FirebaseHelper helper=new FirebaseHelper();
         helper.getProfileIcon(profileIcon, ID, EditMyInformationActivity.this);
         majorSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -186,15 +188,15 @@ public class EditMyInformationActivity extends AppCompatActivity {
         int studentNumber=Integer.parseInt(studentNumberET.getText().toString());
         String password=passwordET.getText().toString();
 
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.UpdateAccountData(ID, "name", name);
-        helper.UpdateAccountData(ID, "email", email);
-        helper.UpdateAccountData(ID, "major", major);
-        helper.UpdateAccountData(ID, "StudentNumber", studentNumber);
-        helper.UpdateAccountData(ID, "group", group);
-        helper.UpdateAccountData(ID, "password", password);
-        Alert alert=new Alert();
-        alert.MsgDialogEnd("정보가 변경되었습니다", EditMyInformationActivity.this);
+        FirebaseAccount firebaseAccount=new FirebaseAccount(EditMyInformationActivity.this);
+        firebaseAccount.UpdateAccountData(ID, "name", name);
+        firebaseAccount.UpdateAccountData(ID, "email", email);
+        firebaseAccount.UpdateAccountData(ID, "major", major);
+        firebaseAccount.UpdateAccountData(ID, "StudentNumber", studentNumber);
+        firebaseAccount.UpdateAccountData(ID, "group", group);
+        firebaseAccount.UpdateAccountData(ID, "password", password);
+        Alert alert=new Alert(EditMyInformationActivity.this);
+        alert.MsgDialogEnd("정보가 변경되었습니다");
     }
 
     public void close(View v) {

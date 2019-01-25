@@ -14,7 +14,9 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".JoinRequestActivity"></activity>
+        <activity android:name=".JoinRequsetLogDetailActivity"></activity>
+        <activity android:name=".JoinRequestLogActivity" />
+        <activity android:name=".JoinRequestActivity" />
         <activity android:name=".AccuseActivity" />
         <activity android:name=".LoadActivity">
             <intent-filter>
@@ -35,14 +37,23 @@
         <activity android:name=".GroupScheduleActivity" />
         <activity android:name=".PRBoardActivity" />
         <activity android:name=".PRSearchActivity" />
-        <activity android:name=".BoardActivity" />
+        <activity
+            android:name=".BoardActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".IntroduceActivity" />
         <activity android:name=".RequirementsActivity" />
-        <activity android:name=".FederationNoticeActivity" />
+        <activity
+            android:name=".FederationNoticeActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SearchActivity" />
-        <activity android:name=".QnAActivity" />
+        <activity
+            android:name=".QnAActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".AddPostActivity" />
-        <activity android:name=".InformationBoardActivity" />
+        <activity
+            android:name=".InformationBoardActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".GroupQnAActivity" />
     </application>
 
 </manifest>

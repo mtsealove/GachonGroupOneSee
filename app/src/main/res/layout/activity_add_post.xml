@@ -60,12 +60,13 @@
     </RelativeLayout>
 
     <EditText
-        android:layout_below="@id/titleLayout"
         android:id="@+id/titleET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/titleLayout"
         android:background="#FFFFFF"
         android:hint="제목"
+        android:inputType="text"
         android:padding="15dp"
         android:textSize="20sp" />
     <View

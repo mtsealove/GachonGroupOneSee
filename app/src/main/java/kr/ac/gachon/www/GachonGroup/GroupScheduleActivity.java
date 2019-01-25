@@ -21,6 +21,7 @@ import java.util.List;
 import kr.ac.gachon.www.GachonGroup.Calendar.OneDayDecorator;
 import kr.ac.gachon.www.GachonGroup.Calendar.SaturdayDecorator;
 import kr.ac.gachon.www.GachonGroup.Calendar.SundayDecorator;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseCalendar;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class GroupScheduleActivity extends AppCompatActivity {
@@ -28,6 +29,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
     MaterialCalendarView calendar;
     LinearLayout scheduleLayout;
     TextView noScheduleTV;
+    FirebaseCalendar firebaseCalendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +37,16 @@ public class GroupScheduleActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         final String groupName=intent.getStringExtra("groupName");
-        groupNameTV=(TextView)findViewById(R.id.groupNameTV);
+        groupNameTV= findViewById(R.id.groupNameTV);
         groupNameTV.setText(groupName);
 
-        calendar=(MaterialCalendarView) findViewById(R.id.Calendar);
+        calendar= findViewById(R.id.Calendar);
         calendar.addDecorators(new SundayDecorator(), new SaturdayDecorator(), new OneDayDecorator());
 
-        scheduleLayout=(LinearLayout)findViewById(R.id.group_schedule_layout);
-        noScheduleTV=(TextView)findViewById(R.id.no_scheduleTV);
+        scheduleLayout= findViewById(R.id.group_schedule_layout);
+        noScheduleTV= findViewById(R.id.no_scheduleTV);
+
+        firebaseCalendar=new FirebaseCalendar(GroupScheduleActivity.this);
         //특정 날짜 클릭 이벤트
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -54,12 +58,11 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 String shot_Day = Year + "," + Month + "," + Day;
 
                 FirebaseHelper helper=new FirebaseHelper();
-                helper.Add_EventDayEvent(groupName, shot_Day, scheduleLayout, noScheduleTV, GroupScheduleActivity.this);
+                firebaseCalendar.Add_EventDayEvent(groupName, shot_Day, scheduleLayout, noScheduleTV);
                 calendar.clearSelection();
             }
         });
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.Add_EventDay(groupName, calendar);
+        firebaseCalendar.Add_EventDay(groupName, calendar);
 
     }
 

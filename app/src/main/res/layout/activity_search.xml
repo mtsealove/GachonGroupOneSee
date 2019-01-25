@@ -40,6 +40,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/searchET"
             android:layout_width="match_parent"
@@ -48,8 +49,10 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/input_background"
             android:hint="검색어를 입력해주세요"
+            android:inputType="text"
             android:padding="5dp"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:imeOptions="actionSearch"/>
 
         <Button
             android:layout_gravity="right"

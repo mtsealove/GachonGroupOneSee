@@ -86,13 +86,14 @@
             android:textSize="20sp" />
 
         <Button
-            android:layout_marginTop="-70dp"
-            android:layout_marginLeft="40dp"
+            android:id="@+id/groupQnABtn"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="-70dp"
+            android:background="@drawable/btn_rhombus_gray"
             android:text="@string/QnA"
-            android:textSize="20sp"
-            android:background="@drawable/btn_rhombus_gray"/>
+            android:textSize="20sp" />
         </LinearLayout>
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
@@ -29,9 +30,9 @@ public class HomeActivity extends AppCompatActivity {
         _Home_Activity=HomeActivity.this;
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
-        FirebaseHelper helper=new FirebaseHelper();
+        FirebaseAccount firebaseAccount=new FirebaseAccount(HomeActivity.this);
         account=new Account();
-        helper.GetAccount(ID, account);
+        firebaseAccount.GetAccount(ID, account);
 
         backPressCloseHandler=new BackPressCloseHandler(this);
 
