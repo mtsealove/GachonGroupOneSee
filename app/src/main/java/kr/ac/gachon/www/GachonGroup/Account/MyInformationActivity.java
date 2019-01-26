@@ -1,12 +1,8 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Account;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,10 +14,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
+import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
+import kr.ac.gachon.www.GachonGroup.Group.GroupScheduleActivity;
+import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
+import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestLogActivity;
+import kr.ac.gachon.www.GachonGroup.R;
+import kr.ac.gachon.www.GachonGroup.Board.RequirementsActivity;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class MyInformationActivity extends AppCompatActivity {
     TextView nameTV, groupTV;

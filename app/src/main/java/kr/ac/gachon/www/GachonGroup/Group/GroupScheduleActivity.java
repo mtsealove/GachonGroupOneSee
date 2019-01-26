@@ -1,27 +1,22 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Group;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import kr.ac.gachon.www.GachonGroup.Calendar.OneDayDecorator;
 import kr.ac.gachon.www.GachonGroup.Calendar.SaturdayDecorator;
 import kr.ac.gachon.www.GachonGroup.Calendar.SundayDecorator;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseCalendar;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class GroupScheduleActivity extends AppCompatActivity {

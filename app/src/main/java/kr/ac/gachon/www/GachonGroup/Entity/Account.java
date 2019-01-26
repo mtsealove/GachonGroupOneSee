@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Entity;
 
 public class Account {
     public String name;

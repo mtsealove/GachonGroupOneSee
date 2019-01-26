@@ -1,17 +1,18 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.JoinRequest;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
-import kr.ac.gachon.www.GachonGroup.modules.JoinRequest;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class JoinRequestLogActivity extends AppCompatActivity {
     private ListView boardLV;
     private String ID;
-    FirebaseList firebaseList;
+    private FirebaseJoinRequest firebaseJoinRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,12 +23,16 @@ public class JoinRequestLogActivity extends AppCompatActivity {
         boardLV=findViewById(R.id.boardLV);
 
         //리스트에 신청 내역을 불러오기
-        firebaseList=new FirebaseList(JoinRequestLogActivity.this);
-        firebaseList.JoinRequestLog(boardLV, ID);
+        firebaseJoinRequest=new FirebaseJoinRequest(JoinRequestLogActivity.this);
+        firebaseJoinRequest.JoinRequestLog(boardLV, ID);
     }
     @Override
     public void onResume() {
         super.onResume();
-        firebaseList.JoinRequestLog(boardLV, ID);
+        firebaseJoinRequest.JoinRequestLog(boardLV, ID);
+    }
+
+    public void close(View v) {
+        finish();
     }
 }

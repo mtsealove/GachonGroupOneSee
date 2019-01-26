@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Account;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
-import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
 
 public class FindIdActivity extends AppCompatActivity {
     EditText email_4_ID_et;

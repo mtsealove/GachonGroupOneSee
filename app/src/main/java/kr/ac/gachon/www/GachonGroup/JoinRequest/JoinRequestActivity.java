@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.JoinRequest;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,31 +10,46 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
-import kr.ac.gachon.www.GachonGroup.modules.JoinRequest;
+import kr.ac.gachon.www.GachonGroup.Entity.JoinRequest;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class JoinRequestActivity extends AppCompatActivity {
-    private String ID, groupName;
-    EditText nameET, contactET, student_numberET, majorET, ageET, able_timeET, self_introduceET;
-    TextView groupNameTV;
-    Button requestBtn;
-    FirebaseView firebaseView;
+    private String ID, groupName, name, contact, major, ableTime, SelfIntroduce;
+    private int age, StudentNumber;
+    private EditText nameET, contactET, student_numberET, majorET, ageET, able_timeET, self_introduceET;
+    private TextView groupNameTV;
+    private Button requestBtn;
+    private FirebaseView firebaseView;
     private Account account;
+    private FirebaseJoinRequest firebaseJoinRequest;
+    private boolean update;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_request);
+        //데이터 받아오기
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
         groupName=intent.getStringExtra("groupName");
+        name=intent.getStringExtra("name");
+        contact=intent.getStringExtra("contact");
+        StudentNumber=intent.getIntExtra("StudentNumber", 0);
+        age=intent.getIntExtra("age", 0);
+        major=intent.getStringExtra("major");
+        ableTime=intent.getStringExtra("AbleTime");
+        SelfIntroduce=intent.getStringExtra("SelfIntroduce");
+
 
         firebaseView=new FirebaseView(JoinRequestActivity.this);
         account=new Account();
         FirebaseAccount firebaseAccount=new FirebaseAccount(JoinRequestActivity.this);
         firebaseAccount.GetAccount(ID, account);
+
+        //텍스트 설정
         nameET=findViewById(R.id.nameET);
         contactET=findViewById(R.id.contactET);
         contactET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
@@ -47,16 +62,31 @@ public class JoinRequestActivity extends AppCompatActivity {
         groupNameTV.setText(groupName);
         requestBtn=findViewById(R.id.requestBtn);
 
-        firebaseView.setEditText("name", ID, nameET);
-        firebaseView.setEditText("StudentNumber", ID, student_numberET);
-        firebaseView.setEditText("major", ID, majorET);
-
         requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JoinRequest();
             }
         });
+
+        firebaseJoinRequest=new FirebaseJoinRequest(JoinRequestActivity.this);
+
+        update=intent.getBooleanExtra("update", false);
+        //이미 신청했으면 종료
+        if(!update) {
+        firebaseJoinRequest.CheckAlreadyRequested(ID, groupName);
+            firebaseView.setEditText("name", ID, nameET);
+            firebaseView.setEditText("StudentNumber", ID, student_numberET);
+            firebaseView.setEditText("major", ID, majorET);
+        } else {
+            nameET.setText(name);
+            contactET.setText(contact);
+            student_numberET.setText(Integer.toString(StudentNumber));
+            ageET.setText(Integer.toString(age));
+            majorET.setText(major);
+            able_timeET.setText(ableTime);
+            self_introduceET.setText(SelfIntroduce);
+        }
     }
 
     //입력란을 확인하고 요청을 발송함
@@ -77,8 +107,7 @@ public class JoinRequestActivity extends AppCompatActivity {
         String able_time=able_timeET.getText().toString();
         String self_introduce=self_introduceET.getText().toString();
 
-        if(account.group.equals(groupName)) Toast.makeText(JoinRequestActivity.this, "이미 가입된 동아리입니다", Toast.LENGTH_SHORT).show();
-        else if(name.length()==0) Toast.makeText(JoinRequestActivity.this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
+        if(name.length()==0) Toast.makeText(JoinRequestActivity.this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(contact.length()==0) Toast.makeText(JoinRequestActivity.this, "연락처를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(student_number==0) Toast.makeText(JoinRequestActivity.this, "학번을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(major.length()==0) Toast.makeText(JoinRequestActivity.this, "학과를 입력해 주세요", Toast.LENGTH_SHORT).show();
@@ -86,9 +115,15 @@ public class JoinRequestActivity extends AppCompatActivity {
         else if(able_time.length()==0) Toast.makeText(JoinRequestActivity.this, "가능한 시간을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(self_introduce.length()==0) Toast.makeText(JoinRequestActivity.this, "자기소개를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            JoinRequest joinRequest=new JoinRequest(name, contact, student_number, major, age, self_introduce, ID, groupName);
-            FirebaseList firebaseList=new FirebaseList(JoinRequestActivity.this);
-            firebaseList.MakeJoinRequest(joinRequest);
+            JoinRequest joinRequest=new JoinRequest(name, contact, student_number, major, age, self_introduce, ID, groupName, able_time);
+            if(!update)
+                firebaseJoinRequest.MakeJoinRequest(joinRequest);
+            else firebaseJoinRequest.UpdateJoinRequest(ID, groupName, joinRequest);
+
         }
+    }
+
+    public void close(View v) {
+        finish();
     }
 }

@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import kr.ac.gachon.www.GachonGroup.Account.MyInformationActivity;
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.Group.GroupListActivity;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class HomeActivity extends AppCompatActivity {
     //동아리 리스트 버튼

@@ -2,16 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:background="@drawable/btn_clear_list"
+    >
 
     <RelativeLayout
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp">
-
+        >
 
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/authorTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,6 +23,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:layout_marginRight="5dp"
             android:id="@+id/timeTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,10 +34,11 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/contentTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
         android:text="내용입니다"
         android:textColor="#000000"
         android:textSize="18sp" />

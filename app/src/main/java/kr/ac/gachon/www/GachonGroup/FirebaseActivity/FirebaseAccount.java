@@ -24,11 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kr.ac.gachon.www.GachonGroup.Account;
-import kr.ac.gachon.www.GachonGroup.FindIdActivity;
-import kr.ac.gachon.www.GachonGroup.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
+import kr.ac.gachon.www.GachonGroup.Account.FindIdActivity;
+import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.SignUpActivity;
+import kr.ac.gachon.www.GachonGroup.Account.SignUpActivity;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
 
@@ -337,7 +338,7 @@ public class FirebaseAccount extends AppCompatActivity {
     private void moveHome(String ID) {
         Intent home=new Intent();
         home.putExtra("ID", ID);
-        home.setClass(context, kr.ac.gachon.www.GachonGroup.HomeActivity.class);
+        home.setClass(context, HomeActivity.class);
         home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(home);
 

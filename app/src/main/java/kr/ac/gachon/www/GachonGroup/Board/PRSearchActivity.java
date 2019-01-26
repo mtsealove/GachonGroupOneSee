@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,8 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class PRSearchActivity extends AppCompatActivity {
     ArrayList<String> titles;

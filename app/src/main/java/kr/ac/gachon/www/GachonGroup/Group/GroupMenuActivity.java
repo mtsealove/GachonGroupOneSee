@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Group;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +8,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.internal.AccountType;
-
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.Board.InformationBoardActivity;
+import kr.ac.gachon.www.GachonGroup.Board.IntroduceActivity;
+import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestActivity;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class GroupMenuActivity extends AppCompatActivity {
     TextView groupNameTV;

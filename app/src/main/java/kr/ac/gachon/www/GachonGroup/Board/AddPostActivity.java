@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class AddPostActivity extends AppCompatActivity {
     private String boardName, userID, groupName;

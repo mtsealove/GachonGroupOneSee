@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class SearchActivity extends AppCompatActivity {
     TextView titleTV;
@@ -34,9 +35,9 @@ public class SearchActivity extends AppCompatActivity {
 
         //액티비티 종료를 위해 설정
         federationNoticeActivity=(FederationNoticeActivity)FederationNoticeActivity._FederationNoticeActivity;
-        QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.QnAActivity._QnAActivity;
+        QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.Board.QnAActivity._QnAActivity;
         InformationActivity=(InformationBoardActivity)InformationBoardActivity._InformationActivity;
-        GroupQnAActivity=(GroupQnAActivity) kr.ac.gachon.www.GachonGroup.GroupQnAActivity._GroupQnAActivity;
+        GroupQnAActivity=(GroupQnAActivity) kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity._GroupQnAActivity;
 
         //게시판 이름과 동아리 이름을 받아옴
         Intent intent=getIntent();
@@ -120,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
                 break;
             case "GroupQnA":
                 GroupQnAActivity.finish();
-                intent=new Intent(SearchActivity.this, kr.ac.gachon.www.GachonGroup.GroupQnAActivity.class);
+                intent=new Intent(SearchActivity.this, kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity.class);
                 intent.putExtra("value", value);
                 intent.putExtra("groupName", groupName);
                 intent.putExtra("ID", userID);

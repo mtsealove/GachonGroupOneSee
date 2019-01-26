@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoardActivity"
+    tools:context=".Board.BoardActivity"
     android:orientation="vertical"
     android:background="#FFFFFF">
 
@@ -34,7 +34,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/back" />
+                android:background="@drawable/back"
+                android:onClick="close"/>
 
             <View
                 android:layout_below="@id/BoardNameTV"
@@ -92,6 +93,7 @@
                     android:textSize="20sp" />
 
                 <LinearLayout
+                    android:layout_marginHorizontal="20dp"
                     android:visibility="gone"
                     android:id="@+id/ShowReplyLayout"
                     android:layout_width="match_parent"

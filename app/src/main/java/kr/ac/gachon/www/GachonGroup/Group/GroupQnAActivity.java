@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Group;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,18 +10,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.R;
+import kr.ac.gachon.www.GachonGroup.Board.SearchActivity;
 
-public class InformationBoardActivity extends AppCompatActivity {
+public class GroupQnAActivity extends AppCompatActivity {
     ListView boardLV;
     Button searchBtn, postBtn;
     TextView titleTV, groupNameTV;
-    private final String BoardName="Information";
+    private final String BoardName="GroupQnA";
     private String userID, value, groupName;
-    public static Activity _InformationActivity;
+    public static Activity _GroupQnAActivity;
     FirebaseAccount firebaseAccount;
     FirebaseList firebaseList;
     private Account account;
@@ -30,10 +32,10 @@ public class InformationBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle si) {
         super.onCreate(si);
         setContentView(R.layout.activity_qna);
-        _InformationActivity=InformationBoardActivity.this;
+        _GroupQnAActivity= GroupQnAActivity.this;
         account=new Account();
-        firebaseAccount=new FirebaseAccount(InformationBoardActivity.this);
-        firebaseList=new FirebaseList(InformationBoardActivity.this);
+        firebaseAccount=new FirebaseAccount(GroupQnAActivity.this);
+        firebaseList=new FirebaseList(GroupQnAActivity.this);
         Intent intent=getIntent();
         groupName=intent.getStringExtra("groupName");
         value=intent.getStringExtra("value");
@@ -43,11 +45,10 @@ public class InformationBoardActivity extends AppCompatActivity {
         searchBtn=findViewById(R.id.searchBtn);
         postBtn=findViewById(R.id.postBtn);
         titleTV=findViewById(R.id.titleTV);
-        titleTV.setText("정보게시판");
+        titleTV.setText("Q&A");
         groupNameTV=findViewById(R.id.groupNameTV);
         groupNameTV.setText(groupName);
         groupNameTV.setVisibility(View.VISIBLE);
-
 
 
         //검색어가 존재하지 않으면 모든 리스트
@@ -73,7 +74,7 @@ public class InformationBoardActivity extends AppCompatActivity {
 
     //검색 메서드
     private void Search() {
-        Intent intent=new Intent(InformationBoardActivity.this, SearchActivity.class);
+        Intent intent=new Intent(GroupQnAActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName);
         intent.putExtra("groupName", groupName);
         intent.putExtra("userID", userID);
@@ -83,12 +84,12 @@ public class InformationBoardActivity extends AppCompatActivity {
     //글 작성 메서드
     private void Post() {
         if(account.group.equals(groupName)) {
-            Intent intent = new Intent(InformationBoardActivity.this, AddPostActivity.class);
+            Intent intent = new Intent(GroupQnAActivity.this, AddPostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);
             intent.putExtra("groupName", groupName);
             startActivity(intent);
-        } else Toast.makeText(InformationBoardActivity.this, "작성 권한이 없습니다", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(GroupQnAActivity.this, "작성 권한이 없습니다", Toast.LENGTH_SHORT).show();
     }
     public void close(View v) {
         finish();

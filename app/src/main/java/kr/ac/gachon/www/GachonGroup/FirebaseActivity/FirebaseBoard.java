@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import kr.ac.gachon.www.GachonGroup.PRBoardActivity;
+import kr.ac.gachon.www.GachonGroup.Board.PRBoardActivity;
 
 public class FirebaseBoard extends AppCompatActivity {
     final Context context;
@@ -102,6 +102,50 @@ public class FirebaseBoard extends AppCompatActivity {
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
                 reference.child("Accuse").child(count).child("Reason").setValue(reason);
                 reference.child("Accuse").child(count).child("GroupName").setValue(groupName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //게시글 신고, 게시판 이름, 게시글 ID, 신고한 유저의 ID, 신고 사유
+    public void AccuseReply(final String boardName, final String boardID, final String userID, final String reason, final String replyID) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Accuse에 새로운 데이터 추가
+                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
+                reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
+                reference.child("Accuse").child(count).child("UserID").setValue(userID);
+                reference.child("Accuse").child(count).child("Reason").setValue(reason);
+                reference.child("Accuse").child(count).child("ReplyID").setValue(replyID);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //게시글 신고, 게시판 이름, 게시글 ID, 신고한 유저의 ID, 신고 사유
+    public void AccuseReply(final String groupName, final String boardName, final String boardID, final String userID, final String reason, final String ReplyID) {
+        final DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Accuse에 새로운 데이터 추가
+                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
+                reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
+                reference.child("Accuse").child(count).child("UserID").setValue(userID);
+                reference.child("Accuse").child(count).child("Reason").setValue(reason);
+                reference.child("Accuse").child(count).child("GroupName").setValue(groupName);
+                reference.child("Accuse").child(count).child("ReplyID").setValue(ReplyID);
             }
 
             @Override

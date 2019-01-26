@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
 //firebase를 이용한 개별 View 수정 클래스
@@ -101,7 +102,7 @@ public class FirebaseView extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 Intent groupMenu=new Intent();
-                                groupMenu.setClass(context, kr.ac.gachon.www.GachonGroup.GroupMenuActivity.class);
+                                groupMenu.setClass(context, GroupMenuActivity.class);
                                 groupMenu.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 groupMenu.putExtra("groupName",groupName);
                                 groupMenu.putExtra("ID", ID);

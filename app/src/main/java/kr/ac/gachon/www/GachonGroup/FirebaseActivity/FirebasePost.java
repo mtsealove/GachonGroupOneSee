@@ -1,12 +1,18 @@
 package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,8 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import kr.ac.gachon.www.GachonGroup.Board.AccuseActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class FirebasePost extends AppCompatActivity {
@@ -28,13 +36,14 @@ public class FirebasePost extends AppCompatActivity {
     }
 
     //화면에 댓글 표시
-    public void AddReply(final LinearLayout layout, final String boardName, final int BoardID) {
+    public void AddReply(final LinearLayout layout, final String boardName, final int BoardID, final String userID) {
         final DatabaseReference reference=database.getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 LayoutInflater inflater=LayoutInflater.from(context);
                 layout.removeAllViews();
+                ArrayList<View> replys=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);
                     TextView authorTV=reply.findViewById(R.id.authorTV);
@@ -46,7 +55,38 @@ public class FirebasePost extends AppCompatActivity {
                     authorTV.setText(authorName);
                     timeTV.setText(snapshot.child("time").getValue(String.class));
                     contentTV.setText(snapshot.child("content").getValue(String.class));
-                    layout.addView(reply);
+                    replys.add(reply);
+                }
+                for(int i=0; i<replys.size(); i++) {
+                    final int finalI = i;
+                    replys.get(i).setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                            ArrayList<String> arrayList=new ArrayList<>();
+                            arrayList.add("신고하기");
+                            ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
+                            ListView listView=new ListView(context);
+                            listView.setAdapter(adapter);
+                            builder.setView(listView);
+                            final AlertDialog dialog=builder.create();
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    dialog.cancel();
+                                    Intent intent=new Intent(context, AccuseActivity.class);
+                                    intent.putExtra("userID", id);
+                                    intent.putExtra("boardName", boardName);
+                                    intent.putExtra("id", BoardID);
+                                    intent.putExtra("replyID", Integer.toString(finalI));
+                                    context.startActivity(intent);
+                                }
+                            });
+                            dialog.show();
+                            return false;
+                        }
+                    });
+                    layout.addView(replys.get(i));
                 }
             }
 
@@ -59,14 +99,15 @@ public class FirebasePost extends AppCompatActivity {
 
     //동아리 게시판 화면에 댓글 표시
     //동아리 이름, 댓글이 추가될 LinearLayout, 게시판 이름, 게시글 ID, Context
-    public void AddReply(final String groupName, final LinearLayout layout,final String boardName, final int BoardID) {
+    public void AddReply(final String groupName, final LinearLayout layout,final String boardName, final int BoardID, final String userID) {
         final DatabaseReference reference=database.getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                LayoutInflater inflater=LayoutInflater.from(context);
+                final LayoutInflater inflater=LayoutInflater.from(context);
                 //데이터가 업데이트 되면 모든 뷰를 추가하기 때문에 모든 뷰 삭제
                 layout.removeAllViews();
+                ArrayList<View> replys=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);
                     TextView authorTV=reply.findViewById(R.id.authorTV);
@@ -79,8 +120,42 @@ public class FirebasePost extends AppCompatActivity {
                     authorTV.setText(authorName);
                     timeTV.setText(snapshot.child("time").getValue(String.class));
                     contentTV.setText(snapshot.child("content").getValue(String.class));
-                    layout.addView(reply);
+
+                    replys.add(reply);
                 }
+                for(int i=0; i<replys.size(); i++) {
+                    final int finalI = i;
+                    replys.get(i).setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                            ArrayList<String> arrayList=new ArrayList<>();
+                            arrayList.add("신고하기");
+                            ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
+                            ListView listView=new ListView(context);
+                            listView.setAdapter(adapter);
+                            builder.setView(listView);
+                            final AlertDialog dialog=builder.create();
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    dialog.cancel();
+                                    Intent intent=new Intent(context, AccuseActivity.class);
+                                    intent.putExtra("userID", id);
+                                    intent.putExtra("boardName", boardName);
+                                    intent.putExtra("id", BoardID);
+                                    intent.putExtra("groupName", groupName);
+                                    intent.putExtra("replyID", Integer.toString(finalI));
+                                    context.startActivity(intent);
+                                }
+                            });
+                            dialog.show();
+                            return false;
+                        }
+                    });
+                    layout.addView(replys.get(i));
+                }
+
             }
 
             @Override

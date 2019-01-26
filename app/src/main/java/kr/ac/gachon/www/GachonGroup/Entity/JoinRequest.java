@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.Entity;
 
 public class JoinRequest {
     public String name;
@@ -9,9 +9,10 @@ public class JoinRequest {
     public String SelfIntroduce;
     public String ID;
     public String group;
+    public String AbleTime;
 
 
-    public JoinRequest(String name, String contact, int StudentNumber, String major, int age, String SelfIntroduce, String ID, String group) {
+    public JoinRequest(String name, String contact, int StudentNumber, String major, int age, String SelfIntroduce, String ID, String group, String AbleTime) {
         this.name=name;
         this.contact=contact;
         this.StudentNumber=StudentNumber;
@@ -20,5 +21,6 @@ public class JoinRequest {
         this.SelfIntroduce=SelfIntroduce;
         this.ID=ID;
         this.group=group;
+        this.AbleTime=AbleTime;
     }
 }

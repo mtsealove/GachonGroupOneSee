@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class AccuseActivity extends AppCompatActivity {
     int[] ButtonID=new int[6];
@@ -19,7 +19,7 @@ public class AccuseActivity extends AppCompatActivity {
     EditText reasonET;
     private String Reason=null;
     Button accuseBtn;
-    private String userID, boardName, boardID, groupName;
+    private String userID, boardName, boardID, groupName, replyID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,7 @@ public class AccuseActivity extends AppCompatActivity {
         boardName=intent.getStringExtra("boardName");
         boardID=Integer.toString(intent.getIntExtra("id", 0));
         groupName=intent.getStringExtra("groupName");
+        replyID=intent.getStringExtra("replyID");
         accuseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +70,11 @@ public class AccuseActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     FirebaseBoard firebaseBoard=new FirebaseBoard(AccuseActivity.this);
-                    if(groupName==null)
+                    if(groupName==null&&replyID==null)
                     firebaseBoard.Accuse(boardName, boardID, userID, Reason);
-                    else firebaseBoard.Accuse(groupName, boardName, boardID, userID, Reason);
+                    else if(groupName!=null&&replyID==null) firebaseBoard.Accuse(groupName, boardName, boardID, userID, Reason);
+                    else if(groupName==null&&replyID!=null) firebaseBoard.AccuseReply(boardName, boardID, userID, Reason, replyID);
+                    else firebaseBoard.AccuseReply(groupName, boardName, boardID, userID, Reason, replyID);
                     Toast.makeText(AccuseActivity.this, "신고가 완료되었습니다", Toast.LENGTH_SHORT).show();
                     finish();
                 }

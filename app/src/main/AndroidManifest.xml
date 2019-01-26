@@ -14,10 +14,10 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".JoinRequsetLogDetailActivity"></activity>
-        <activity android:name=".JoinRequestLogActivity" />
-        <activity android:name=".JoinRequestActivity" />
-        <activity android:name=".AccuseActivity" />
+        <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity"></activity>
+        <activity android:name=".JoinRequest.JoinRequestLogActivity" />
+        <activity android:name=".JoinRequest.JoinRequestActivity" />
+        <activity android:name=".Board.AccuseActivity" />
         <activity android:name=".LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,35 +25,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".FindIdActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".GroupListActivity" />
+        <activity android:name=".Account.LoginActivity" />
+        <activity android:name=".Account.FindIdActivity" />
+        <activity android:name=".Account.SignUpActivity" />
+        <activity android:name=".Board.HomeActivity" />
+        <activity android:name=".Group.GroupListActivity" />
         <activity android:name=".modules.FirebaseHelper" />
-        <activity android:name=".GroupMenuActivity" />
-        <activity android:name=".MyInformationActivity" />
-        <activity android:name=".EditMyInformationActivity" />
-        <activity android:name=".GroupScheduleActivity" />
-        <activity android:name=".PRBoardActivity" />
-        <activity android:name=".PRSearchActivity" />
+        <activity android:name=".Group.GroupMenuActivity" />
+        <activity android:name=".Account.MyInformationActivity" />
+        <activity android:name=".Account.EditMyInformationActivity" />
+        <activity android:name=".Group.GroupScheduleActivity" />
+        <activity android:name=".Board.PRBoardActivity" />
+        <activity android:name=".Board.PRSearchActivity" />
         <activity
-            android:name=".BoardActivity"
+            android:name=".Board.BoardActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".IntroduceActivity" />
-        <activity android:name=".RequirementsActivity" />
+        <activity android:name=".Board.IntroduceActivity" />
+        <activity android:name=".Board.RequirementsActivity" />
         <activity
-            android:name=".FederationNoticeActivity"
+            android:name=".Board.FederationNoticeActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".Board.SearchActivity" />
         <activity
-            android:name=".QnAActivity"
+            android:name=".Board.QnAActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".AddPostActivity" />
+        <activity android:name=".Board.AddPostActivity" />
         <activity
-            android:name=".InformationBoardActivity"
+            android:name=".Board.InformationBoardActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".GroupQnAActivity" />
+        <activity android:name=".Group.GroupQnAActivity" />
     </application>
 
 </manifest>

@@ -1,14 +1,15 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.JoinRequest;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
 
 public class JoinRequsetLogDetailActivity extends AppCompatActivity {
@@ -20,13 +21,15 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
     private String group;
     private String major;
     private String name;
-    private TextView SelfIntroduceTV, StudentNuberTV, ageTV, contactTV, groupTV, majorTV, nameTV;
-    private Button RemoveJoinRequestBtn;
+    private String AbleTime;
+    private TextView SelfIntroduceTV, StudentNuberTV, ageTV, contactTV, groupTV, majorTV, nameTV, AbleTimeTV;
+    private Button RemoveJoinRequestBtn, updateJoinRequestBtn;
+    public static Activity _JoinRequestLogDetailActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_requset_log_detail);
-
+        _JoinRequestLogDetailActivity=JoinRequsetLogDetailActivity.this;
         //표시할 내용 받아오기
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
@@ -38,6 +41,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         group=intent.getStringExtra("group");
         major=intent.getStringExtra("major");
         name=intent.getStringExtra("name");
+        AbleTime=intent.getStringExtra("AbleTime");
 
         //모든 뷰 매칭
         SelfIntroduceTV=findViewById(R.id.selfIntroduceTV);
@@ -47,7 +51,9 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         groupTV=findViewById(R.id.groupNameTV);
         majorTV=findViewById(R.id.majorTV);
         nameTV=findViewById(R.id.nameTV);
+        AbleTimeTV=findViewById(R.id.ableTimeTV);
         RemoveJoinRequestBtn=findViewById(R.id.removeBtn);
+        updateJoinRequestBtn=findViewById(R.id.updateBtn);
 
         SelfIntroduceTV.setText(SelfIntroduce);
         StudentNuberTV.setText(StudentNumberStr);
@@ -56,11 +62,19 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         groupTV.setText(group);
         majorTV.setText(major);
         nameTV.setText(name);
+        AbleTimeTV.setText(AbleTime);
 
+        //삭제 및 수정 버튼 매칭
         RemoveJoinRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setRemoveJoinRequestBtn();
+            }
+        });
+        updateJoinRequestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpdateJoinRequestBtn();
             }
         });
     }
@@ -70,8 +84,30 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         alert.MsgDialogChoice("가입신청을 취소하시겠습니까?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseList firebaseList=new FirebaseList(JoinRequsetLogDetailActivity.this);
-                firebaseList.RemoveJoinRequest(ID, group);
+                FirebaseJoinRequest firebaseJoinRequest=new FirebaseJoinRequest(JoinRequsetLogDetailActivity.this);
+                firebaseJoinRequest.RemoveJoinRequest(ID, group);
+            }
+        });
+    }
+
+    private void setUpdateJoinRequestBtn() {
+        Alert alert=new Alert(JoinRequsetLogDetailActivity.this);
+        alert.MsgDialogChoice("신청 내역을 수정하시겠습니까?", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(JoinRequsetLogDetailActivity.this, JoinRequestActivity.class);
+                //화면에 표시될 내용과 ID전송
+                intent.putExtra("name", name);
+                intent.putExtra("contact",contact);
+                intent.putExtra("StudentNumber", StudentNumber);
+                intent.putExtra("age", age);
+                intent.putExtra("major", major);
+                intent.putExtra("SelfIntroduce", SelfIntroduce);
+                intent.putExtra("AbleTime", AbleTime);
+                intent.putExtra("ID", ID);
+                intent.putExtra("groupName", group);
+                intent.putExtra("update", true);
+                startActivity(intent);
             }
         });
     }

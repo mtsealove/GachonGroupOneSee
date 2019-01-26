@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PRBoardActivity"
+    tools:context=".Board.PRBoardActivity"
     android:orientation="vertical"
     android:background="#FFFFFF">
 
@@ -30,7 +30,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:background="@drawable/back" />
+            android:background="@drawable/back"
+            android:onClick="close"/>
 
         <View
             style="?android:attr/borderlessButtonStyle"

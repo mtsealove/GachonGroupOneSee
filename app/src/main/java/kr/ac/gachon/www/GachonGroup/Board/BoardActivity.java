@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class BoardActivity extends AppCompatActivity {
@@ -76,7 +77,7 @@ public class BoardActivity extends AppCompatActivity {
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
-                firebasePost.AddReply(ReplyShowLayout, boardName, id);
+                firebasePost.AddReply(ReplyShowLayout, boardName, id, userID);
                 replyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -103,7 +104,7 @@ public class BoardActivity extends AppCompatActivity {
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
-                firebasePost.AddReply(groupName,ReplyShowLayout, boardName, id);
+                firebasePost.AddReply(groupName,ReplyShowLayout, boardName, id, userID);
                 replyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -122,7 +123,7 @@ public class BoardActivity extends AppCompatActivity {
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
-                firebasePost.AddReply(groupName, ReplyShowLayout, boardName, id);
+                firebasePost.AddReply(groupName, ReplyShowLayout, boardName, id, userID);
                 replyBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -144,7 +145,6 @@ public class BoardActivity extends AppCompatActivity {
         //입력 체크
         if(content.length()==0) Toast.makeText(BoardActivity.this, "댓글을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            FirebaseHelper helper=new FirebaseHelper();
             //동아리의 게시판아니면
             if(groupName==null)
                 firebasePost.CommitReply(boardName, Integer.toString(id), userID, content);
@@ -166,5 +166,9 @@ public class BoardActivity extends AppCompatActivity {
         intent.putExtra("userID", userID);
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+
+    public void close(View v) {
+        finish();
     }
 }
