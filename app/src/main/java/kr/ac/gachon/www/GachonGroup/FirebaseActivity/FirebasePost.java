@@ -224,7 +224,10 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //해당 게시판의 마지막 글로
-                int count=(int)(dataSnapshot.child(boardName).getChildrenCount());
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.child(boardName).getChildren()) {
+                    count=snapshot.child("id").getValue(Integer.class)+1;
+                }
                 reference.child(boardName).child(Integer.toString(count)).child("author").setValue(ID);
                 reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child(boardName).child(Integer.toString(count)).child("title").setValue(title);
@@ -245,7 +248,10 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //해당 게시판의 마지막 글로
-                int count=(int)(dataSnapshot.child("Groups").child(groupName).child(boardName).getChildrenCount());
+                int count=0;
+                for (DataSnapshot snapshot:dataSnapshot.child("Groups").child(groupName).child(boardName).getChildren()) {
+                    count=snapshot.child("id").getValue(Integer.class)+1;
+                }
                 //내용 삽입
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("author").setValue(ID);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("content").setValue(content);
@@ -258,5 +264,28 @@ public class FirebasePost extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void Update(final String boardName, final String title, final String content, final String boardID) {
+        DatabaseReference ref=database.getReference();
+        ref.child(boardName).child(boardID).child("title").setValue(title);
+        ref.child(boardName).child(boardID).child("content").setValue(content);
+    }
+
+    public void Update(final String GroupName, final String boardName, final String title, final String content, final String boardID) {
+        DatabaseReference ref=database.getReference();
+        ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("title").setValue(title);
+        ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("content").setValue(content);
+    }
+
+    public void Remove(final String boardName, String boardID) {
+        DatabaseReference reference=database.getReference();
+        DatabaseReference ref=reference.child(boardName).child(boardID);
+        ref.setValue(null);
+    }
+    public void Remove(final String groupName, final String boardName, String boardID) {
+        DatabaseReference reference=database.getReference();
+        DatabaseReference ref=reference.child("Groups").child(groupName).child(boardName).child(boardID);
+        ref.setValue(null);
     }
 }

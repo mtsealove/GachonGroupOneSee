@@ -80,7 +80,7 @@ public class Alert extends AppCompatActivity {
         dialog.show();
     }
     //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 지정 가능
-    public void MsgDialogChoice(String msg, View.OnClickListener positiveListener) {
+    public AlertDialog MsgDialogChoice(String msg, View.OnClickListener positiveListener) {
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
@@ -99,5 +99,8 @@ public class Alert extends AppCompatActivity {
         });
         positive.setOnClickListener(positiveListener);
         dialog.show();
+        return dialog;
     }
+
+
 }

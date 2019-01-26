@@ -14,6 +14,7 @@ import kr.ac.gachon.www.GachonGroup.modules.Alert;
 
 public class AddPostActivity extends AppCompatActivity {
     private String boardName, userID, groupName;
+    private String title, content, boardID;
     EditText titleET, contentET;
     Button commitBtn, tmpCommitBtn;
     @Override
@@ -21,14 +22,22 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
         Intent intent=getIntent();
+        //기본정보
         boardName=intent.getStringExtra("boardName");
         userID=intent.getStringExtra("userID");
         groupName=intent.getStringExtra("groupName");
+        //업데이트용 추가정보
+        title=intent.getStringExtra("title");
+        content=intent.getStringExtra("content");
+        boardID=intent.getStringExtra("boardID");
 
         titleET=findViewById(R.id.titleET);
         contentET=findViewById(R.id.contentET);
         commitBtn=findViewById(R.id.commitBtn);
         tmpCommitBtn=findViewById(R.id.tmpCommitBtn);
+
+        titleET.setText(title);
+        contentET.setText(content);
 
         commitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +47,6 @@ public class AddPostActivity extends AppCompatActivity {
         });
         if(groupName!=null) contentET.setHint("내용을 입력해주세요");
     }
-    private String title, content;
     private void Post() {
         title=titleET.getText().toString();
         content=contentET.getText().toString();
@@ -46,10 +54,17 @@ public class AddPostActivity extends AppCompatActivity {
         else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else {
             Alert alert=new Alert(AddPostActivity.this);
-            if(groupName==null)
-            alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", postListener);
-            else
-                alert.MsgDialogChoice("작성한 내용을 등록하시겠습니까?", GroupPostListener);
+            if(boardID==null) {
+                if (groupName == null)
+                    alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", postListener);
+                else
+                    alert.MsgDialogChoice("작성한 내용을\n등록하시겠습니까?", GroupPostListener);
+            } else {
+                if(groupName==null)
+                    alert.MsgDialogChoice("수정한 내용을\n등록하시겠습니까?", UpdateListener);
+                else
+                    alert.MsgDialogChoice("수정한 내용을\n등록하시겠습니까?", GroupUpdateListener);
+            }
         }
     }
     View.OnClickListener postListener=new View.OnClickListener() {
@@ -65,6 +80,22 @@ public class AddPostActivity extends AppCompatActivity {
         public void onClick(View v) {
             FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
             firebasePost.Post(groupName, boardName, userID, title, content);
+            finish();
+        }
+    };
+    View.OnClickListener UpdateListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
+            firebasePost.Update(boardName, title, content, boardID);
+            finish();
+        }
+    };
+    View.OnClickListener GroupUpdateListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
+            firebasePost.Update(groupName, boardName, title, content, boardID);
             finish();
         }
     };

@@ -20,11 +20,11 @@ import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class BoardActivity extends AppCompatActivity {
     TextView authorTV, titleTV, contentTV, boardNameTV;
-    Button functionBtn;
+    Button functionBtn, replyBtn, removeBtn;
     LinearLayout ReplyShowLayout;
     FrameLayout ReplyInputLayout;
     EditText replyET;
-    Button replyBtn;
+
     private String userID, boardName, groupName;
     int id;
     FirebasePost firebasePost;
@@ -39,6 +39,7 @@ public class BoardActivity extends AppCompatActivity {
         contentTV= findViewById(R.id.contentTV);
         boardNameTV= findViewById(R.id.BoardNameTV);
         functionBtn=findViewById(R.id.functionBtn);
+        removeBtn=findViewById(R.id.removeBtn);
         //댓글 출력 레이아웃
         ReplyShowLayout=findViewById(R.id.ShowReplyLayout);
         ReplyInputLayout=findViewById(R.id.InputReplyLayout);
@@ -47,13 +48,16 @@ public class BoardActivity extends AppCompatActivity {
 
         firebasePost=new FirebasePost(BoardActivity.this);
 
+        init();
+    }
+
+    private void init() {
         Intent intent=getIntent();
         boardName=intent.getStringExtra("boardName");
         String boardNameKR=null;
         id=intent.getIntExtra("id", 0);
         userID=intent.getStringExtra("userID");
         groupName=intent.getStringExtra("groupName");
-
         //게시판 이름에 따라 다르게 설정
         switch (boardName) {
             case "PublicRelation":
@@ -93,6 +97,7 @@ public class BoardActivity extends AppCompatActivity {
                 break;
             case "Information":
                 boardNameKR="정보게시판";
+
                 functionBtn.setText("신고");
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,10 +138,14 @@ public class BoardActivity extends AppCompatActivity {
         }
         boardNameTV.setText(boardNameKR);
         FirebaseBoard firebaseBoard=new FirebaseBoard(BoardActivity.this);
-        if(groupName==null)
-        firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
-        else
+        if(groupName==null) {
+            firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
+            firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn);
+        }
+        else {
             firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
+            firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn);
+        }
     }
 
     //댓글 입력
@@ -170,5 +179,11 @@ public class BoardActivity extends AppCompatActivity {
 
     public void close(View v) {
         finish();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        init();
     }
 }

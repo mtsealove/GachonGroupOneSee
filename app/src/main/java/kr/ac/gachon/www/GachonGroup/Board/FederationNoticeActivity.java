@@ -15,8 +15,9 @@ public class FederationNoticeActivity extends AppCompatActivity {
     ListView boardLV;
     Button searchBtn;
     private final String BoardName="FederationNotice";
-    private String ID;
+    private String ID, value;
     public static Activity _FederationNoticeActivity;
+    FirebaseList firebaseList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,17 +25,14 @@ public class FederationNoticeActivity extends AppCompatActivity {
         _FederationNoticeActivity=FederationNoticeActivity.this;
         Intent intent=getIntent();
         ID=intent.getStringExtra("userID");
-        String value=intent.getStringExtra("value");
+        value=intent.getStringExtra("value");
         boardLV= findViewById(R.id.boardLV);
         searchBtn=findViewById(R.id.searchBtn);
 
-        FirebaseList firebaseList=new FirebaseList(FederationNoticeActivity.this);
+        firebaseList=new FirebaseList(FederationNoticeActivity.this);
         //검색어가 존재하지 않으면 모든 리스트
-        if(value==null)
-            firebaseList.setListView(ID, boardLV, BoardName);
-        //존재하면 검색어를 포함하는 리스트
-        else firebaseList.setListView(ID, boardLV, BoardName, value);
 
+        init();
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +46,20 @@ public class FederationNoticeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void init() {
+        if(value==null)
+            firebaseList.setListView(ID, boardLV, BoardName);
+            //존재하면 검색어를 포함하는 리스트
+        else firebaseList.setListView(ID, boardLV, BoardName, value);
+    }
+
     public void close(View v){
         finish();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        init();
     }
 }

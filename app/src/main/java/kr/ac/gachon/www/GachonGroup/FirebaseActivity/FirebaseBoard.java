@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +17,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
 import kr.ac.gachon.www.GachonGroup.Board.PRBoardActivity;
+import kr.ac.gachon.www.GachonGroup.modules.Alert;
 
 public class FirebaseBoard extends AppCompatActivity {
     final Context context;
@@ -177,6 +181,109 @@ public class FirebaseBoard extends AppCompatActivity {
                 context.startActivity(intent);
                 ((Activity)context).finish();
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //자신의 글인지 확인하는 메서드
+    public void MyContent(final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn){
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //자신의 글이라면
+                if(dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {
+                    final String title=dataSnapshot.child(boardName).child(boardID).child("title").getValue(String.class);
+                    final String content=dataSnapshot.child(boardName).child(boardID).child("content").getValue(String.class);
+                    editBtn.setText("수정");
+                    editBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(context, AddPostActivity.class);
+                            //기본정보
+                            intent.putExtra("boardName", boardName);
+                            intent.putExtra("userID", userID);
+                            //추가 정보
+                            intent.putExtra("title", title);
+                            intent.putExtra("content", content);
+                            intent.putExtra("boardID", boardID);
+                            context.startActivity(intent);
+                        }
+                    });
+                    removeBtn.setVisibility(View.VISIBLE);
+                    removeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Alert alert=new Alert(context);
+                            alert.MsgDialogChoice("게시글을 삭제하시겠습니까?", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    FirebasePost firebasePost=new FirebasePost(context);
+                                    firebasePost.Remove(boardName, boardID);
+                                    ((Activity)context).finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //자신의 글인지 확인하는 메서드//그룹용
+    public void MyContent(final String groupName, final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn){
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //자신의 글이라면
+                if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {
+                    final String title=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("title").getValue(String.class);
+                    final String content=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("content").getValue(String.class);
+
+                    editBtn.setText("수정");
+                    editBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(context, AddPostActivity.class);
+                            //기본정보
+                            intent.putExtra("boardName", boardName);
+                            intent.putExtra("userID", userID);
+                            intent.putExtra("groupName", groupName);
+                            //추가 정보
+                            intent.putExtra("title", title);
+                            intent.putExtra("content", content);
+                            intent.putExtra("boardID", boardID);
+                            context.startActivity(intent);
+                        }
+                    });
+
+                    removeBtn.setVisibility(View.VISIBLE);
+                    removeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Alert alert=new Alert(context);
+                            alert.MsgDialogChoice("게시글을 삭제하시겠습니까?", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    FirebasePost firebasePost=new FirebasePost(context);
+                                    firebasePost.Remove(groupName, boardName, boardID);
+                                    ((Activity)context).finish();
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             @Override

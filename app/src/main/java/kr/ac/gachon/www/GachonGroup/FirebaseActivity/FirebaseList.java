@@ -35,7 +35,7 @@ public class FirebaseList extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<String> titles=new ArrayList<>();
-                ArrayList<Integer> ids=new ArrayList<>();
+                final ArrayList<Integer> ids=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child(board_name).getChildren()) {
                     String title=snapshot.child("title").getValue(String.class);
                     int id=snapshot.child("id").getValue(Integer.class);
@@ -49,7 +49,7 @@ public class FirebaseList extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent=new Intent(context, BoardActivity.class);
                         intent.putExtra("boardName", board_name);
-                        intent.putExtra("id", position);
+                        intent.putExtra("id", ids.get(position));
                         intent.putExtra("userID", userID);
                         context.startActivity(intent);
                     }
@@ -70,7 +70,7 @@ public class FirebaseList extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<String> titles=new ArrayList<>();
-                ArrayList<Integer> ids=new ArrayList<>();
+                final ArrayList<Integer> ids=new ArrayList<>();
                 String newName=TrimName(groupName);
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(newName).child(board_name).getChildren()) {
                     String title=snapshot.child("title").getValue(String.class);
@@ -86,7 +86,7 @@ public class FirebaseList extends AppCompatActivity {
                         Intent intent=new Intent(context, BoardActivity.class);
                         intent.putExtra("groupName", groupName);
                         intent.putExtra("boardName", board_name);
-                        intent.putExtra("id", position);
+                        intent.putExtra("id", ids.get(position));
                         intent.putExtra("userID", userID);
                         context.startActivity(intent);
                     }

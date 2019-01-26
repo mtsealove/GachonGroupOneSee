@@ -1,7 +1,9 @@
 package kr.ac.gachon.www.GachonGroup.JoinRequest;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;

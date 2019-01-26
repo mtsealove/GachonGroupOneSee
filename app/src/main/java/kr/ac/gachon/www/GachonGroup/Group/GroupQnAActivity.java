@@ -83,13 +83,11 @@ public class GroupQnAActivity extends AppCompatActivity {
 
     //글 작성 메서드
     private void Post() {
-        if(account.group.equals(groupName)) {
             Intent intent = new Intent(GroupQnAActivity.this, AddPostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);
             intent.putExtra("groupName", groupName);
             startActivity(intent);
-        } else Toast.makeText(GroupQnAActivity.this, "작성 권한이 없습니다", Toast.LENGTH_SHORT).show();
     }
     public void close(View v) {
         finish();
