@@ -91,6 +91,7 @@ public class GroupMenuActivity extends AppCompatActivity {
     private void JoinRequest() {
         if(groupName.equals(account.group))
             Toast.makeText(GroupMenuActivity.this, "자신이 속한 동아리는 신청할 수 없습니다", Toast.LENGTH_SHORT).show();
+        else if(account.is_manager) Toast.makeText(GroupMenuActivity.this, "관리자는 가입신청을 할 수 없습니다", Toast.LENGTH_SHORT).show();
         else {
             Intent intent = new Intent(GroupMenuActivity.this, JoinRequestActivity.class);
             groupName=TrimName(groupName);

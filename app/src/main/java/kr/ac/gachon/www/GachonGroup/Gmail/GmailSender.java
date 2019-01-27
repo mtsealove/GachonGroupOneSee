@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.Gmail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.Gmail;
 
 import java.security.AccessController;
 import java.security.Provider;

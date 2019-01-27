@@ -82,7 +82,7 @@ public class InformationBoardActivity extends AppCompatActivity {
 
     //글 작성 메서드
     private void Post() {
-        if(account.group.equals(groupName)) {
+        if(account.group.equals(groupName)&&account.is_manager) {
             Intent intent = new Intent(InformationBoardActivity.this, AddPostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);

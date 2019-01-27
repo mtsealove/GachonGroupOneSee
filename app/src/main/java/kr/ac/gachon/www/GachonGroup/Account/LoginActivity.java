@@ -17,6 +17,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
@@ -64,13 +67,26 @@ public class LoginActivity extends AppCompatActivity {
         isManager = UserCategoryKR.equals("관리자");
         String ID=ID_et.getText().toString();
         String password=PW_et.getText().toString();
+        AES256Util aes256Util= null;
+        try {
+            aes256Util = new AES256Util();
+            password=aes256Util.encrypt(password);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
         //아이디, 비밀번호 미입력 체크
         if(ID.length()==0) Toast.makeText(LoginActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(password.length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
         else {
             FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
             firebaseAccount.Login(ID, password, isManager);
-            write_ID(ID, password);
+                write_ID(ID, password);
+
         }
     }
 
@@ -92,12 +108,18 @@ public class LoginActivity extends AppCompatActivity {
             BufferedReader br=new BufferedReader(new FileReader(new File(getFilesDir()+"login.dat")));
             String ID=br.readLine();
             String pw=br.readLine();
+            AES256Util aes256Util=new AES256Util();
+            pw=aes256Util.decrypt(pw);
             ID_et.setText(ID);
             PW_et.setText(pw);
             br.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
     }

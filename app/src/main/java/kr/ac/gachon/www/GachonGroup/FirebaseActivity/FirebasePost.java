@@ -44,6 +44,8 @@ public class FirebasePost extends AppCompatActivity {
                 LayoutInflater inflater=LayoutInflater.from(context);
                 layout.removeAllViews();
                 ArrayList<View> replys=new ArrayList<>();
+                final ArrayList<String> userIDs=new ArrayList<>();
+                final ArrayList<Integer> replyIDS=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);
                     TextView authorTV=reply.findViewById(R.id.authorTV);
@@ -56,6 +58,8 @@ public class FirebasePost extends AppCompatActivity {
                     timeTV.setText(snapshot.child("time").getValue(String.class));
                     contentTV.setText(snapshot.child("content").getValue(String.class));
                     replys.add(reply);
+                    userIDs.add(authorID);
+                    replyIDS.add(snapshot.child("id").getValue(Integer.class));
                 }
                 for(int i=0; i<replys.size(); i++) {
                     final int finalI = i;
@@ -65,6 +69,7 @@ public class FirebasePost extends AppCompatActivity {
                             AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             ArrayList<String> arrayList=new ArrayList<>();
                             arrayList.add("신고하기");
+                            if (userID.equals(userIDs.get(finalI))) arrayList.add("삭제하기");
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
@@ -73,13 +78,22 @@ public class FirebasePost extends AppCompatActivity {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    dialog.cancel();
-                                    Intent intent=new Intent(context, AccuseActivity.class);
-                                    intent.putExtra("userID", id);
-                                    intent.putExtra("boardName", boardName);
-                                    intent.putExtra("id", BoardID);
-                                    intent.putExtra("replyID", Integer.toString(finalI));
-                                    context.startActivity(intent);
+                                    switch (position) {
+                                        case 0:
+                                        dialog.cancel();
+                                        Intent intent = new Intent(context, AccuseActivity.class);
+                                        intent.putExtra("userID", id);
+                                        intent.putExtra("boardName", boardName);
+                                        intent.putExtra("id", BoardID);
+                                        intent.putExtra("replyID", Integer.toString(finalI));
+                                        context.startActivity(intent);
+                                        break;
+                                        case 1:
+                                            reference.child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDS.get(finalI))).setValue(null);
+                                            Toast.makeText(context, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                            dialog.cancel();
+                                            break;
+                                    }
                                 }
                             });
                             dialog.show();
@@ -108,6 +122,8 @@ public class FirebasePost extends AppCompatActivity {
                 //데이터가 업데이트 되면 모든 뷰를 추가하기 때문에 모든 뷰 삭제
                 layout.removeAllViews();
                 ArrayList<View> replys=new ArrayList<>();
+                final ArrayList<String> userIDs=new ArrayList<>();
+                final ArrayList<Integer> replyIDs=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);
                     TextView authorTV=reply.findViewById(R.id.authorTV);
@@ -122,6 +138,8 @@ public class FirebasePost extends AppCompatActivity {
                     contentTV.setText(snapshot.child("content").getValue(String.class));
 
                     replys.add(reply);
+                    userIDs.add(authorID);
+                    replyIDs.add(snapshot.child("id").getValue(Integer.class));
                 }
                 for(int i=0; i<replys.size(); i++) {
                     final int finalI = i;
@@ -131,6 +149,8 @@ public class FirebasePost extends AppCompatActivity {
                             AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             ArrayList<String> arrayList=new ArrayList<>();
                             arrayList.add("신고하기");
+                            if (userID.equals(userIDs.get(finalI))) arrayList.add("삭제하기");
+
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
@@ -139,14 +159,23 @@ public class FirebasePost extends AppCompatActivity {
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    dialog.cancel();
-                                    Intent intent=new Intent(context, AccuseActivity.class);
-                                    intent.putExtra("userID", id);
-                                    intent.putExtra("boardName", boardName);
-                                    intent.putExtra("id", BoardID);
-                                    intent.putExtra("groupName", groupName);
-                                    intent.putExtra("replyID", Integer.toString(finalI));
-                                    context.startActivity(intent);
+                                    switch (position) {
+                                        case 0:
+                                        dialog.cancel();
+                                        Intent intent = new Intent(context, AccuseActivity.class);
+                                        intent.putExtra("userID", id);
+                                        intent.putExtra("boardName", boardName);
+                                        intent.putExtra("id", BoardID);
+                                        intent.putExtra("groupName", groupName);
+                                        intent.putExtra("replyID", Integer.toString(replyIDs.get(finalI)));
+                                        context.startActivity(intent);
+                                        break;
+                                        case 1:
+                                            reference.child("Group").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDs.get(finalI))).setValue(null);
+                                            Toast.makeText(context, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                                            dialog.cancel();
+                                            break;
+                                    }
                                 }
                             });
                             dialog.show();
@@ -173,9 +202,13 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //마지막 글로
-                int count=(int)(dataSnapshot.child(boardName).child(boardID).child("reply").getChildrenCount());
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.child(boardName).child(boardID).child("reply").getChildren()) {
+                    count=snapshot.child("id").getValue(Integer.class)+1;
+                }
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
+                reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("id").setValue(count);
                 //현재 시간을 불러와 간단한 형식으로 추가
                 Date date=new Date();
                 SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
@@ -198,9 +231,13 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //해당 게시글의 마지막 댓글로
-                int count=(int)(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").getChildrenCount());
+                int count=0;
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("relpy").getChildren()) {
+                    count=snapshot.child("id").getValue(Integer.class)+1;
+                }
                 reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
                 reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
+                reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("id").setValue(count);
                 //현재 시간을 불러와 간단한 형식으로 데이터 추가
                 Date date=new Date();
                 SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");

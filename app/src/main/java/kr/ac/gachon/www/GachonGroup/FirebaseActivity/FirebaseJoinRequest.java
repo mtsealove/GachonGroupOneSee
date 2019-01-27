@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.Entity.ListAdapter;
 import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequsetLogDetailActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
@@ -39,7 +40,12 @@ public class FirebaseJoinRequest extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //데이터 삽입
-                    reference.child("JoinRequest").push().setValue(joinRequest);
+                    int count=0;
+                    for(DataSnapshot snapshot:dataSnapshot.child("JoinRequest").getChildren()) {
+                        count=snapshot.child("requestID").getValue(Integer.class)+1;
+                    }
+                    joinRequest.requestID=count;
+                    reference.child("JoinRequest").child(Integer.toString(count)).setValue(joinRequest);
                     Toast.makeText(context, "신청이 완료되었습니다", Toast.LENGTH_SHORT).show();
                     ((Activity)context).finish();
             }
@@ -65,7 +71,7 @@ public class FirebaseJoinRequest extends AppCompatActivity {
                     if(snapshot.child("ID").getValue(String.class).equals(ID)) {
                         //타이틀에 추가
                         title.add(snapshot.child("group").getValue(String.class));
-                        //JoinRequests에 추가
+                        //JoinRequest에 추가
                         String SelfIntroduce=snapshot.child("SelfIntroduce").getValue(String.class);
                         int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
                         int age=snapshot.child("age").getValue(Integer.class);
@@ -75,6 +81,7 @@ public class FirebaseJoinRequest extends AppCompatActivity {
                         String name=snapshot.child("name").getValue(String.class);
                         String AbleTime=snapshot.child("AbleTime").getValue(String.class);
                         JoinRequest joinRequest=new JoinRequest(name, contact, StudentNumber, major, age, SelfIntroduce, ID, group, AbleTime);
+                        joinRequest.requestID=snapshot.child("requestID").getValue(Integer.class);
                         joinRequests.add(joinRequest);
                     }
                 }
@@ -178,6 +185,61 @@ public class FirebaseJoinRequest extends AppCompatActivity {
                         JoinRequsetLogDetailActivity._JoinRequestLogDetailActivity.finish();
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //자신의 동아리에 신청한 내역 조회
+    public void GroupJoinRequestLog(final ListView listView, final String group) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                ListAdapter listAdapter=new ListAdapter();
+                final ArrayList<Integer> requestIDs=new ArrayList<>();
+                for(DataSnapshot snapshot: dataSnapshot.child("JoinRequest").getChildren()) {
+                    //자신의 동아리에 속해 있으면
+                    if(snapshot.child("group").getValue(String.class).equals(group)) {
+                        String major=snapshot.child("major").getValue(String.class);
+                        String name=snapshot.child("name").getValue(String.class);
+                        int requestID=snapshot.child("requestID").getValue(Integer.class);
+                        requestIDs.add(requestID);
+                        listAdapter.addItem(name, major);
+                    }
+                }
+                listView.setAdapter(listAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        DataSnapshot snap=dataSnapshot.child("JoinRequest").child(Integer.toString(requestIDs.get(position)));
+                        String ID=snap.child("ID").getValue(String.class);
+                        String SelfIntroduce=snap.child("SelfIntroduce").getValue(String.class);
+                        int StudentNumber=snap.child("StudentNumber").getValue(Integer.class);
+                        int age=snap.child("age").getValue(Integer.class);
+                        String contact=snap.child("contact").getValue(String.class);
+                        String group=snap.child("group").getValue(String.class);
+                        String major=snap.child("major").getValue(String.class);
+                        String name=snap.child("name").getValue(String.class);
+                        String AbleTime=snap.child("AbleTime").getValue(String.class);
+                        Intent intent=new Intent(context, JoinRequsetLogDetailActivity.class);
+                        intent.putExtra("ID", ID);
+                        intent.putExtra("SelfIntroduce", SelfIntroduce);
+                        intent.putExtra("StudentNumber", StudentNumber);
+                        intent.putExtra("age", age);
+                        intent.putExtra("contact", contact);
+                        intent.putExtra("group", group);
+                        intent.putExtra("major", major);
+                        intent.putExtra("name", name);
+                        intent.putExtra("AbleTime", AbleTime);
+                        intent.putExtra("viewOnly", true);
+                        context.startActivity(intent);
+                    }
+                });
             }
 
             @Override

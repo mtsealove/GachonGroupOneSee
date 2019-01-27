@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
+import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
 public class RequirementsActivity extends AppCompatActivity {
     EditText titleET, emailET, contentET;

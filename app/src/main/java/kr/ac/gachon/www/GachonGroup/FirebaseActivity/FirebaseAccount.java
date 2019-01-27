@@ -21,9 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.Account.FindIdActivity;
@@ -31,7 +35,7 @@ import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.Account.SignUpActivity;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.GmailSender;
+import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
 //Firebase를 이용한 계정 접근 메서드
 public class FirebaseAccount extends AppCompatActivity {
@@ -174,6 +178,14 @@ public class FirebaseAccount extends AppCompatActivity {
                 for(DataSnapshot snapshot:dataSnapshot.child("Manager").getChildren()) {
                     if(snapshot.child("phone").getValue(String.class).equals(account.phone))
                         account.is_manager=true;
+                    //비밀번호 암호화
+                    try {
+                        AES256Util aes256Util=new AES256Util();
+                        account.password=aes256Util.encrypt(account.password);
+                    } catch (UnsupportedEncodingException | GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 reference.child("Account").child(ID).setValue(account);
             }
@@ -250,6 +262,8 @@ public class FirebaseAccount extends AppCompatActivity {
                                 email);
                         Toast.makeText(context, "인증번호가 발송되었습니다" ,Toast.LENGTH_SHORT).show();
                         FindIdActivity.VerifyCode=verifyCode;
+                        AES256Util aes256Util=new AES256Util();
+                        PW=aes256Util.decrypt(PW);
                         FindIdActivity.password=PW;
                         FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
@@ -346,8 +360,20 @@ public class FirebaseAccount extends AppCompatActivity {
     }
 
     //계정 정보 수정
-    public void UpdateAccountData(final String ID, final String child, final String value) {
+    public void UpdateAccountData(final String ID, final String child, String value) {
         DatabaseReference reference=database.getReference();
+        if(child.equals("password")) {
+            try {
+                AES256Util aes256Util=new AES256Util();
+                value=aes256Util.encrypt(value);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        }
         reference.child("Account").child(ID).child(child).setValue(value);
     }
     //계정 정보 수정(int값)

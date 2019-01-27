@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity"></activity>
+        <activity android:name=".Group.GroupJoinRequestLogActivity"></activity>
+        <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity" />
         <activity android:name=".JoinRequest.JoinRequestLogActivity" />
         <activity android:name=".JoinRequest.JoinRequestActivity" />
         <activity android:name=".Board.AccuseActivity" />

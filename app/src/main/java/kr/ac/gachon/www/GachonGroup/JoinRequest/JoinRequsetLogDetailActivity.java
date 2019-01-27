@@ -44,6 +44,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         major=intent.getStringExtra("major");
         name=intent.getStringExtra("name");
         AbleTime=intent.getStringExtra("AbleTime");
+        boolean viewOnly=intent.getBooleanExtra("viewOnly", false);
 
         //모든 뷰 매칭
         SelfIntroduceTV=findViewById(R.id.selfIntroduceTV);
@@ -65,6 +66,11 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         majorTV.setText(major);
         nameTV.setText(name);
         AbleTimeTV.setText(AbleTime);
+
+        if(viewOnly) {
+            RemoveJoinRequestBtn.setVisibility(View.GONE);
+            updateJoinRequestBtn.setVisibility(View.GONE);
+        }
 
         //삭제 및 수정 버튼 매칭
         RemoveJoinRequestBtn.setOnClickListener(new View.OnClickListener() {

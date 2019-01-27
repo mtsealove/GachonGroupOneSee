@@ -80,7 +80,12 @@ public class FirebaseBoard extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Accuse에 새로운 데이터 추가
-                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                int countInt=0;
+                for(DataSnapshot snapshot: dataSnapshot.child("Accuse").getChildren()) {
+                    countInt=snapshot.child("id").getValue(Integer.class)+1;
+                }
+                String count=Integer.toString(countInt);
+                reference.child("Accuse").child(count).child("id").setValue(countInt);
                 reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
                 reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
@@ -100,7 +105,12 @@ public class FirebaseBoard extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Accuse에 새로운 데이터 추가
-                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                int countInt=0;
+                for(DataSnapshot snapshot: dataSnapshot.child("Accuse").getChildren()) {
+                    countInt=snapshot.child("id").getValue(Integer.class)+1;
+                }
+                String count=Integer.toString(countInt);
+                reference.child("Accuse").child(count).child("id").setValue(countInt);
                 reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
                 reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);

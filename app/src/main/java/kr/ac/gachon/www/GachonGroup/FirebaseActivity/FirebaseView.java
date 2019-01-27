@@ -19,8 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -60,6 +64,18 @@ public class FirebaseView extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!child.equals("StudentNumber")) {
                     String result = dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
+                    if(child.equals("password")) {
+                        try {
+                            AES256Util aes256Util=new AES256Util();
+                            result=aes256Util.decrypt(result);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (GeneralSecurityException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     editText.setText(result);
                 } else {
                     int studentNumber=dataSnapshot.child("Account").child(ID).child("StudentNumber").getValue(Integer.class);

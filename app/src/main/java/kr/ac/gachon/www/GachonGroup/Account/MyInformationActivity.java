@@ -17,6 +17,7 @@ import java.io.IOException;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
+import kr.ac.gachon.www.GachonGroup.Group.GroupJoinRequestLogActivity;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
 import kr.ac.gachon.www.GachonGroup.Group.GroupScheduleActivity;
 import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
@@ -164,9 +165,15 @@ public class MyInformationActivity extends AppCompatActivity {
     }
     //동아리 신청 내역 조회
     private void JoinRequestLog() {
+        //관리자이면 자신의 동아리에 신청된 내역 조회
+        if(account.is_manager) {
+            Intent intent=new Intent(MyInformationActivity.this, GroupJoinRequestLogActivity.class);
+            intent.putExtra("groupName", account.group);
+            startActivity(intent);
+        } else { //일반회원이면 자신이 신청한 동아리 내역 조회
         Intent intent=new Intent(MyInformationActivity.this, JoinRequestLogActivity.class);
         intent.putExtra("userID", ID);
-        startActivity(intent);
+        startActivity(intent); }
     }
 
     @Override

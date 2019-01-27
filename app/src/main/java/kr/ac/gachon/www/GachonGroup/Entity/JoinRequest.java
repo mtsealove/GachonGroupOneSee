@@ -10,6 +10,7 @@ public class JoinRequest {
     public String ID;
     public String group;
     public String AbleTime;
+    public int requestID;
 
 
     public JoinRequest(String name, String contact, int StudentNumber, String major, int age, String SelfIntroduce, String ID, String group, String AbleTime) {
