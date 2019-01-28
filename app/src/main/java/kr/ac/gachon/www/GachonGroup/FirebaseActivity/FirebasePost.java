@@ -171,7 +171,7 @@ public class FirebasePost extends AppCompatActivity {
                                         context.startActivity(intent);
                                         break;
                                         case 1:
-                                            reference.child("Group").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDs.get(finalI))).setValue(null);
+                                            reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDs.get(finalI))).setValue(null);
                                             Toast.makeText(context, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                                             dialog.cancel();
                                             break;
@@ -232,7 +232,7 @@ public class FirebasePost extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //해당 게시글의 마지막 댓글로
                 int count=0;
-                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("relpy").getChildren()) {
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").getChildren()) {
                     count=snapshot.child("id").getValue(Integer.class)+1;
                 }
                 reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
@@ -324,5 +324,11 @@ public class FirebasePost extends AppCompatActivity {
         DatabaseReference reference=database.getReference();
         DatabaseReference ref=reference.child("Groups").child(groupName).child(boardName).child(boardID);
         ref.setValue(null);
+    }
+
+    public void SetIntroduce(String group, String location, String introduce) {
+        DatabaseReference reference=database.getReference();
+        reference.child("Groups").child(group).child("location").setValue(location);
+        reference.child("Groups").child(group).child("introduce").setValue(introduce);
     }
 }

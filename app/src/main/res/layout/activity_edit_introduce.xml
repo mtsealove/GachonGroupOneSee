@@ -39,43 +39,43 @@
     </RelativeLayout>
 
     <ImageView
-        android:layout_marginTop="10dp"
+        android:id="@+id/GroupIcon"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        />
-
-    <TextView
-        android:id="@+id/locationTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="위치"
-        android:textColor="#000000"
-        android:textSize="20sp" />
+        android:src="@drawable/group_alt" />
+
+    <EditText
+        android:id="@+id/locationET"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:hint="동아리방 입력"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:background="@drawable/input_background"
+        android:padding="5dp"
+        android:textSize="18sp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ScrollView
-            android:layout_marginTop="25dp"
+
+        <EditText
+            android:id="@+id/introduceET"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/functionBtn"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
-            android:scrollbars="none">
-
-            <TextView
-                android:id="@+id/introduceTV"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:text="소개"
-                android:textColor="#000000"
-                android:textSize="17sp"
-                android:lineSpacingMultiplier="1.5"/>
-        </ScrollView>
+            android:background="@drawable/input_background"
+            android:gravity="top"
+            android:hint="동아리를 소개해주세요!"
+            android:lineSpacingMultiplier="1.5"
+            android:padding="10dp"
+            android:textColorHint="#000000"
+            android:textSize="17sp" />
         <Button
-            android:visibility="gone"
             android:id="@+id/functionBtn"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"

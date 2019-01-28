@@ -15,13 +15,24 @@ import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+
+import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 
 public class LoadActivity extends AppCompatActivity {
     ProgressBar PB;
     public static final String WIFE_STATE = "WIFE";
     public static final String MOBILE_STATE = "MOBILE";
     public static final String NONE_STATE = "NONE";
+    private String ID, pw;
     private boolean newtwork = true;
 
     public static final int PERMISSION_READ_PHONE_NUMBER=0;
@@ -53,11 +64,12 @@ public class LoadActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.READ_PHONE_NUMBERS},
                     PERMISSION_READ_PHONE_NUMBER);
         } else {
-            Move_Login();
+            if(read_ID()) {
+                FirebaseAccount firebaseAccount=new FirebaseAccount(LoadActivity.this);
+                firebaseAccount.AutoLogin(ID, pw);
+            }
+            else Move_Login();
         }
-
-
-
     }
 
     public static String getWhatKindOfNetwork(Context context) {
@@ -73,18 +85,26 @@ public class LoadActivity extends AppCompatActivity {
         return NONE_STATE;
     }
     private void Move_Login() {
-        //hander 객체로 0.7초 딜레이 설정
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //로그인 액티비티로 이동
-                Intent intent=new Intent(LoadActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 700);
+        //로그인 액티비티로 이동
+        Intent intent=new Intent(LoadActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
+    private boolean read_ID() {
+        try {
+            BufferedReader br=new BufferedReader(new FileReader(new File(getFilesDir()+"login.dat")));
+            ID=br.readLine();
+            pw=br.readLine();
+            br.close();
+            if(ID.length()>1)
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

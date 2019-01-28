@@ -52,8 +52,10 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent=getIntent();
         boolean logout=intent.getBooleanExtra("logout", false);
         if(!logout) {
+            /*
             read_ID();
             if (ID_et.length() != 0 && PW_et.length() != 0) LoginBtn.performClick();
+            */
         } else {
             Alert alert=new Alert(LoginActivity.this);
             alert.MsgDialog("로그아웃 되었습니다");
@@ -84,9 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         else if(password.length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
         else {
             FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
-            firebaseAccount.Login(ID, password, isManager);
+            firebaseAccount.Login(ID, password);
                 write_ID(ID, password);
-
         }
     }
 

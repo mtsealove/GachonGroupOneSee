@@ -22,11 +22,12 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
         Intent intent=getIntent();
-        //기본정보
+        //새 게시글 작성을 위한 기본정보
         boardName=intent.getStringExtra("boardName");
         userID=intent.getStringExtra("userID");
+        //동아리용 게시판일 경우 사용
         groupName=intent.getStringExtra("groupName");
-        //업데이트용 추가정보
+        //기존 게시글 업데이트용 추가정보
         title=intent.getStringExtra("title");
         content=intent.getStringExtra("content");
         boardID=intent.getStringExtra("boardID");
@@ -46,6 +47,8 @@ public class AddPostActivity extends AppCompatActivity {
             }
         });
         if(groupName!=null) contentET.setHint("내용을 입력해주세요");
+        else if(boardName.equals("PublicRelation")) contentET.setHint("내용을 입력해주세요");
+
     }
     private void Post() {
         title=titleET.getText().toString();

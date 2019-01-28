@@ -11,7 +11,6 @@ import android.widget.Toast;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.Board.InformationBoardActivity;
-import kr.ac.gachon.www.GachonGroup.Board.IntroduceActivity;
 import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -85,6 +84,8 @@ public class GroupMenuActivity extends AppCompatActivity {
         Intent intent=new Intent(GroupMenuActivity.this, IntroduceActivity.class);
         groupName=TrimName(groupName);
         intent.putExtra("group", groupName);
+        intent.putExtra("is_manager", account.is_manager);
+        intent.putExtra("userGroup", account.group);
         startActivity(intent);
     }
 

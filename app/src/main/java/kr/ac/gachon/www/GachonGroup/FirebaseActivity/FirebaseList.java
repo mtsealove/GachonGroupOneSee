@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import kr.ac.gachon.www.GachonGroup.Board.BoardActivity;
 import kr.ac.gachon.www.GachonGroup.R;
@@ -42,6 +43,8 @@ public class FirebaseList extends AppCompatActivity {
                     titles.add(title);
                     ids.add(id);
                 }
+                Collections.reverse(titles);
+                Collections.reverse(ids);
                 ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,6 +81,8 @@ public class FirebaseList extends AppCompatActivity {
                     titles.add(title);
                     ids.add(id);
                 }
+                Collections.reverse(titles);
+                Collections.reverse(ids);
                 ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,6 +122,8 @@ public class FirebaseList extends AppCompatActivity {
                         ids.add(id);
                     }
                 }
+                Collections.reverse(titles);
+                Collections.reverse(ids);
                 ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,6 +162,8 @@ public class FirebaseList extends AppCompatActivity {
                         ids.add(id);
                     }
                 }
+                Collections.reverse(titles);
+                Collections.reverse(ids);
                 ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

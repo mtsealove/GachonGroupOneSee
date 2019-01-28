@@ -131,6 +131,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void PRBoard() {
         Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);
+        intent.putExtra("userID", ID);
         intent.putExtra("is_manager", account.is_manager);
         startActivity(intent);
     }

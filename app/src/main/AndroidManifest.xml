@@ -41,7 +41,7 @@
         <activity
             android:name=".Board.BoardActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Board.IntroduceActivity" />
+        <activity android:name=".Group.IntroduceActivity" />
         <activity android:name=".Board.RequirementsActivity" />
         <activity
             android:name=".Board.FederationNoticeActivity"
@@ -55,6 +55,7 @@
             android:name=".Board.InformationBoardActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Group.GroupQnAActivity" />
+        <activity android:name=".Group.EditIntroduceActivity" />
     </application>
 
 </manifest>

@@ -304,7 +304,7 @@ public class FirebaseAccount extends AppCompatActivity {
     }
 
     //로그인 메서드
-    public void Login(final String ID, final String PW, final boolean isManager) {
+    public void Login(final String ID, final String PW) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -314,6 +314,7 @@ public class FirebaseAccount extends AppCompatActivity {
                     if(snapshot.child("ID").getValue(String.class).equals(ID)) {
                         find=true;
                         if(snapshot.child("password").getValue(String.class).equals(PW)) {
+                            /*
                             if(isManager) {
                                 if(snapshot.child("is_manager").getValue(Boolean.class)==isManager) {
                                     String name=snapshot.child("name").getValue(String.class);
@@ -335,10 +336,55 @@ public class FirebaseAccount extends AppCompatActivity {
                                 LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
                                 moveHome(ID);
                             }
-                        } else Toast.makeText(context, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                            */
+                            String name=snapshot.child("name").getValue(String.class);
+                            String email=snapshot.child("email").getValue(String.class);
+                            String major=snapshot.child("major").getValue(String.class);
+                            int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
+                            String group=snapshot.child("group").getValue(String.class);
+                            String phone=snapshot.child("phone").getValue(String.class);
+                            boolean isManager=snapshot.child("is_manager").getValue(Boolean.class);
+                            LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
+                            moveHome(ID);
+                        } else {
+                            Toast.makeText(context, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-                if(!find) Toast.makeText(context, "일치하는 ID를 찾지 못했습니다", Toast.LENGTH_SHORT).show();
+                if(!find)
+                    Toast.makeText(context, "일치하는 ID를 찾지 못했습니다", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //LoadActivityty에서 자동 로그인
+    public void AutoLogin(final String ID, final String PW) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean done=false;
+                for(DataSnapshot snapshot:dataSnapshot.child("Account").getChildren()) {
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
+                        if(snapshot.child("password").getValue(String.class).equals(PW)) {
+                            String name=snapshot.child("name").getValue(String.class);
+                            String email=snapshot.child("email").getValue(String.class);
+                            String major=snapshot.child("major").getValue(String.class);
+                            int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
+                            String group=snapshot.child("group").getValue(String.class);
+                            String phone=snapshot.child("phone").getValue(String.class);
+                            boolean isManager=snapshot.child("is_manager").getValue(Boolean.class);
+                            LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
+                            done=true;
+                            moveHome(ID);
+                        } else moveLogin();
+                    }
+                }
+                if(!done) moveLogin();
             }
 
             @Override
@@ -348,6 +394,13 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
+    //로그인 화면 이동
+    private void moveLogin() {
+        Intent intent=new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+        ((Activity)context).finish();
+    }
+
     //홈화면 이동
     private void moveHome(String ID) {
         Intent home=new Intent();
@@ -355,7 +408,6 @@ public class FirebaseAccount extends AppCompatActivity {
         home.setClass(context, HomeActivity.class);
         home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(home);
-
         ((Activity)context).finish();
     }
 

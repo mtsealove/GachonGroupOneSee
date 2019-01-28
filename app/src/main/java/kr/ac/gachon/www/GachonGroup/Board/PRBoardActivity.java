@@ -25,29 +25,33 @@ public class PRBoardActivity extends AppCompatActivity {
     ArrayList<PRFragment> fragments;
     int pageCount=0;
     boolean is_manger;
-    ArrayList<Integer> ids;
+    private ArrayList<Integer> ids;
+    private ArrayList<String> titles;
+    private String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prboard);
         PRBActivity=PRBoardActivity.this;
+        //버튼 매칭
         prevBtn= findViewById(R.id.prevBtn);
         nextBtn= findViewById(R.id.nextBtn);
         searchBtn= findViewById(R.id.searchBtn);
         addBtn= findViewById(R.id.addBtn);
+        //프래그먼트 arraylist 생성
         fragments=new ArrayList<>();
+
         Intent intent=getIntent();
-        ArrayList<String> titles= intent.getStringArrayListExtra("titles");
+        userID=intent.getStringExtra("userID");
+        titles= intent.getStringArrayListExtra("titles");
         is_manger=intent.getBooleanExtra("is_manager", false);
         try {
             ids= intent.getIntegerArrayListExtra("ids");
         } catch (Exception e) {
-
         }
 
-        if(titles!=null) {
+        if(titles!=null)
             resultFragment(titles, ids);
-        }
         else
             createFragment();
 
@@ -170,10 +174,24 @@ public class PRBoardActivity extends AppCompatActivity {
     private void setAddBtn() {
         if(!is_manger) {
             Toast.makeText(PRBoardActivity.this, "작성 권한이 없습니다", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent=new Intent(PRBoardActivity.this, AddPostActivity.class);
+            intent.putExtra("boardName", "PublicRelation");
+            intent.putExtra("userID", userID);
+            startActivity(intent);
         }
     }
 
     public void close(View v){
         finish();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(titles!=null)
+            resultFragment(titles, ids);
+        else
+            createFragment();
     }
 }

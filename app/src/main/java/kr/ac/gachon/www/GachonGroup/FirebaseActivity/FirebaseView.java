@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -186,11 +187,11 @@ public class FirebaseView extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                textView.setText(alt);
                 try {
                     String value = dataSnapshot.child(child1).child(child2).child(child3).getValue(String.class);
                     textView.setText(value);
                 } catch (DatabaseException e) {
-                    textView.setText(alt);
                 }
             }
 
@@ -201,5 +202,24 @@ public class FirebaseView extends AppCompatActivity {
         });
     }
 
+    //소개글에서 동아리 이름에 따라 버튼 텍스트 설정
+    public void setButtonText(final String groupName, final Button button) {
+        DatabaseReference reference=database.getReference();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String introduce=dataSnapshot.child("Groups").child(groupName).child("introduce").getValue(String.class);
+                if(introduce==null) {
+                    button.setText("등록하기");
+                } else {
+                    button.setText("수정하기");
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
