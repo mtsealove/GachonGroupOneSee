@@ -77,6 +77,8 @@ public class GroupMenuActivity extends AppCompatActivity {
         Intent intent=new Intent(GroupMenuActivity.this, GroupScheduleActivity.class);
         groupName=TrimName(groupName);
         intent.putExtra("groupName", groupName);
+        intent.putExtra("is_manager", account.is_manager);
+        intent.putExtra("userGroup", account.group);
         startActivity(intent);
     }
 

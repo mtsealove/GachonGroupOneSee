@@ -66,14 +66,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="bottom">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:text="@string/schedule"
-            android:textSize="18sp"
-            android:layout_marginLeft="20dp"/>
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="@string/schedule"
+                android:textSize="18sp"
+                android:layout_marginLeft="20dp"/>
+
+            <Button
+                android:id="@+id/AddScheduleBtn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/add"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <View
             android:layout_marginTop="10dp"

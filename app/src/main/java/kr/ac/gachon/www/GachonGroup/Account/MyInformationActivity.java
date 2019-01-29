@@ -153,9 +153,15 @@ public class MyInformationActivity extends AppCompatActivity {
     }
     //내 동아리 일정 바로가기
     private void MyGroupSchedule() {
-        Intent intent=new Intent(MyInformationActivity.this, GroupScheduleActivity.class);
-        intent.putExtra("groupName", account.group);
-        startActivity(intent);
+        if(account.group.equals("동아리 없음"))
+            Toast.makeText(MyInformationActivity.this, "가입된 동아리가 없습니다", Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(MyInformationActivity.this, GroupScheduleActivity.class);
+            intent.putExtra("groupName", account.group);
+            intent.putExtra("is_manager", account.is_manager);
+            intent.putExtra("userGroup", account.group);
+            startActivity(intent);
+        }
     }
     //문의사항
     private void Requirements() {

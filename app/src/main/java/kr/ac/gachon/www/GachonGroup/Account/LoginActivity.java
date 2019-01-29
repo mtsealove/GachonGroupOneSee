@@ -25,6 +25,7 @@ import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
 
 public class LoginActivity extends AppCompatActivity {
     EditText ID_et;
@@ -135,6 +136,12 @@ public class LoginActivity extends AppCompatActivity {
     public void Sign_Up(View v) {
         Intent SignUp=new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(SignUp);
+    }
+
+    @Override
+    public void onBackPressed() {
+        BackPressCloseHandler backPressCloseHandler=new BackPressCloseHandler(LoginActivity.this);
+        backPressCloseHandler.onBackPressed();
     }
 
 }

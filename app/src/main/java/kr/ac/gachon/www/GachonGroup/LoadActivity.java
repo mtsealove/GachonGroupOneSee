@@ -97,7 +97,7 @@ public class LoadActivity extends AppCompatActivity {
             ID=br.readLine();
             pw=br.readLine();
             br.close();
-            if(ID.length()>1)
+            if(ID!=null&&ID.length()>1)
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
