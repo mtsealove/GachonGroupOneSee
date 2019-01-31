@@ -86,19 +86,30 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#bdbdbd" />
-
-        <EditText
-            android:id="@+id/contentET"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFFFFF"
-            android:gravity="top"
-            android:hint="궁금한 점을 적어주세요!"
-            android:inputType="textMultiLine"
-            android:padding="10dp"
-            android:textColor="#000000"
-            android:textColorHint="#000000"
-            android:textSize="18sp" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/contentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/contentET"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF"
+                    android:gravity="top"
+                    android:hint="궁금한 점을 적어주세요!"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#000000"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </ScrollView>
+
     </LinearLayout>
 
     <RelativeLayout

@@ -34,7 +34,7 @@ import kr.ac.gachon.www.GachonGroup.Account.FindIdActivity;
 import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.Account.SignUpActivity;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
 //Firebase를 이용한 계정 접근 메서드

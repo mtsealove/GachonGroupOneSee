@@ -12,7 +12,7 @@ import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.Group.GroupListActivity;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
+import kr.ac.gachon.www.GachonGroup.etc.BackPressCloseHandler;
 
 public class HomeActivity extends AppCompatActivity {
     //동아리 리스트 버튼

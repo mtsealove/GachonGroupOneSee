@@ -9,8 +9,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FindIdActivity extends AppCompatActivity {
     EditText email_4_ID_et;
@@ -107,7 +106,6 @@ public class FindIdActivity extends AppCompatActivity {
         else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
             Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            FirebaseHelper helper=new FirebaseHelper();
             firebaseAccount.Find_PW_mail(email, ID);
         }
     }

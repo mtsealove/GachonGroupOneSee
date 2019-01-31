@@ -29,21 +29,23 @@ import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
+import kr.ac.gachon.www.GachonGroup.etc.FullScreenImageActivity;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class EditMyInformationActivity extends AppCompatActivity {
     private String ID;
     private Account account;
-    EditText nameET, IDET, emailET, studentNumberET, passwordET;
-    Spinner majorSP, groupSP;
+    private EditText nameET, IDET, emailET, studentNumberET, passwordET;
+    private Spinner majorSP, groupSP;
     ImageView profileIcon;
     Button editBtn;
     FirebaseDatabase database;
     DatabaseReference reference;
     private String major, group;
+    private FirebaseImage firebaseImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,9 @@ public class EditMyInformationActivity extends AppCompatActivity {
         firebaseView.setSpinnerMatch(majorSP, "major", ID);
         firebaseView.setEditText("password", ID, passwordET);
 
+        firebaseImage=new FirebaseImage(EditMyInformationActivity.this);
+        firebaseImage.ShowProfileIcon(ID, profileIcon);
+
         profileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,8 +98,7 @@ public class EditMyInformationActivity extends AppCompatActivity {
 
             }
         });
-        FirebaseHelper helper=new FirebaseHelper();
-        helper.getProfileIcon(profileIcon, ID, EditMyInformationActivity.this);
+
         majorSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -143,6 +147,12 @@ public class EditMyInformationActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dialog.cancel();
                 switch (position) {
+                    case 0:
+                        Intent intent=new Intent(EditMyInformationActivity.this, FullScreenImageActivity.class);
+                        intent.putExtra("userID", ID);
+                        intent.putExtra("Profile", true);
+                        startActivity(intent);
+                        break;
                     case 1:
                         EditImage();
                         break;
@@ -170,8 +180,8 @@ public class EditMyInformationActivity extends AppCompatActivity {
                 //Uri 파일을 Bitmap으로 만들어서 ImageView에 집어 넣는다.
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 profileIcon.setImageBitmap(bitmap);
-                FirebaseHelper helper=new FirebaseHelper();
-                helper.UploadImage(filePath, EditMyInformationActivity.this, ID);
+                FirebaseImage firebaseImage=new FirebaseImage(EditMyInformationActivity.this);
+                firebaseImage.UploadProfileImage(filePath, ID);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

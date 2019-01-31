@@ -2,8 +2,12 @@ package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,21 +17,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import kr.ac.gachon.www.GachonGroup.Account.EditMyInformationActivity;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
 
 public class BoardActivity extends AppCompatActivity {
     TextView authorTV, titleTV, contentTV, boardNameTV;
     Button functionBtn, replyBtn, removeBtn;
-    LinearLayout ReplyShowLayout;
+    LinearLayout ReplyShowLayout, ContentLayout;
     FrameLayout ReplyInputLayout;
     EditText replyET;
 
     private String userID, boardName, groupName;
     int id;
     FirebasePost firebasePost;
+    FirebaseImage firebaseImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,7 @@ public class BoardActivity extends AppCompatActivity {
         boardNameTV= findViewById(R.id.BoardNameTV);
         functionBtn=findViewById(R.id.functionBtn);
         removeBtn=findViewById(R.id.removeBtn);
+        ContentLayout=findViewById(R.id.contentLayout);
         //댓글 출력 레이아웃
         ReplyShowLayout=findViewById(R.id.ShowReplyLayout);
         ReplyInputLayout=findViewById(R.id.InputReplyLayout);
@@ -47,6 +57,7 @@ public class BoardActivity extends AppCompatActivity {
         replyBtn=findViewById(R.id.replyBtn);
 
         firebasePost=new FirebasePost(BoardActivity.this);
+        firebaseImage=new FirebaseImage(BoardActivity.this);
 
         init();
     }
@@ -141,6 +152,8 @@ public class BoardActivity extends AppCompatActivity {
         if(groupName==null) {
             firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
             firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn);
+            firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV);
+
         }
         else {
             firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
@@ -186,4 +199,5 @@ public class BoardActivity extends AppCompatActivity {
         super.onResume();
         init();
     }
+
 }

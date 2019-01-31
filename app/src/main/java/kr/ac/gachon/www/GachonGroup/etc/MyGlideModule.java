@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.etc;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,8 @@ import com.bumptech.glide.module.AppGlideModule;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
+
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImageLoader;
 
 @GlideModule
 public class MyGlideModule extends AppGlideModule {

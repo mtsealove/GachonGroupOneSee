@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.modules;
+package kr.ac.gachon.www.GachonGroup.etc;
 
 import android.app.Activity;
 import android.widget.Toast;

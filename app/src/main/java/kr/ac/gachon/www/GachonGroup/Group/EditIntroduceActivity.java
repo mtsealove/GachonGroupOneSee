@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class EditIntroduceActivity extends AppCompatActivity {
     private ImageView imageView;

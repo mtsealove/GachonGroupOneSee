@@ -2,6 +2,7 @@ package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +15,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -255,7 +260,7 @@ public class FirebasePost extends AppCompatActivity {
     //전체 게시판(연합회 공지사항, QnA)에 게시글 작성
     //게시판 이름, 유저 ID, 제목, 내용
     //관리자 이외에는 접근 불가하게 타 크래스에서 설정
-    public void Post(final String boardName,final String ID,final String title,final String content) {
+    public void Post(final String boardName, final String ID, final String title, final String content, final ArrayList<Uri> filePath) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -269,6 +274,10 @@ public class FirebasePost extends AppCompatActivity {
                 reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child(boardName).child(Integer.toString(count)).child("title").setValue(title);
                 reference.child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+                FirebaseImage firebaseImage=new FirebaseImage(context);
+                for(int i=0; i<filePath.size(); i++) {
+                    firebaseImage.UploadBoardImage(filePath.get(i), boardName, Integer.toString(count), i);
+                }
             }
 
             @Override
@@ -318,11 +327,37 @@ public class FirebasePost extends AppCompatActivity {
     public void Remove(final String boardName, String boardID) {
         DatabaseReference reference=database.getReference();
         DatabaseReference ref=reference.child(boardName).child(boardID);
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        StorageReference storageReference=storage.getReference().child(boardName).child(boardID);
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "게시글 삭제에 실패했습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
         ref.setValue(null);
     }
     public void Remove(final String groupName, final String boardName, String boardID) {
         DatabaseReference reference=database.getReference();
         DatabaseReference ref=reference.child("Groups").child(groupName).child(boardName).child(boardID);
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        StorageReference storageReference=storage.getReference().child("Groups").child(groupName).child(boardName).child(boardID);
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "게시글 삭제에 실패했습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
         ref.setValue(null);
     }
 

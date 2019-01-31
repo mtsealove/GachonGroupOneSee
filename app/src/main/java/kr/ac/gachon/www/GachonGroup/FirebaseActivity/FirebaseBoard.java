@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
 import kr.ac.gachon.www.GachonGroup.Board.PRBoardActivity;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebaseBoard extends AppCompatActivity {
     final Context context;

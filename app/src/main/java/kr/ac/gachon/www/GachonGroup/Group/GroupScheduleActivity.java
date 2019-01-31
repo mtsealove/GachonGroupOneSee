@@ -21,8 +21,7 @@ import kr.ac.gachon.www.GachonGroup.Calendar.SaturdayDecorator;
 import kr.ac.gachon.www.GachonGroup.Calendar.SundayDecorator;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseCalendar;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class GroupScheduleActivity extends AppCompatActivity {
     TextView groupNameTV;
@@ -42,6 +41,8 @@ public class GroupScheduleActivity extends AppCompatActivity {
         Intent intent=getIntent();
         groupName=intent.getStringExtra("groupName");
         is_manager=intent.getBooleanExtra("is_manager", false);
+        userGroup=intent.getStringExtra("userGroup");
+
         groupNameTV= findViewById(R.id.groupNameTV);
         groupNameTV.setText(groupName);
 
@@ -54,10 +55,12 @@ public class GroupScheduleActivity extends AppCompatActivity {
 
         firebaseCalendar=new FirebaseCalendar(GroupScheduleActivity.this);
         init();
+        //관리자이며 자신의 동아리 일 경우 일정 추가 활성화
         if(is_manager&&userGroup.equals(groupName)) WriteAble();
     }
+    //초기화
     private void init() {
-        //특정 날짜 클릭 이벤트
+        //특정 날짜 클릭 시 해당하는 일정 출력
         calendar.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -74,6 +77,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
         firebaseCalendar.Add_EventDay(groupName, calendar);
     }
 
+    //일정 추가 활성화
     private void WriteAble() {
         AddScheduleBtn.setVisibility(View.VISIBLE);
         AddScheduleBtn.setOnClickListener(new View.OnClickListener() {

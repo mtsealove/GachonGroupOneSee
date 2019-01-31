@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.Group.GroupJoinRequestLogActivity;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
@@ -24,7 +25,7 @@ import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestLogActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.Board.RequirementsActivity;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class MyInformationActivity extends AppCompatActivity {
     TextView nameTV, groupTV;
@@ -35,6 +36,7 @@ public class MyInformationActivity extends AppCompatActivity {
     Account account;
     FirebaseAccount firebaseAccount;
     FirebaseView firebaseView;
+    FirebaseImage firebaseImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +62,9 @@ public class MyInformationActivity extends AppCompatActivity {
         firebaseView=new FirebaseView(MyInformationActivity.this);
         firebaseView.setTextView("name", ID, nameTV);
         firebaseView.setTextView("group", ID, groupTV);
+
+        firebaseImage=new FirebaseImage(MyInformationActivity.this);
+        firebaseImage.ShowProfileIcon(ID, profileIcon);
 
         EditInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +110,7 @@ public class MyInformationActivity extends AppCompatActivity {
         });
     }
 
-    //정보 수정 활동
+    //정보 수정
     private void Edit_information() {
         Intent intent=new Intent(MyInformationActivity.this, EditMyInformationActivity.class);
         intent.putExtra("ID", ID);
@@ -184,8 +189,9 @@ public class MyInformationActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         firebaseView.setTextView("name", ID, nameTV);
         firebaseView.setTextView("group", ID, groupTV);
-        super.onResume();
+        firebaseImage.ShowProfileIcon(ID, profileIcon);
     }
 }

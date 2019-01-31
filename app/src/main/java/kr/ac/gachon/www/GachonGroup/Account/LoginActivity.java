@@ -24,8 +24,8 @@ import java.security.NoSuchAlgorithmException;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.BackPressCloseHandler;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.BackPressCloseHandler;
 
 public class LoginActivity extends AppCompatActivity {
     EditText ID_et;

@@ -20,8 +20,7 @@ import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
-import kr.ac.gachon.www.GachonGroup.modules.FirebaseHelper;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class SignUpActivity extends AppCompatActivity {
     //회원가입에 사용할 입력창들
@@ -100,7 +99,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        FirebaseHelper helper=new FirebaseHelper();
         firebaseView.getAllGroupName(groupSP);
         //동아리 선택 스피너
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

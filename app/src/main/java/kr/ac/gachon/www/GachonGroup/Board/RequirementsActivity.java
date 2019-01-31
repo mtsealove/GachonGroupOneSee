@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
 public class RequirementsActivity extends AppCompatActivity {

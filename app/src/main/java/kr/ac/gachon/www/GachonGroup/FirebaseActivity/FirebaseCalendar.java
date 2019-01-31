@@ -55,10 +55,10 @@ public class FirebaseCalendar extends AppCompatActivity {
             }
         });
     }
-    //달력에 이벤트 리스너 추가
+    //특정 날짜 클릭 시 해당 날짜의 스케줄 표시
     public void Add_EventDayEvent(final String GroupName, final String Day, final LinearLayout layout, final TextView no_Schedule) {
         DatabaseReference reference=database.getReference();
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean exist=false;
@@ -116,7 +116,7 @@ public class FirebaseCalendar extends AppCompatActivity {
         });
 
     }
-
+    //"."을 포함하는 문자를 공백으로 대체
     private String TrimName(String str) {
         if(str.contains("."))
             str=str.replace(".", "");

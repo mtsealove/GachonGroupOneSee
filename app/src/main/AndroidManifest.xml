@@ -14,12 +14,13 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Group.GroupJoinRequestLogActivity"></activity>
+        <activity android:name=".etc.FullScreenImageActivity"></activity>
+        <activity android:name=".Group.GroupJoinRequestLogActivity" />
         <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity" />
         <activity android:name=".JoinRequest.JoinRequestLogActivity" />
         <activity android:name=".JoinRequest.JoinRequestActivity" />
         <activity android:name=".Board.AccuseActivity" />
-        <activity android:name=".LoadActivity">
+        <activity android:name=".etc.LoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +32,6 @@
         <activity android:name=".Account.SignUpActivity" />
         <activity android:name=".Board.HomeActivity" />
         <activity android:name=".Group.GroupListActivity" />
-        <activity android:name=".modules.FirebaseHelper" />
         <activity android:name=".Group.GroupMenuActivity" />
         <activity android:name=".Account.MyInformationActivity" />
         <activity android:name=".Account.EditMyInformationActivity" />

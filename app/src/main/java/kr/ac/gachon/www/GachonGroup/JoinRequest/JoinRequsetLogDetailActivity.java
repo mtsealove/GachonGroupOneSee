@@ -1,9 +1,7 @@
 package kr.ac.gachon.www.GachonGroup.JoinRequest;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +10,7 @@ import android.widget.TextView;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class JoinRequsetLogDetailActivity extends AppCompatActivity {
     private String ID;

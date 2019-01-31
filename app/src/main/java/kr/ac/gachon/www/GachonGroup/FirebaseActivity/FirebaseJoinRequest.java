@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import kr.ac.gachon.www.GachonGroup.Entity.ListAdapter;
 import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequsetLogDetailActivity;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Entity.JoinRequest;
 
 public class FirebaseJoinRequest extends AppCompatActivity {

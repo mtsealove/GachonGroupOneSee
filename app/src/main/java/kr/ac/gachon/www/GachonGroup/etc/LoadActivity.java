@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup;
+package kr.ac.gachon.www.GachonGroup.etc;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,12 +20,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 
-import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.R;
 
 public class LoadActivity extends AppCompatActivity {
     ProgressBar PB;

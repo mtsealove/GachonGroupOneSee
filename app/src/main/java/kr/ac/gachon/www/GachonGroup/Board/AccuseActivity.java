@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
 import kr.ac.gachon.www.GachonGroup.R;
-import kr.ac.gachon.www.GachonGroup.modules.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class AccuseActivity extends AppCompatActivity {
     int[] ButtonID=new int[6];

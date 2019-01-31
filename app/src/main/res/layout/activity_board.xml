@@ -98,16 +98,26 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/contentTV"
+                <!--글, 이미지 표시 레이아웃-->
+                <LinearLayout
+                    android:id="@+id/contentLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
+                    android:orientation="vertical"
                     android:background="@drawable/input_background"
-                    android:padding="10dp"
-                    android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:layout_margin="20dp" >
 
+                    <TextView
+                        android:id="@+id/contentTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <!--댓글 표시 레이아웃-->
                 <LinearLayout
                     android:layout_marginHorizontal="20dp"
                     android:visibility="gone"
@@ -122,6 +132,7 @@
         </ScrollView>
     </LinearLayout>
 
+    <!--댓글 작성 레이아웃-->
     <FrameLayout
         android:layout_marginTop="10dp"
         android:visibility="gone"
