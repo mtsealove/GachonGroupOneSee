@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -14,6 +16,7 @@ public class IntroduceActivity extends AppCompatActivity {
     private TextView introduceTV, locationTV;
     private Button functionBtn;
     private String group, userGroup;
+    private ImageView GroupIcon;
     private boolean is_manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +25,12 @@ public class IntroduceActivity extends AppCompatActivity {
         locationTV= findViewById(R.id.locationTV);
         introduceTV= findViewById(R.id.introduceTV);
         functionBtn=findViewById(R.id.functionBtn);
+        GroupIcon=findViewById(R.id.GroupIcon);
 
         Intent intent=getIntent();
         group=intent.getStringExtra("group");
         is_manager=intent.getBooleanExtra("is_manager", false);
         userGroup=intent.getStringExtra("userGroup");
-
     }
 
     private void init() {
@@ -45,6 +48,10 @@ public class IntroduceActivity extends AppCompatActivity {
                 }
             });
         }
+
+        FirebaseImage firebaseImage=new FirebaseImage(IntroduceActivity.this);
+        String FilePath="Groups/"+group+"/"+group+"Icon.png";
+        firebaseImage.LoadImageView(FilePath, GroupIcon);
     }
 
     private void EditIntroduce() {

@@ -147,17 +147,19 @@ public class BoardActivity extends AppCompatActivity {
                     }
                 });
         }
+
         boardNameTV.setText(boardNameKR);
         FirebaseBoard firebaseBoard=new FirebaseBoard(BoardActivity.this);
+        //동아리게시판인지 확인하고 해당하는 내용 불러오기
         if(groupName==null) {
             firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
             firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn);
             firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV);
-
         }
         else {
             firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
             firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn);
+            firebaseImage.getBoardPhotos(groupName, boardName, Integer.toString(id), ContentLayout, contentTV);
         }
     }
 
@@ -199,5 +201,4 @@ public class BoardActivity extends AppCompatActivity {
         super.onResume();
         init();
     }
-
 }

@@ -193,6 +193,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Account account = new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber1, false);
                     firebaseAccount.CreateAccount(account);
                     alert.MsgDialogEnd("회원가입이\n완료되었습니다");
+                    Alert.dialog.cancel();
                 }
             });
         }

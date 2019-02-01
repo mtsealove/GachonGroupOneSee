@@ -288,7 +288,7 @@ public class FirebasePost extends AppCompatActivity {
     }
     //동아리의 게시판에 게시글 작성
     //동아리 이름, 게시판 제목, 유저ID, 제목, 내용
-    public void Post(final String groupName, final String boardName,final String ID,final String title,final String content) {
+    public void Post(final String groupName, final String boardName,final String ID,final String title,final String content, final ArrayList<Uri> filePath) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -303,6 +303,10 @@ public class FirebasePost extends AppCompatActivity {
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("title").setValue(title);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+                //받아온 이미지 개수만큼 이미지 업로드
+                FirebaseImage firebaseImage=new FirebaseImage(context);
+                for(int i=0; i<filePath.size(); i++)
+                    firebaseImage.UploadBoardImage(filePath.get(i), groupName, boardName, Integer.toString(count), i);
             }
 
             @Override
@@ -312,53 +316,127 @@ public class FirebasePost extends AppCompatActivity {
         });
     }
 
-    public void Update(final String boardName, final String title, final String content, final String boardID) {
+    public void Update(final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath) {
         DatabaseReference ref=database.getReference();
+        //제목 및 내용 설정
         ref.child(boardName).child(boardID).child("title").setValue(title);
         ref.child(boardName).child(boardID).child("content").setValue(content);
+        //삭제 파일 삭제
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        for(int i=0; i<RemoveFiles.size(); i++) {
+            StorageReference reference=storage.getReference().child(RemoveFiles.get(i));
+            reference.delete();
+        }
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
+                    String filePath=snapshot.child("FilePath").getValue(String.class);
+                    count=filePath.charAt(filePath.length()-5)-'0'+1;
+                }
+                FirebaseImage firebaseImage=new FirebaseImage(context);
+                for(int i=0; i<FilePath.size(); i++)
+                    firebaseImage.UploadBoardImage(FilePath.get(i), boardName, boardID, count++);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Toast.makeText(context, "게시글이 수정되었습니다", Toast.LENGTH_SHORT).show();
     }
 
-    public void Update(final String GroupName, final String boardName, final String title, final String content, final String boardID) {
+    public void Update(final String GroupName, final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath) {
         DatabaseReference ref=database.getReference();
+        //제목 및 내용 변경
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("title").setValue(title);
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("content").setValue(content);
+        //삭제 파일 삭제
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        for(int i=0; i<RemoveFiles.size(); i++) {
+            StorageReference reference=storage.getReference().child(RemoveFiles.get(i));
+            reference.delete();
+        }
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.child("Groups").child(GroupName).child(boardName).child(boardID).child("Photos").getChildren()) {
+                    String filePath=snapshot.child("FilePath").getValue(String.class);
+                    count=filePath.charAt(filePath.length()-5)-'0'+1;
+                }
+                FirebaseImage firebaseImage=new FirebaseImage(context);
+                for(int i=0; i<FilePath.size(); i++) {
+                    firebaseImage.UploadBoardImage(FilePath.get(i), GroupName, boardName, boardID, count++);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Toast.makeText(context, "게시글이 수정되었습니다", Toast.LENGTH_SHORT).show();
     }
 
     public void Remove(final String boardName, String boardID) {
         DatabaseReference reference=database.getReference();
         DatabaseReference ref=reference.child(boardName).child(boardID);
-        FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference storageReference=storage.getReference().child(boardName).child(boardID);
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        final FirebaseStorage storage=FirebaseStorage.getInstance();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.child("Photos").getChildren()) {
+                    String FilePath=snapshot.child("FilePath").getValue(String.class);
+                    StorageReference storageReference=storage.getReference().child(FilePath);
+                    storageReference.delete().addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "사진 삭제 실패", Toast.LENGTH_SHORT).show();
+                                return;
+                        }
+                    });
+                }
             }
-        }).addOnFailureListener(new OnFailureListener() {
+
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "게시글 삭제에 실패했습니다", Toast.LENGTH_SHORT).show();
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
         ref.setValue(null);
+        Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
     }
     public void Remove(final String groupName, final String boardName, String boardID) {
         DatabaseReference reference=database.getReference();
         DatabaseReference ref=reference.child("Groups").child(groupName).child(boardName).child(boardID);
-        FirebaseStorage storage=FirebaseStorage.getInstance();
-        StorageReference storageReference=storage.getReference().child("Groups").child(groupName).child(boardName).child(boardID);
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        final FirebaseStorage storage=FirebaseStorage.getInstance();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.child("Photos").getChildren()){
+                    String FilePath=snapshot.child("FilePath").getValue(String.class);
+                    StorageReference storageReference=storage.getReference().child(FilePath);
+                    storageReference.delete()
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context, "사진 삭제 실패", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            });
+                }
             }
-        }).addOnFailureListener(new OnFailureListener() {
+
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "게시글 삭제에 실패했습니다", Toast.LENGTH_SHORT).show();
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
         ref.setValue(null);
+        Toast.makeText(context, "게시글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
     }
 
     public void SetIntroduce(String group, String location, String introduce) {

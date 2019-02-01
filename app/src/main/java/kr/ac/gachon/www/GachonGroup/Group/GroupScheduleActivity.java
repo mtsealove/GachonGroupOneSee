@@ -83,12 +83,15 @@ public class GroupScheduleActivity extends AppCompatActivity {
         AddScheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //레이아웃의 모든 뷰 제거
                 scheduleLayout.removeAllViews();
+                //일정 추가용 레이아웃 활성화
                 LayoutInflater inflater=getLayoutInflater();
                 View InputLayout=inflater.inflate(R.layout.sub_add_schedule, null);
                 final EditText scheduleET=InputLayout.findViewById(R.id.ScheduleET);
                 Button AddScheduleBtn=InputLayout.findViewById(R.id.WriteScheduleBtn);
                 scheduleLayout.addView(InputLayout);
+                //추가 버튼
                 AddScheduleBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -103,6 +106,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                                         firebaseCalendar.AddEvent(groupName, Year, Month, Day, EventName);
                                     } catch (Exception e) {
                                     }
+                                    Alert.dialog.cancel();
                             }
                         });
                     }

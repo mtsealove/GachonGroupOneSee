@@ -76,6 +76,7 @@ public class AccuseActivity extends AppCompatActivity {
                     else if(groupName==null&&replyID!=null) firebaseBoard.AccuseReply(boardName, boardID, userID, Reason, replyID);
                     else firebaseBoard.AccuseReply(groupName, boardName, boardID, userID, Reason, replyID);
                     Toast.makeText(AccuseActivity.this, "신고가 완료되었습니다", Toast.LENGTH_SHORT).show();
+                    Alert.dialog.cancel();
                     finish();
                 }
             });

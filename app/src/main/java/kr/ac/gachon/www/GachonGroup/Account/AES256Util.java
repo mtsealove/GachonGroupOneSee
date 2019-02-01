@@ -24,9 +24,10 @@ public class AES256Util {
      * @throws UnsupportedEncodingException
      *             키값의 길이가 16이하일 경우 발생
      */
+    //키값은 gmail비밀번호와 일치하게 설정
     final static String key = "kffdmoebguyivmyh";
 
-    public AES256Util() throws UnsupportedEncodingException {
+    public AES256Util() {
         this.iv = key.substring(0, 16);
         byte[] keyBytes = new byte[16];
         byte[] b = key.getBytes(StandardCharsets.UTF_8);
@@ -48,11 +49,11 @@ public class AES256Util {
      * @return
      * @throws NoSuchAlgorithmException
      * @throws GeneralSecurityException
-     * @throws UnsupportedEncodingException
      */
 
+    //암호화
     public String encrypt(String str) throws NoSuchAlgorithmException,
-            GeneralSecurityException, UnsupportedEncodingException {
+            GeneralSecurityException {
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
         c.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
         byte[] encrypted = c.doFinal(str.getBytes(StandardCharsets.UTF_8));
@@ -68,10 +69,11 @@ public class AES256Util {
      * @return
      * @throws NoSuchAlgorithmException
      * @throws GeneralSecurityException
-     * @throws UnsupportedEncodingException
      */
+
+    //복호화
     public String decrypt(String str) throws NoSuchAlgorithmException,
-            GeneralSecurityException, UnsupportedEncodingException {
+            GeneralSecurityException {
         Cipher c = Cipher.getInstance("AES/CBC/PKCS5Padding");
         c.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(iv.getBytes()));
         byte[] byteStr = Base64.decodeBase64(str.getBytes());

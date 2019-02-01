@@ -141,6 +141,7 @@ public class MyInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseAccount.RemoveAccount(ID);
                 alert.MsgDialogEnd("회원 탈퇴가 완료되었습니다");
+                Alert.dialog.cancel();
             }
         });
     }

@@ -208,6 +208,11 @@ public class FirebaseBoard extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //자신의 글이라면
                 if(dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {
+                    final ArrayList<String> FilePath=new ArrayList<>();
+                    for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
+                        String path=snapshot.child("FilePath").getValue(String.class);
+                        FilePath.add(path);
+                    }
                     final String title=dataSnapshot.child(boardName).child(boardID).child("title").getValue(String.class);
                     final String content=dataSnapshot.child(boardName).child(boardID).child("content").getValue(String.class);
                     editBtn.setText("수정");
@@ -222,6 +227,7 @@ public class FirebaseBoard extends AppCompatActivity {
                             intent.putExtra("title", title);
                             intent.putExtra("content", content);
                             intent.putExtra("boardID", boardID);
+                            if(FilePath.size()!=0) intent.putExtra("FilePath", FilePath);
                             context.startActivity(intent);
                         }
                     });
@@ -258,6 +264,11 @@ public class FirebaseBoard extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //자신의 글이라면
                 if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {
+                    final ArrayList<String> FilePath=new ArrayList<>();
+                    for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).getChildren()) {
+                        String path=snapshot.child("FilePath").getValue(String.class);
+                        FilePath.add(path);
+                    }
                     final String title=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("title").getValue(String.class);
                     final String content=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("content").getValue(String.class);
 
@@ -274,6 +285,7 @@ public class FirebaseBoard extends AppCompatActivity {
                             intent.putExtra("title", title);
                             intent.putExtra("content", content);
                             intent.putExtra("boardID", boardID);
+                            if(FilePath.size()!=0) intent.putExtra("FilePath", FilePath);
                             context.startActivity(intent);
                         }
                     });
