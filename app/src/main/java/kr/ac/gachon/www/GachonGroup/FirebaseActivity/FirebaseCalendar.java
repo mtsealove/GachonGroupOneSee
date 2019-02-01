@@ -35,7 +35,7 @@ public class FirebaseCalendar extends AppCompatActivity {
     public void Add_EventDay(final String GroupName, final MaterialCalendarView calendarView) {
         final HashSet<CalendarDay> days=new HashSet<>();
         DatabaseReference reference=database.getReference();
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(TrimName(GroupName)).child("Schedule").getChildren()) {

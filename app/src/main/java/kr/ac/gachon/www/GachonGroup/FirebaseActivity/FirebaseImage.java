@@ -339,9 +339,20 @@ public class FirebaseImage  extends AppGlideModule {
                 layoutParams.bottomMargin=30;
                 //게시글에 있는 모든 사진의 이름을 불러오기
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    String FilePath=snapshot.child("FilePath").getValue(String.class);
+                    final String FilePath=snapshot.child("FilePath").getValue(String.class);
                     ImageView photo=new ImageView(context);
                     photo.setLayoutParams(layoutParams);
+                    photo.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Vibrator vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(5);
+                            Intent intent=new Intent(context, FullScreenImageActivity.class);
+                            intent.putExtra("FilePath", FilePath);
+                            context.startActivity(intent);
+                            return false;
+                        }
+                    });
                     LoadImageView(FilePath, photo);
                     photos.add(photo);
                 }

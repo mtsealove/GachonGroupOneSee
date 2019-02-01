@@ -265,7 +265,7 @@ public class FirebaseBoard extends AppCompatActivity {
                 //자신의 글이라면
                 if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {
                     final ArrayList<String> FilePath=new ArrayList<>();
-                    for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).getChildren()) {
+                    for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("Photos").getChildren()) {
                         String path=snapshot.child("FilePath").getValue(String.class);
                         FilePath.add(path);
                     }

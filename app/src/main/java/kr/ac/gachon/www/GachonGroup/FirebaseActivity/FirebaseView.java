@@ -69,8 +69,6 @@ public class FirebaseView extends AppCompatActivity {
                         try {
                             AES256Util aes256Util=new AES256Util();
                             result=aes256Util.decrypt(result);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
                         } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
                         } catch (GeneralSecurityException e) {

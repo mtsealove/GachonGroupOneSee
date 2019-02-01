@@ -182,7 +182,7 @@ public class FirebaseAccount extends AppCompatActivity {
                     try {
                         AES256Util aes256Util=new AES256Util();
                         account.password=aes256Util.encrypt(account.password);
-                    } catch (UnsupportedEncodingException | GeneralSecurityException e) {
+                    } catch (GeneralSecurityException e) {
                         e.printStackTrace();
                     }
 
@@ -418,8 +418,6 @@ public class FirebaseAccount extends AppCompatActivity {
             try {
                 AES256Util aes256Util=new AES256Util();
                 value=aes256Util.encrypt(value);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (GeneralSecurityException e) {

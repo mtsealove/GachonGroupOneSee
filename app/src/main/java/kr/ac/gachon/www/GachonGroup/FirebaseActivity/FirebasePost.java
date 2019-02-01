@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -389,9 +390,14 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.child("Photos").getChildren()) {
-                    String FilePath=snapshot.child("FilePath").getValue(String.class);
+                    final String FilePath=snapshot.child("FilePath").getValue(String.class);
                     StorageReference storageReference=storage.getReference().child(FilePath);
-                    storageReference.delete().addOnFailureListener(new OnFailureListener() {
+                    storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("사진 삭제 성공", FilePath);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(context, "사진 삭제 실패", Toast.LENGTH_SHORT).show();
@@ -417,9 +423,15 @@ public class FirebasePost extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.child("Photos").getChildren()){
-                    String FilePath=snapshot.child("FilePath").getValue(String.class);
+                    final String FilePath=snapshot.child("FilePath").getValue(String.class);
                     StorageReference storageReference=storage.getReference().child(FilePath);
                     storageReference.delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("사진 삭제 성공", FilePath);
+                                }
+                            })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {

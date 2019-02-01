@@ -74,8 +74,6 @@ public class LoginActivity extends AppCompatActivity {
         try {
             aes256Util = new AES256Util();
             password=aes256Util.encrypt(password);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {

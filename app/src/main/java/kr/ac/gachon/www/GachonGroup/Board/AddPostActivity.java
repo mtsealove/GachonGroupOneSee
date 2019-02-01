@@ -38,7 +38,7 @@ public class AddPostActivity extends AppCompatActivity {
     private LinearLayout.LayoutParams layoutParams;
     private final int MaxImage=5;
     private ArrayList<Uri> filePath=new ArrayList<>();
-    private ArrayList<String> filePathStr=new ArrayList<>();
+    private ArrayList<String> filePathStr;
     private ArrayList<String> removeFile=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class AddPostActivity extends AppCompatActivity {
             }
         });
 
-        layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.leftMargin=30;
         layoutParams.rightMargin=30;
         layoutParams.topMargin=10;
@@ -105,6 +105,7 @@ public class AddPostActivity extends AppCompatActivity {
         for(int i=0; i<filePathStr.size(); i++) {
             final ImageView imageView=new ImageView(AddPostActivity.this);
             firebaseImage.LoadImageView(filePathStr.get(i), imageView);
+            Log.d("ImageFilePath", filePathStr.get(i));
             imageView.setLayoutParams(layoutParams);
             contentLayout.addView(imageView);
 
