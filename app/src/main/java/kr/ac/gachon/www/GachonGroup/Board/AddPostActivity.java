@@ -31,7 +31,8 @@ import kr.ac.gachon.www.GachonGroup.etc.Alert;
 //게시글 작성 및 수정 클래스
 public class AddPostActivity extends AppCompatActivity {
     private String boardName, userID, groupName;
-    private String title, content, boardID;
+    private String title, content;
+    public static String boardID;
     private EditText titleET, contentET;
     private Button commitBtn, tmpCommitBtn, imageBtn, clipBtn;
     private LinearLayout contentLayout;
@@ -40,6 +41,8 @@ public class AddPostActivity extends AppCompatActivity {
     private ArrayList<Uri> filePath=new ArrayList<>();
     private ArrayList<String> filePathStr;
     private ArrayList<String> removeFile=new ArrayList<>();
+    private FirebasePost firebasePost;
+    public static boolean temp=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,12 @@ public class AddPostActivity extends AppCompatActivity {
                 Post();
             }
         });
+        tmpCommitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TempPost();
+            }
+        });
 
         //동아리거나 홍보게시판이면 내용을 입력해주세요로 설정
         if(groupName!=null) contentET.setHint("내용을 입력해주세요");
@@ -96,7 +105,15 @@ public class AddPostActivity extends AppCompatActivity {
         layoutParams.topMargin=10;
         layoutParams.bottomMargin=30;
 
+
         if(filePathStr!=null) LoadImages();
+        else {
+            filePathStr=new ArrayList<>();
+            firebasePost = new FirebasePost(AddPostActivity.this);
+            //임시저장 확인
+            firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);
+        }
+
     }
 
     //업데이트 시 원래 업로드 되었던 이미지 불러오기
@@ -160,8 +177,7 @@ public class AddPostActivity extends AppCompatActivity {
     View.OnClickListener postListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
-            firebasePost.Post(boardName, userID, title, content, filePath);
+            firebasePost.Post(boardName, userID, title, content, filePath, false);
             finish();
         }
     };
@@ -169,8 +185,7 @@ public class AddPostActivity extends AppCompatActivity {
     View.OnClickListener GroupPostListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
-            firebasePost.Post(groupName, boardName, userID, title, content, filePath);
+            firebasePost.Post(groupName, boardName, userID, title, content, filePath, false);
             finish();
         }
     };
@@ -178,7 +193,6 @@ public class AddPostActivity extends AppCompatActivity {
     View.OnClickListener UpdateListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
             firebasePost.Update(boardName, title, content, boardID, removeFile, filePath);
             finish();
         }
@@ -187,7 +201,6 @@ public class AddPostActivity extends AppCompatActivity {
     View.OnClickListener GroupUpdateListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FirebasePost firebasePost=new FirebasePost(AddPostActivity.this);
             firebasePost.Update(groupName, boardName, title, content, boardID, removeFile, filePath);
             finish();
         }
@@ -200,6 +213,35 @@ public class AddPostActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요"), 0);
     }
+    //임시저장 메서드
+    private void TempPost() {
+        title=titleET.getText().toString();
+        content=contentET.getText().toString();
+        if(title.length()==0) Toast.makeText(AddPostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+        else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
+        else {
+            Alert alert=new Alert(AddPostActivity.this);
+            if(boardID==null) {
+                if(groupName==null)
+                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempPostListener);
+                else
+                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempGroupPostListener);
+            }
+        }
+    }
+    View.OnClickListener TempPostListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            firebasePost.Post(boardName, userID, title, content, filePath, true);
+            finish();
+        }
+    };
+    View.OnClickListener TempGroupPostListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            firebasePost.Post(groupName, boardID, userID, title, content, filePath, true);
+        }
+    };
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

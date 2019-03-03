@@ -38,10 +38,13 @@ public class FirebaseList extends AppCompatActivity {
                 ArrayList<String> titles=new ArrayList<>();
                 final ArrayList<Integer> ids=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child(board_name).getChildren()) {
-                    String title=snapshot.child("title").getValue(String.class);
-                    int id=snapshot.child("id").getValue(Integer.class);
-                    titles.add(title);
-                    ids.add(id);
+                    String temp=snapshot.child("temp").getValue(String.class);
+                    if(temp==null) {
+                        String title = snapshot.child("title").getValue(String.class);
+                        int id = snapshot.child("id").getValue(Integer.class);
+                        titles.add(title);
+                        ids.add(id);
+                    }
                 }
                 Collections.reverse(titles);
                 Collections.reverse(ids);
@@ -76,10 +79,13 @@ public class FirebaseList extends AppCompatActivity {
                 final ArrayList<Integer> ids=new ArrayList<>();
                 String newName=TrimName(groupName);
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(newName).child(board_name).getChildren()) {
-                    String title=snapshot.child("title").getValue(String.class);
-                    int id=snapshot.child("id").getValue(Integer.class);
-                    titles.add(title);
-                    ids.add(id);
+                    String temp=snapshot.child("temp").getValue(String.class);
+                    if(temp==null) {
+                        String title = snapshot.child("title").getValue(String.class);
+                        int id = snapshot.child("id").getValue(Integer.class);
+                        titles.add(title);
+                        ids.add(id);
+                    }
                 }
                 Collections.reverse(titles);
                 Collections.reverse(ids);

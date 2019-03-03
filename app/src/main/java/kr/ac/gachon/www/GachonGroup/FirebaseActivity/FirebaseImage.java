@@ -3,6 +3,7 @@ package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.module.AppGlideModule;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,20 +35,30 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.FullScreenImageActivity;
 
 public class FirebaseImage  extends AppGlideModule {
     final Context context;
     RequestOptions requestOptions;
+    RequestOptions profileOptions;
     FirebaseDatabase database;
     public FirebaseImage(Context context) {
         this.context=context;
+        profileOptions=new RequestOptions()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+        .placeholder(R.drawable.user_icon)
+        .error(R.drawable.user_icon);
         requestOptions=new RequestOptions()
                 .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE);
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.loadimage);
+
         database=FirebaseDatabase.getInstance();
     }
 
@@ -187,6 +199,49 @@ public class FirebaseImage  extends AppGlideModule {
         }
     }
 
+    //임시 게시판 사진 업로드
+    public void UploadTempBoardImage(final Uri filePath, final String ID, int count, final DatabaseReference TempRef) {
+        //업로드할 파일이 있으면 수행
+        if (filePath != null) {
+            //storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            String FilePath="Temp/"+ID+"/"+count+".png";
+
+            TempRef.child("Photos").push().child("FilePath").setValue(FilePath);
+            //storage 주소와 폴더 파일명을 지정해 준다.
+            final StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child(FilePath);
+
+            //올라가거라...
+            storageRef.putFile(filePath)
+                    //성공시
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(context, "업로드 완료!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    //실패시
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context, "업로드 실패!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    //진행중
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
+                            //dialog에 진행률을 퍼센트로 출력해 준다
+                        }
+                    });
+        } else {
+            Toast.makeText(context, "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //동아리 게시판 사진 업로드
     public void UploadBoardImage(final Uri filePath, final String GroupName,  final String boardName, final String boardID, int count) {
         //업로드할 파일이 있으면 수행
@@ -199,6 +254,7 @@ public class FirebaseImage  extends AppGlideModule {
             reference.push().child("FilePath").setValue("Groups/"+GroupName+"/"+boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
             //storage 주소와 폴더 파일명을 지정해 준다.
             StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child("Groups/"+GroupName+"/"+boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
+
             //올라가거라...
             storageRef.putFile(filePath)
                     //성공시
@@ -243,7 +299,7 @@ public class FirebaseImage  extends AppGlideModule {
 
         Glide.with(context)
                 .load(imageRef)
-                .apply(requestOptions)
+                .apply(profileOptions)
                 .thumbnail(0.3f)
                 .into(imageView);
         imageView.setBackground(new ShapeDrawable(new OvalShape()));
@@ -318,7 +374,6 @@ public class FirebaseImage  extends AppGlideModule {
 
             }
         });
-
     }
     //동아리 게시판에 해당하는 사진 표시
     public void getBoardPhotos(final String groupName, final String BoardName, final String BoardID, final LinearLayout layout, final TextView contentTV) {
@@ -367,5 +422,18 @@ public class FirebaseImage  extends AppGlideModule {
 
             }
         });
+    }
+
+    //임시 저장 일반 게시판에 해당하는 사진 표시
+    public void getTempBoardPhotos(final LinearLayout layout, final String FilePath) {
+                LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.leftMargin=30;
+                layoutParams.rightMargin=30;
+                layoutParams.topMargin=10;
+                layoutParams.bottomMargin=30;
+                //게시글에 있는 모든 사진의 이름을 불러오기
+                ImageView photo=new ImageView(context);
+                LoadImageView(FilePath, photo);
+                layout.addView(photo);
     }
 }

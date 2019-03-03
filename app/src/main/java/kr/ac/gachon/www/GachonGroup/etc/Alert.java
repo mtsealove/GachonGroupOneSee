@@ -98,4 +98,22 @@ public class Alert extends AppCompatActivity {
         positive.setOnClickListener(positiveListener);
         dialog.show();
     }
+
+    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 지정 가능
+    public void MsgDialogChoice(String msg, View.OnClickListener positiveListener, View.OnClickListener negativeListener) {
+        dialog=null;
+        LayoutInflater inflater=LayoutInflater.from(context);
+        View layout=inflater.inflate(R.layout.dialog_msg_choice, null);
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setView(layout);
+        TextView msgTV=layout.findViewById(R.id.dialog_msgTV);
+        msgTV.setText(msg);
+        Button negative=layout.findViewById(R.id.negative);
+        Button positive=layout.findViewById(R.id.positive);
+        dialog=builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        negative.setOnClickListener(negativeListener);
+        positive.setOnClickListener(positiveListener);
+        dialog.show();
+    }
 }

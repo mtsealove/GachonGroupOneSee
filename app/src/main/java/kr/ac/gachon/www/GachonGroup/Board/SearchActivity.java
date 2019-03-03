@@ -100,6 +100,7 @@ public class SearchActivity extends AppCompatActivity {
                 federationNoticeActivity.finish();
                 intent=new Intent(SearchActivity.this, FederationNoticeActivity.class);
                 intent.putExtra("value", value);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
                 finish();
                 break;
@@ -107,6 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                 QnAActivity.finish();
                 intent=new Intent(SearchActivity.this, QnAActivity.class);
                 intent.putExtra("value", value);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
                 finish();
                 break;

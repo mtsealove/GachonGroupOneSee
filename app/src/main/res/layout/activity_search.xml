@@ -50,7 +50,9 @@
             android:background="@drawable/input_background"
             android:hint="검색어를 입력해주세요"
             android:inputType="text"
-            android:padding="5dp"
+
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
             android:textSize="20sp"
             android:imeOptions="actionSearch"/>
 

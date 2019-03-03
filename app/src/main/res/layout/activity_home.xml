@@ -37,6 +37,7 @@
             android:orientation="horizontal">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/tab_1"
@@ -47,6 +48,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/PRboardBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +60,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/federation_noticeBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,6 +72,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/QnABtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

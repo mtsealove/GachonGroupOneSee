@@ -3,6 +3,8 @@ package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +35,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import kr.ac.gachon.www.GachonGroup.Board.AccuseActivity;
+import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
 import kr.ac.gachon.www.GachonGroup.R;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebasePost extends AppCompatActivity {
     FirebaseDatabase database;
@@ -39,6 +45,11 @@ public class FirebasePost extends AppCompatActivity {
     public FirebasePost(Context context){
         this.context=context;
         database=FirebaseDatabase.getInstance();
+    }
+
+    @Override
+    protected void onCreate(Bundle si) {
+        super.onCreate(si);
     }
 
     //화면에 댓글 표시
@@ -61,7 +72,28 @@ public class FirebasePost extends AppCompatActivity {
                     String authorID=snapshot.child("author").getValue(String.class);
                     String authorName=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
                     authorTV.setText(authorName);
-                    timeTV.setText(snapshot.child("time").getValue(String.class));
+
+                    //시간 옵션
+                    String time=snapshot.child("time").getValue(String.class);
+                    Date date=new Date();
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
+                    String now=dateFormat.format(date);
+                    if(now.substring(7).equals(time.substring(7))) {
+                        int hour1=Integer.parseInt(time.substring(8, 9));
+                        int hour2=Integer.parseInt(now.substring(8, 9));
+                        int min1=Integer.parseInt(time.substring(11, 12));
+                        int min2=Integer.parseInt(now.substring(11, 12));
+
+                        int hour=hour2-hour1;
+                        int min=min2-min1;
+                        if(min2-min1<0) {
+                            min+=60;
+                            hour--;
+                        }
+                        time=hour+"시간 "+min+"분 전";
+                    }
+
+                    timeTV.setText(time);
                     contentTV.setText(snapshot.child("content").getValue(String.class));
                     replys.add(reply);
                     userIDs.add(authorID);
@@ -140,7 +172,28 @@ public class FirebasePost extends AppCompatActivity {
                     String authorName=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
                     //작성자, 작성 시간, 댓글 내용 출력
                     authorTV.setText(authorName);
-                    timeTV.setText(snapshot.child("time").getValue(String.class));
+
+                    //시간 옵션
+                    String time=snapshot.child("time").getValue(String.class);
+                    Date date=new Date();
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
+                    String now=dateFormat.format(date);
+                    if(now.substring(7).equals(time.substring(7))) {
+                        int hour1=Integer.parseInt(time.substring(8, 9));
+                        int hour2=Integer.parseInt(now.substring(8, 9));
+                        int min1=Integer.parseInt(time.substring(11, 12));
+                        int min2=Integer.parseInt(now.substring(11, 12));
+
+                        int hour=hour2-hour1;
+                        int min=min2-min1;
+                        if(min2-min1<0) {
+                            min+=60;
+                            hour--;
+                        }
+                        time=hour+"시간 "+min+"분 전";
+                    }
+
+                    timeTV.setText(time);
                     contentTV.setText(snapshot.child("content").getValue(String.class));
 
                     replys.add(reply);
@@ -261,7 +314,7 @@ public class FirebasePost extends AppCompatActivity {
     //전체 게시판(연합회 공지사항, QnA)에 게시글 작성
     //게시판 이름, 유저 ID, 제목, 내용
     //관리자 이외에는 접근 불가하게 타 크래스에서 설정
-    public void Post(final String boardName, final String ID, final String title, final String content, final ArrayList<Uri> filePath) {
+    public void Post(final String boardName, final String ID, final String title, final String content, final ArrayList<Uri> filePath, final boolean temp) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -275,6 +328,7 @@ public class FirebasePost extends AppCompatActivity {
                 reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child(boardName).child(Integer.toString(count)).child("title").setValue(title);
                 reference.child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+                if(temp) reference.child(boardName).child(Integer.toString(count)).child("temp").setValue("true");
                 FirebaseImage firebaseImage=new FirebaseImage(context);
                 for(int i=0; i<filePath.size(); i++) {
                     firebaseImage.UploadBoardImage(filePath.get(i), boardName, Integer.toString(count), i);
@@ -289,7 +343,7 @@ public class FirebasePost extends AppCompatActivity {
     }
     //동아리의 게시판에 게시글 작성
     //동아리 이름, 게시판 제목, 유저ID, 제목, 내용
-    public void Post(final String groupName, final String boardName,final String ID,final String title,final String content, final ArrayList<Uri> filePath) {
+    public void Post(final String groupName, final String boardName,final String ID,final String title,final String content, final ArrayList<Uri> filePath, final boolean temp) {
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -304,6 +358,7 @@ public class FirebasePost extends AppCompatActivity {
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("title").setValue(title);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+                if(temp) reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("temp").setValue("true");
                 //받아온 이미지 개수만큼 이미지 업로드
                 FirebaseImage firebaseImage=new FirebaseImage(context);
                 for(int i=0; i<filePath.size(); i++)
@@ -322,6 +377,7 @@ public class FirebasePost extends AppCompatActivity {
         //제목 및 내용 설정
         ref.child(boardName).child(boardID).child("title").setValue(title);
         ref.child(boardName).child(boardID).child("content").setValue(content);
+        ref.child(boardName).child(boardID).child("temp").setValue(null);
         //삭제 파일 삭제
         FirebaseStorage storage=FirebaseStorage.getInstance();
         for(int i=0; i<RemoveFiles.size(); i++) {
@@ -335,6 +391,11 @@ public class FirebasePost extends AppCompatActivity {
                 for(DataSnapshot snapshot:dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
                     String filePath=snapshot.child("FilePath").getValue(String.class);
                     count=filePath.charAt(filePath.length()-5)-'0'+1;
+                    //경로 삭제
+                    DatabaseReference removeRef=snapshot.getRef();
+                    for(int i=0; i<RemoveFiles.size(); i++) {
+                        if(filePath.equals(RemoveFiles.get(i))) removeRef.child("FilePath").setValue(null);
+                    }
                 }
                 FirebaseImage firebaseImage=new FirebaseImage(context);
                 for(int i=0; i<FilePath.size(); i++)
@@ -354,6 +415,7 @@ public class FirebasePost extends AppCompatActivity {
         //제목 및 내용 변경
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("title").setValue(title);
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("content").setValue(content);
+        ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("temp").setValue(null);
         //삭제 파일 삭제
         FirebaseStorage storage=FirebaseStorage.getInstance();
         for(int i=0; i<RemoveFiles.size(); i++) {
@@ -367,6 +429,11 @@ public class FirebasePost extends AppCompatActivity {
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").child(GroupName).child(boardName).child(boardID).child("Photos").getChildren()) {
                     String filePath=snapshot.child("FilePath").getValue(String.class);
                     count=filePath.charAt(filePath.length()-5)-'0'+1;
+                    //경로 삭제
+                    DatabaseReference removeRef=snapshot.getRef();
+                    for(int i=0; i<RemoveFiles.size(); i++) {
+                        if(filePath.equals(RemoveFiles.get(i))) removeRef.child("FilePath").setValue(null);
+                    }
                 }
                 FirebaseImage firebaseImage=new FirebaseImage(context);
                 for(int i=0; i<FilePath.size(); i++) {
@@ -455,5 +522,104 @@ public class FirebasePost extends AppCompatActivity {
         DatabaseReference reference=database.getReference();
         reference.child("Groups").child(group).child("location").setValue(location);
         reference.child("Groups").child(group).child("introduce").setValue(introduce);
+    }
+
+    //일반 게시판 임시저장 체크 메서드
+    public void CheckTempBoard(final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
+        DatabaseReference reference=database.getReference().child(boardName);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(final DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    String userID=snapshot.child("author").getValue(String.class);
+                    String temp=snapshot.child("temp").getValue(String.class);
+                    //ID가 일치하며 임시 글인 경우
+                    if(userID.equals(ID)&&temp!=null) {
+                        final Alert alert=new Alert(context);
+                        alert.MsgDialogChoice("임시저장한 내용을\n불러오시겠습니까?", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String content=snapshot.child("content").getValue(String.class);
+                                String title=snapshot.child("title").getValue(String.class);
+                                String boardId=Integer.toString(snapshot.child("id").getValue(Integer.class));
+                                titleET.setText(title);
+                                contentET.setText(content);
+                                ArrayList<String> photos=new ArrayList<>();
+                                FirebaseImage firebaseImage=new FirebaseImage(context);
+                                for(DataSnapshot photoSnap: snapshot.child("Photos").getChildren()) {
+                                    photos.add(photoSnap.child("FilePath").getValue(String.class));
+                                    firebaseImage.getTempBoardPhotos(linearLayout, photoSnap.child("FilePath").getValue(String.class));
+                                }
+                                Alert.dialog.cancel();
+                                AddPostActivity.temp=true;
+                                AddPostActivity.boardID=boardId;
+                            }
+                        });
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    //업데이트 시 원래 업로드 되었던 이미지 불러오기
+    private void LoadImages(final ArrayList<Uri> filePath, final ArrayList<String> removeFile, final LinearLayout contentLayout) {
+        LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.leftMargin=30;
+        layoutParams.rightMargin=30;
+        layoutParams.topMargin=10;
+        layoutParams.bottomMargin=30;
+        FirebaseImage firebaseImage=new FirebaseImage(context);
+        for(int i=0; i<filePath.size(); i++) {
+            final ImageView imageView=new ImageView(context);
+            try {
+                imageView.setImageURI(filePath.get(i));
+                imageView.setLayoutParams(layoutParams);
+                contentLayout.addView(imageView);
+
+                final int finalI = i;
+                //이미지를 길게 누르면 삭제 다이얼로그 출력
+                imageView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        //진동 반응
+                        //Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+                        //vibrator.vibrate(5);
+                        Alert alert = new Alert(context);
+                        alert.MsgDialogChoice("이미지를 삭제하시겠습니까?", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //이미지 제거 및 uri제거
+                                contentLayout.removeView(imageView);
+                                //제거 변수에 추가
+                                removeFile.add(filePath.get(finalI).toString());
+                                Alert.dialog.cancel();
+                            }
+                        });
+                        return false;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //일반게시판 임시저장
+    public void TempPost(final String ID, final String title, final String content, final String boardName, final ArrayList<Uri> filePath) {
+        DatabaseReference reference=database.getReference().child("Account").child(ID).child("Temp").push();
+        reference.child("board").setValue(boardName);
+        reference.child("content").setValue(content);
+        reference.child("title").setValue(title);
+        FirebaseImage firebaseImage=new FirebaseImage(context);
+        for(int i=0; i<filePath.size(); i++) {
+            firebaseImage.UploadTempBoardImage(filePath.get(i), ID, i, reference);
+        }
+
     }
 }
