@@ -23,6 +23,7 @@ public class SearchActivity extends AppCompatActivity {
     QnAActivity  QnAActivity;
     InformationBoardActivity InformationActivity;
     GroupQnAActivity GroupQnAActivity;
+    PRBoardActivity prBoardActivity;
     private String BoardName, groupName, userID;
     @Override
     protected void onCreate(Bundle si) {
@@ -38,6 +39,7 @@ public class SearchActivity extends AppCompatActivity {
         QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.Board.QnAActivity._QnAActivity;
         InformationActivity=(InformationBoardActivity)InformationBoardActivity._InformationActivity;
         GroupQnAActivity=(GroupQnAActivity) kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity._GroupQnAActivity;
+        prBoardActivity=(PRBoardActivity) PRBoardActivity.PRBActivity;
 
         //게시판 이름과 동아리 이름을 받아옴
         Intent intent=getIntent();
@@ -58,6 +60,9 @@ public class SearchActivity extends AppCompatActivity {
                 break;
             case "GroupQnA":
                 BoardNameKR="Q&A";
+                break;
+            case "PRBoard":
+                BoardNameKR="홍보게시판";
                 break;
         }
         titleTV.setText(BoardNameKR);
@@ -127,6 +132,14 @@ public class SearchActivity extends AppCompatActivity {
                 intent.putExtra("value", value);
                 intent.putExtra("groupName", groupName);
                 intent.putExtra("ID", userID);
+                startActivity(intent);
+                finish();
+                break;
+            case "PRBoard":
+                prBoardActivity.finish();
+                intent=new Intent(SearchActivity.this, PRBoardActivity.class);
+                intent.putExtra("value", value);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
                 finish();
                 break;

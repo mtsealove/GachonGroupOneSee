@@ -73,10 +73,25 @@
             android:textSize="16sp"
             android:textStyle="normal" />
 
-        <View
+        <LinearLayout
+            android:id="@+id/indicatorLayout"
             android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
             android:layout_height="30dp"
-            android:layout_weight="2" />
+            android:layout_weight="2" >
+
+            <View
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/default_dot"
+                android:layout_width="10dp"
+                android:layout_height="10dp" />
+
+            <View
+                android:layout_marginHorizontal="5dp" android:layout_height="10dp"
+                android:layout_width="10dp"
+                android:background="@drawable/selected_dot" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/nextBtn"
@@ -98,30 +113,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="30dp">
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/addBtn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="15dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/btn_color"
+            android:paddingHorizontal="30dp"
             android:text="@string/enrollment"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
+
 
         <Button
+            android:layout_marginLeft="10dp"
             android:id="@+id/searchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="50dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/btn_normal_gray"
+            android:paddingHorizontal="30dp"
             android:text="@string/search"
             android:textColor="#FFFFFF"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 </RelativeLayout>
