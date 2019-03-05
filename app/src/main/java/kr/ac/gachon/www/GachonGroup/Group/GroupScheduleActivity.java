@@ -70,7 +70,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
 
                 String shot_Day = Year + "," + Month + "," + Day;
 
-                firebaseCalendar.Add_EventDayEvent(groupName, shot_Day, scheduleLayout, noScheduleTV);
+                firebaseCalendar.Add_EventDayEvent(groupName, shot_Day, scheduleLayout, noScheduleTV, is_manager, userGroup);
                 calendar.clearSelection();
             }
         });
@@ -104,6 +104,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                                 else
                                     try {
                                         firebaseCalendar.AddEvent(groupName, Year, Month, Day, EventName);
+                                        init();
                                     } catch (Exception e) {
                                     }
                                     Alert.dialog.cancel();

@@ -106,10 +106,10 @@ public class AddPostActivity extends AppCompatActivity {
         layoutParams.bottomMargin=30;
 
 
+        firebasePost = new FirebasePost(AddPostActivity.this);
         if(filePathStr!=null) LoadImages();
         else {
             filePathStr=new ArrayList<>();
-            firebasePost = new FirebasePost(AddPostActivity.this);
             //임시저장 확인
             firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);
         }

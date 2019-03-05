@@ -1,8 +1,11 @@
 package kr.ac.gachon.www.GachonGroup.etc;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
@@ -30,7 +33,16 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
         FirebaseImage firebaseImage=new FirebaseImage(FullScreenImageActivity.this);
         firebaseImage.LoadFullImageView(FilePath, imageView);
+
         PhotoViewAttacher photoViewAttacher=new PhotoViewAttacher(imageView);
-        photoViewAttacher.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        photoViewAttacher.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        View view=getWindow().getDecorView();
+        if(Build.VERSION.SDK_INT>=21) {
+            if(view!=null) {
+                getWindow().setStatusBarColor(Color.BLACK);
+            }
+        }
+
     }
 }

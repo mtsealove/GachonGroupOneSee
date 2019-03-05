@@ -73,4 +73,14 @@ public class QnAActivity extends AppCompatActivity {
     public void close(View v) {
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        if(value!=null) {
+            Intent intent=new Intent(QnAActivity.this, QnAActivity.class);
+            intent.putExtra("userID", userID);
+            startActivity(intent);
+            finish();
+        } else super.onBackPressed();
+    }
 }

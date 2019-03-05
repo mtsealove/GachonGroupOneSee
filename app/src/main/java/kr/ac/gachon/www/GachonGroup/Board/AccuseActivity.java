@@ -25,6 +25,7 @@ public class AccuseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse);
 
+        //각 버튼 매칭
         ButtonID[0]=R.id.accsue1;
         ButtonID[1]=R.id.accuse2;
         ButtonID[2]=R.id.accuse3;
@@ -34,6 +35,7 @@ public class AccuseActivity extends AppCompatActivity {
         reasonET=findViewById(R.id.reasonET);
         accuseBtn=findViewById(R.id.accuseBtn);
 
+        //사유를 누를 경우 표시
         for(int i=0; i<6; i++) {
             buttons[i] = findViewById(ButtonID[i]);
             final int finalI = i;
@@ -61,8 +63,11 @@ public class AccuseActivity extends AppCompatActivity {
         });
     }
 
+    //신고
     private void Accuse() {
+        //기타 사유가 있으면 기타 사유로 변경
         if(reasonET.getText().toString().length()!=0) Reason=reasonET.getText().toString();
+        //사유 체크 여부 확인
         if(Reason.length()==0) Toast.makeText(AccuseActivity.this, "신고 내용을 선택하세요", Toast.LENGTH_SHORT).show();
         else {
             Alert alert=new Alert(AccuseActivity.this);
@@ -70,10 +75,14 @@ public class AccuseActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     FirebaseBoard firebaseBoard=new FirebaseBoard(AccuseActivity.this);
+                    //동아리가 없고 댓글이 아닐 경우
                     if(groupName==null&&replyID==null)
                     firebaseBoard.Accuse(boardName, boardID, userID, Reason);
+                    //동아리가 있고 댓글일 경우
                     else if(groupName!=null&&replyID==null) firebaseBoard.Accuse(groupName, boardName, boardID, userID, Reason);
+                    //동아리가 없고 댓글일 경우
                     else if(groupName==null&&replyID!=null) firebaseBoard.AccuseReply(boardName, boardID, userID, Reason, replyID);
+                    //동아리가 있고 댓글일 경우
                     else firebaseBoard.AccuseReply(groupName, boardName, boardID, userID, Reason, replyID);
                     Toast.makeText(AccuseActivity.this, "신고가 완료되었습니다", Toast.LENGTH_SHORT).show();
                     Alert.dialog.cancel();

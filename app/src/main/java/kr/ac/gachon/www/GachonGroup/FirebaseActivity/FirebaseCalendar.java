@@ -3,10 +3,14 @@ package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +22,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.R;
+import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebaseCalendar extends AppCompatActivity {
     final Context context;
@@ -56,9 +62,9 @@ public class FirebaseCalendar extends AppCompatActivity {
         });
     }
     //특정 날짜 클릭 시 해당 날짜의 스케줄 표시
-    public void Add_EventDayEvent(final String GroupName, final String Day, final LinearLayout layout, final TextView no_Schedule) {
+    public void Add_EventDayEvent(final String GroupName, final String Day, final LinearLayout layout, final TextView no_Schedule, final boolean isManager, final String userGroup) {
         DatabaseReference reference=database.getReference();
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean exist=false;
@@ -67,7 +73,8 @@ public class FirebaseCalendar extends AppCompatActivity {
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").child(TrimName(GroupName)).child("Schedule").getChildren()) {
                     if(snapshot.child("EventDate").getValue(String.class).equals(Day)) {
                         String date=(snapshot.child("EventDate").getValue(String.class).split(","))[2];
-                        String name=snapshot.child("EventName").getValue(String.class);
+                        final String fullDate=snapshot.child("EventDate").getValue(String.class);
+                        final String name=snapshot.child("EventName").getValue(String.class);
                         LayoutInflater inflater=LayoutInflater.from(context);
                         View sub=inflater.inflate(R.layout.sub_schedule, null);
                         TextView SchDate= sub.findViewById(R.id.schdateTV);
@@ -76,6 +83,43 @@ public class FirebaseCalendar extends AppCompatActivity {
                         SchName.setText(name);
                         layout.addView(sub);
                         exist=true;
+                        //관리자이며 자신의 동아리일 경우
+                        if(isManager&&userGroup.equals(GroupName)) {
+                            sub.setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    ListView listView=new ListView(context);
+                                    listView.setDivider(null);
+                                    ArrayList<String> arrayList=new ArrayList<>();
+                                    arrayList.add("삭제");
+                                    ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
+                                    listView.setAdapter(adapter);
+                                    AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                                    builder.setView(listView);
+                                    final AlertDialog dialog=builder.create();
+                                    dialog.show();
+                                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            Alert alert=new Alert(context);
+                                            switch (position) {
+                                                case 0:
+                                                    alert.MsgDialogChoice("일정을 삭제하시겠습니까?", new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            removeSchedule(GroupName,  fullDate, name);
+                                                            Alert.dialog.cancel();
+                                                        }
+                                                    });
+                                                    dialog.cancel();
+                                                    break;
+                                            }
+                                        }
+                                    });
+                                    return false;
+                                }
+                            });
+                        }
                     }
                 }
                 if (exist) no_Schedule.setVisibility(View.GONE);
@@ -87,6 +131,29 @@ public class FirebaseCalendar extends AppCompatActivity {
 
             }
         });
+    }
+    //스케줄 삭제 메서드
+    private void removeSchedule(String Group, final String EventDate, final String EventName) {
+        final DatabaseReference reference=database.getReference().child("Groups").child(Group).child("Schedule");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
+                    String date=snapshot.child("EventDate").getValue(String.class);
+                    String name=snapshot.child("EventName").getValue(String.class);
+                    if(date.equals(EventDate)&&name.equals(EventName)) {
+                        snapshot.getRef().setValue(null);
+                        Toast.makeText(context, "일정이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     //관리자용 스케줄 추가

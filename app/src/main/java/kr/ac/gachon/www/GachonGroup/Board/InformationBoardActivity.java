@@ -101,4 +101,15 @@ public class InformationBoardActivity extends AppCompatActivity {
             firebaseList.setGroupListView(groupName, userID, boardLV, BoardName);
         else firebaseList.setGroupListView(groupName, userID, boardLV, BoardName, value);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(value!=null) {
+            Intent intent=new Intent(InformationBoardActivity.this, InformationBoardActivity.class);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("ID", userID);
+            startActivity(intent);
+            finish();
+        } else super.onBackPressed();
+    }
 }

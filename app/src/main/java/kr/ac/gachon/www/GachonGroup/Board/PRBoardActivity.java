@@ -3,6 +3,7 @@ package kr.ac.gachon.www.GachonGroup.Board;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,8 @@ public class PRBoardActivity extends AppCompatActivity {
     public static Activity PRBActivity;
     Button prevBtn, nextBtn, searchBtn,addBtn;
     public static ArrayList<PRFragment> fragments;
-    static int pageCount=0, page;
+    static int pageCount=0;
+    int page;
     boolean is_manger;
     private String userID;
     private String value;
@@ -74,39 +76,6 @@ public class PRBoardActivity extends AppCompatActivity {
             }
         });
     }
-    //검색결과를 통해 프래그먼트 설정
-    private void resultFragment(final String value) {
-        FirebaseDatabase database=FirebaseDatabase.getInstance();
-        DatabaseReference reference=database.getReference().child("PublicRelation");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int total=(int)(dataSnapshot.getChildrenCount());
-                 page=total/8;
-                int nam=total%8;
-                if(nam>0) page++;
-
-                fragments=new ArrayList<>();
-                for(int i=0; i<page; i++) {
-                    PRFragment fragment=new PRFragment();
-                    Bundle bundle=new Bundle(4);
-                    bundle.putInt("page", i+1);
-                    bundle.putInt("count", 8);
-                    bundle.putString("userID", userID);
-                    bundle.putString("value", value);
-                    fragment.setArguments(bundle);
-                    fragments.add(fragment);
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, fragments.get(0)).commit();
-                setIndicator(page, 0);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
     //검색 없이 프래그먼트 설정
     private void createFragment() {
         FirebaseDatabase database=FirebaseDatabase.getInstance();
@@ -128,9 +97,11 @@ public class PRBoardActivity extends AppCompatActivity {
                     bundle.putString("userID", userID);
                     if(value!=null) bundle.putString("value", value);
                     fragment.setArguments(bundle);
+
                     fragments.add(fragment);
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, fragments.get(0)).commit();
+                setIndicator(0);
             }
 
             @Override
@@ -146,7 +117,7 @@ public class PRBoardActivity extends AppCompatActivity {
         if(pageCount<fragments.size()-1) {
             pageCount++;
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, fragments.get(pageCount)).commit();
-            setIndicator(page, pageCount);
+            setIndicator(pageCount);
 
         } else {
             Toast.makeText(PRBoardActivity.this, "마지막 페이지 입니다", Toast.LENGTH_SHORT).show();
@@ -157,7 +128,7 @@ public class PRBoardActivity extends AppCompatActivity {
         if(pageCount>0) {
             pageCount--;
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentView, fragments.get(pageCount)).commit();
-            setIndicator(page, pageCount);
+            setIndicator(pageCount);
         } else {
             Toast.makeText(PRBoardActivity.this, "첫 번째 페이지 입니다", Toast.LENGTH_SHORT).show();
         }
@@ -187,24 +158,47 @@ public class PRBoardActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setIndicator(int page, int current) {
-        LinearLayout IndicatorLayout=findViewById(R.id.indicatorLayout);
-        IndicatorLayout.removeAllViews();
+    View[] dots=new View[7];
+    int [] dotIds=new int[7];
+    private void setIndicator(int current) {
+        dotIds[0]=R.id.dot0;
+        dotIds[1]=R.id.dot1;
+        dotIds[2]=R.id.dot2;
+        dotIds[3]=R.id.dot3;
+        dotIds[4]=R.id.dot4;
+        dotIds[5]=R.id.dot5;
+        dotIds[6]=R.id.dot6;
+        //모든 인디케이터를 안보이게
+        for(int i=0; i<7; i++) {
+            dots[i] = findViewById(dotIds[i]);
+            dots[i].setVisibility(View.GONE);
+        }
 
-        for(int i=0; i<page; i++) {
-            View view=new View(PRBoardActivity.this);
-            if(current==i) view.setBackgroundDrawable(getDrawable(R.drawable.selected_dot));
-            else view.setBackgroundDrawable(getDrawable(R.drawable.default_dot));
-
-            IndicatorLayout.addView(view);
+        Drawable selected_dot=getDrawable(R.drawable.selected_dot);
+        Drawable default_dot=getDrawable(R.drawable.default_dot);
+        //페이지 수만큼 표시
+        for(int i=0; i<fragments.size(); i++) {
+            dots[i].setVisibility(View.VISIBLE);
+            dots[i].setBackgroundDrawable(default_dot);
+            if(i==current) dots[i].setBackgroundDrawable(selected_dot);
+            if(i==6) break;
         }
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
             fragments=new ArrayList<>();
             createFragment();
+    }
+    @Override
+    public void onBackPressed() {
+        if(value!=null) {
+            Intent intent=new Intent(PRBoardActivity.this, PRBoardActivity.class);
+            intent.putExtra("userID", userID);
+            intent.putExtra("is_manager", is_manger);
+            startActivity(intent);
+            finish();
+        } else super.onBackPressed();
     }
 }

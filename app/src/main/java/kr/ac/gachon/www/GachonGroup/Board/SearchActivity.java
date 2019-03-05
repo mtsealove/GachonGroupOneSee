@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity;
 import kr.ac.gachon.www.GachonGroup.R;
@@ -25,6 +26,7 @@ public class SearchActivity extends AppCompatActivity {
     GroupQnAActivity GroupQnAActivity;
     PRBoardActivity prBoardActivity;
     private String BoardName, groupName, userID;
+    private String userGroup;
     @Override
     protected void onCreate(Bundle si) {
         super.onCreate(si);
@@ -46,6 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         BoardName=intent.getStringExtra("BoardName");
         groupName=intent.getStringExtra("groupName");
         userID=intent.getStringExtra("userID");
+        userGroup=intent.getStringExtra("userGroup");
         String BoardNameKR=null;
 
         switch (BoardName) {
@@ -96,53 +99,57 @@ public class SearchActivity extends AppCompatActivity {
     //검색 버튼
     private void Search() {
         String value=searchET.getText().toString();
-        Intent intent;
-        //게시판 제목에 따라 다른 활동 수행
-        //검색을 위한 value값과 게시판 이름, 동아리 이름을 새 액티비티로 전송
-        //이전에 존재했던 게시판 액티비티 종료
-        switch (BoardName) {
-            case "FederationNotice":
-                federationNoticeActivity.finish();
-                intent=new Intent(SearchActivity.this, FederationNoticeActivity.class);
-                intent.putExtra("value", value);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
-                finish();
-                break;
-            case "QnA":
-                QnAActivity.finish();
-                intent=new Intent(SearchActivity.this, QnAActivity.class);
-                intent.putExtra("value", value);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
-                finish();
-                break;
-            case "Information":
-                InformationActivity.finish();
-                intent=new Intent(SearchActivity.this, InformationBoardActivity.class);
-                intent.putExtra("value", value);
-                intent.putExtra("groupName", groupName);
-                intent.putExtra("ID", userID);
-                startActivity(intent);
-                finish();
-                break;
-            case "GroupQnA":
-                GroupQnAActivity.finish();
-                intent=new Intent(SearchActivity.this, kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity.class);
-                intent.putExtra("value", value);
-                intent.putExtra("groupName", groupName);
-                intent.putExtra("ID", userID);
-                startActivity(intent);
-                finish();
-                break;
-            case "PRBoard":
-                prBoardActivity.finish();
-                intent=new Intent(SearchActivity.this, PRBoardActivity.class);
-                intent.putExtra("value", value);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
-                finish();
-                break;
+        if(value.length()==0) Toast.makeText(SearchActivity.this, "검색어를 입력해 주세요", Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent;
+            //게시판 제목에 따라 다른 활동 수행
+            //검색을 위한 value값과 게시판 이름, 동아리 이름을 새 액티비티로 전송
+            //이전에 존재했던 게시판 액티비티 종료
+            switch (BoardName) {
+                case "FederationNotice":
+                    federationNoticeActivity.finish();
+                    intent = new Intent(SearchActivity.this, FederationNoticeActivity.class);
+                    intent.putExtra("value", value);
+                    intent.putExtra("userID", userID);
+                    intent.putExtra("group", userGroup);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "QnA":
+                    QnAActivity.finish();
+                    intent = new Intent(SearchActivity.this, QnAActivity.class);
+                    intent.putExtra("value", value);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "Information":
+                    InformationActivity.finish();
+                    intent = new Intent(SearchActivity.this, InformationBoardActivity.class);
+                    intent.putExtra("value", value);
+                    intent.putExtra("groupName", groupName);
+                    intent.putExtra("ID", userID);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "GroupQnA":
+                    GroupQnAActivity.finish();
+                    intent = new Intent(SearchActivity.this, kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity.class);
+                    intent.putExtra("value", value);
+                    intent.putExtra("groupName", groupName);
+                    intent.putExtra("ID", userID);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "PRBoard":
+                    prBoardActivity.finish();
+                    intent = new Intent(SearchActivity.this, PRBoardActivity.class);
+                    intent.putExtra("value", value);
+                    intent.putExtra("userID", userID);
+                    startActivity(intent);
+                    finish();
+                    break;
+            }
         }
     }
 }

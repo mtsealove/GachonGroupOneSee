@@ -138,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
     private void FederationNotice() {
         Intent intent=new Intent(HomeActivity.this, FederationNoticeActivity.class);
         intent.putExtra("userID", ID);
+        intent.putExtra("group", account.group);
         startActivity(intent);
     }
     private void QnA() {

@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
@@ -45,6 +48,9 @@ public class RequirementsActivity extends AppCompatActivity {
                 setCloseBtn();
             }
         });
+
+        FirebaseView firebaseView=new FirebaseView(RequirementsActivity.this);
+        firebaseView.setEditText("email", ID, emailET);
     }
     //버튼 클릭시 미입력 체크
     private void setSendBtn() {

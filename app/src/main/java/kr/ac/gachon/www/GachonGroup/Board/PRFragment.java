@@ -40,13 +40,7 @@ public class PRFragment extends Fragment {
         if(value!=null) firebaseList.setCountListView(userID, listView, "PublicRelation", page, count, value);
         else firebaseList.setCountListView(userID, listView, "PublicRelation", page, count);
 
+
         return view;
-    }
-    private void OpenBoard(int id) {
-        String boardName="PublicRelation";
-        Intent intent=new Intent(getContext(), BoardActivity.class);
-        intent.putExtra("boardName", boardName);
-        intent.putExtra("id", id);
-        startActivity(intent);
     }
 }

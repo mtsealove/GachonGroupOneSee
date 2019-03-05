@@ -39,7 +39,6 @@
         <activity android:name=".Account.EditMyInformationActivity" />
         <activity android:name=".Group.GroupScheduleActivity" />
         <activity android:name=".Board.PRBoardActivity" />
-        <activity android:name=".Board.PRSearchActivity" />
         <activity
             android:name=".Board.BoardActivity"
             android:windowSoftInputMode="stateHidden" />
