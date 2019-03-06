@@ -42,19 +42,20 @@ import java.util.ArrayList;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.FullScreenImageActivity;
 
-public class FirebaseImage  extends AppGlideModule {
+public class FirebaseImage  extends AppGlideModule {    //firebase와 glide를 이용하여 이미지 표시
     final Context context;
     RequestOptions requestOptions;
     RequestOptions profileOptions;
     FirebaseDatabase database;
     public FirebaseImage(Context context) {
         this.context=context;
-        profileOptions=new RequestOptions()
+        profileOptions=new RequestOptions() //프로필 사진 옵션
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
         .placeholder(R.drawable.user_icon)
         .error(R.drawable.user_icon);
-        requestOptions=new RequestOptions()
+
+        requestOptions=new RequestOptions() //일반 사진 옵션
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.drawable.loadimage);
@@ -69,22 +70,20 @@ public class FirebaseImage  extends AppGlideModule {
             //업로드 진행 Dialog 보이기
             final ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("업로드중...");
+            progressDialog.setCancelable(false);    //취소 불가
             progressDialog.show();
 
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            //Unique한 파일명을 만들자.
-
-            String filename =ID + "PF.png";
-            //storage 주소와 폴더 파일명을 지정해 준다.
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child("ProfileIcon/" + filename);
+            String filename =ID + "PF.png"; //파일 이름
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child("ProfileIcon/" + filename); //업로드할 위치
             //올라가거라...
             storageRef.putFile(filePath)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {   //성공
                             progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
                             Toast.makeText(context, "업로드 완료!", Toast.LENGTH_SHORT).show();
                         }
@@ -92,7 +91,7 @@ public class FirebaseImage  extends AppGlideModule {
                     //실패시
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
+                        public void onFailure(@NonNull Exception e) {   //실패
                             progressDialog.dismiss();
                             Toast.makeText(context, "업로드 실패!", Toast.LENGTH_SHORT).show();
                         }
@@ -100,10 +99,10 @@ public class FirebaseImage  extends AppGlideModule {
                     //진행중
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {  //
+                            @SuppressWarnings("VisibleForTests")
                                     double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
-                            //dialog에 진행률을 퍼센트로 출력해 준다
+                            //진행률 표시
                             progressDialog.setMessage("사진 업로드 중 " + ((int) progress) + "% ...");
                         }
                     });
@@ -112,21 +111,21 @@ public class FirebaseImage  extends AppGlideModule {
         }
     }
 
-    //동아리 이미지 업로드
+    //동아리 게시판 이미지 업로드
     public void UploadGroupImage(Uri filePath,  String Group) {
         //업로드할 파일이 있으면 수행
         if (filePath != null) {
             //업로드 진행 Dialog 보이기
             final ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("업로드중...");
+            progressDialog.setCancelable(false);    //취소 불가
             progressDialog.show();
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            String filename ="Groups/"+Group+"/"+Group+"Icon.png";
-            //storage 주소와 폴더 파일명을 지정해 준다.
+            String filename ="Groups/"+Group+"/"+Group+"Icon.png";  //파일 위치, 이름
             StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child(filename);
-            //올라가거라...
+
             storageRef.putFile(filePath)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -148,7 +147,7 @@ public class FirebaseImage  extends AppGlideModule {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                            @SuppressWarnings("VisibleForTests")
                                     double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
                             //dialog에 진행률을 퍼센트로 출력해 준다
                             progressDialog.setMessage("사진 업로드 중 " + ((int) progress) + "% ...");
@@ -158,23 +157,27 @@ public class FirebaseImage  extends AppGlideModule {
             Toast.makeText(context, "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
-    //게시판 사진 업로드
+    //일반 게시판 사진 업로드
     public void UploadBoardImage(final Uri filePath,  final String boardName, final String boardID, int count) {
         //업로드할 파일이 있으면 수행
         if (filePath != null) {
-            //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
+            //업로드 진행 Dialog 보이기
+            final ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.setCancelable(false);    //취소 불가
+            progressDialog.show();
 
             final DatabaseReference reference=database.getReference().child(boardName).child(boardID).child("Photos");
             reference.push().child("FilePath").setValue(boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
                     //storage 주소와 폴더 파일명을 지정해 준다.
                     StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child(boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
-                    //올라가거라...
                     storageRef.putFile(filePath)
                             //성공시
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    progressDialog.dismiss();
                                     Toast.makeText(context, "업로드 완료!", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -182,6 +185,7 @@ public class FirebaseImage  extends AppGlideModule {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    progressDialog.dismiss();
                                     Toast.makeText(context, "업로드 실패!", Toast.LENGTH_SHORT).show();
                                 }
                             })
@@ -189,9 +193,9 @@ public class FirebaseImage  extends AppGlideModule {
                             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                    @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    @SuppressWarnings("VisibleForTests")
                                             double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
-                                    //dialog에 진행률을 퍼센트로 출력해 준다
+                                    progressDialog.setMessage("사진 업로드 중 "+((int)progress+"%..."));
                                 }
                             });
         } else {
@@ -199,25 +203,29 @@ public class FirebaseImage  extends AppGlideModule {
         }
     }
 
-    //임시 게시판 사진 업로드
+    //임시 게시판 사진 업로드(일반 게시판)
     public void UploadTempBoardImage(final Uri filePath, final String ID, int count, final DatabaseReference TempRef) {
         //업로드할 파일이 있으면 수행
         if (filePath != null) {
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
+            //업로드 진행 Dialog 보이기
+            final ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.setCancelable(false);    //취소 불가
+            progressDialog.show();
 
             String FilePath="Temp/"+ID+"/"+count+".png";
 
             TempRef.child("Photos").push().child("FilePath").setValue(FilePath);
-            //storage 주소와 폴더 파일명을 지정해 준다.
             final StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child(FilePath);
 
-            //올라가거라...
             storageRef.putFile(filePath)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
                             Toast.makeText(context, "업로드 완료!", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -225,6 +233,7 @@ public class FirebaseImage  extends AppGlideModule {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(context, "업로드 실패!", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -232,9 +241,10 @@ public class FirebaseImage  extends AppGlideModule {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                            @SuppressWarnings("VisibleForTests")
                                     double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
                             //dialog에 진행률을 퍼센트로 출력해 준다
+                            progressDialog.setMessage("사진 업로드 중 "+((int)progress)+"%...");
                         }
                     });
         } else {
@@ -242,7 +252,7 @@ public class FirebaseImage  extends AppGlideModule {
         }
     }
 
-    //동아리 게시판 사진 업로드
+    //동아리 게시판 사진 업로드(동아리 게시판)
     public void UploadBoardImage(final Uri filePath, final String GroupName,  final String boardName, final String boardID, int count) {
         //업로드할 파일이 있으면 수행
         if (filePath != null) {
@@ -250,12 +260,16 @@ public class FirebaseImage  extends AppGlideModule {
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
 
+            //업로드 진행 Dialog 보이기
+            final ProgressDialog progressDialog = new ProgressDialog(context);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.setCancelable(false);    //취소 불가
+            progressDialog.show();
+
             final DatabaseReference reference=database.getReference().child("Groups").child(GroupName).child(boardName).child(boardID).child("Photos");
             reference.push().child("FilePath").setValue("Groups/"+GroupName+"/"+boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
-            //storage 주소와 폴더 파일명을 지정해 준다.
             StorageReference storageRef = storage.getReferenceFromUrl("gs://gachongrouponesee.appspot.com").child("Groups/"+GroupName+"/"+boardName+"/"+boardID+"/"+Integer.toString(count)+".png");
 
-            //올라가거라...
             storageRef.putFile(filePath)
                     //성공시
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -275,7 +289,7 @@ public class FirebaseImage  extends AppGlideModule {
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                            @SuppressWarnings("VisibleForTests")
                                     double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
                             //dialog에 진행률을 퍼센트로 출력해 준다
                         }
@@ -287,20 +301,20 @@ public class FirebaseImage  extends AppGlideModule {
 
 
     @Override
-    public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
+    public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {   //firebase storage를 glide에 표시하기 위해
         registry.append(StorageReference.class, InputStream.class, new FirebaseImageLoader.Factory());
     }
 
     //프로필 아이콘 표시
     public void ShowProfileIcon(String ID, ImageView imageView) {
-        String FilePath ="ProfileIcon/"+ID+"PF.png";
+        String FilePath ="ProfileIcon/"+ID+"PF.png";    //프로필 사진 경로
         FirebaseStorage fs=FirebaseStorage.getInstance();
         StorageReference imageRef=fs.getReference().child(FilePath);
 
         Glide.with(context)
                 .load(imageRef)
                 .apply(profileOptions)
-                .thumbnail(0.3f)
+                .thumbnail(0.3f)    //0.3배율
                 .into(imageView);
         imageView.setBackground(new ShapeDrawable(new OvalShape()));
         if(Build.VERSION.SDK_INT>=21) imageView.setClipToOutline(true);
@@ -313,7 +327,7 @@ public class FirebaseImage  extends AppGlideModule {
         Glide.with(context)
                 .load(reference)
                 .apply(requestOptions)
-                .thumbnail(0.5f)
+                .thumbnail(0.5f)    //0.5 배율
                 .into(imageView);
     }
 
@@ -339,32 +353,33 @@ public class FirebaseImage  extends AppGlideModule {
                 //텍스트 삽입
                 layout.addView(contentTV);
                 ArrayList<ImageView> photos=new ArrayList<>();
+                //이미지뷰 속성
                 LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.leftMargin=30;
                 layoutParams.rightMargin=30;
                 layoutParams.topMargin=10;
                 layoutParams.bottomMargin=30;
-                //게시글에 있는 모든 사진의 이름을 불러오기
+                //게시글에 있는 모든 사진의 경로를 불러오기
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     final String FilePath=snapshot.child("FilePath").getValue(String.class);
                     ImageView photo=new ImageView(context);
-                    photo.setLayoutParams(layoutParams);
+                    photo.setLayoutParams(layoutParams);    //속성 적용
                     photo.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
-                        public boolean onLongClick(View v) {
+                        public boolean onLongClick(View v) {    //길게 누르면
                             Vibrator vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
                             vibrator.vibrate(5);
-                            Intent intent=new Intent(context, FullScreenImageActivity.class);
-                            intent.putExtra("FilePath", FilePath);
-                            context.startActivity(intent);
+                            Intent intent=new Intent(context, FullScreenImageActivity.class);   //전체화면 액티비티
+                            intent.putExtra("FilePath", FilePath);  //파일 경로 전송
+                            context.startActivity(intent);  //실행
                             return false;
                         }
                     });
-                    LoadImageView(FilePath, photo);
-                    photos.add(photo);
+                    LoadImageView(FilePath, photo); //이미지 불러오기
+                    photos.add(photo);  //이미지뷰 리스트에 추가
                 }
                 for(int i=0; i<photos.size(); i++) {
-                    layout.addView(photos.get(i));
+                    layout.addView(photos.get(i));  //화면에 추가
                 }
 
             }
@@ -387,32 +402,33 @@ public class FirebaseImage  extends AppGlideModule {
                 //텍스트 삽입
                 layout.addView(contentTV);
                 ArrayList<ImageView> photos=new ArrayList<>();
+                //이미지뷰 속성
                 LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.leftMargin=30;
                 layoutParams.rightMargin=30;
                 layoutParams.topMargin=10;
                 layoutParams.bottomMargin=30;
-                //게시글에 있는 모든 사진의 이름을 불러오기
+                //게시글에 있는 모든 사진의 경로를 불러오기
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     final String FilePath=snapshot.child("FilePath").getValue(String.class);
                     ImageView photo=new ImageView(context);
                     photo.setLayoutParams(layoutParams);
                     photo.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
-                        public boolean onLongClick(View v) {
+                        public boolean onLongClick(View v) {    //길게 누르면
                             Vibrator vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
                             vibrator.vibrate(5);
-                            Intent intent=new Intent(context, FullScreenImageActivity.class);
-                            intent.putExtra("FilePath", FilePath);
-                            context.startActivity(intent);
+                            Intent intent=new Intent(context, FullScreenImageActivity.class);   //전체화면 액티비티
+                            intent.putExtra("FilePath", FilePath);  //파일 경로 전송
+                            context.startActivity(intent);  //실행
                             return false;
                         }
                     });
-                    LoadImageView(FilePath, photo);
-                    photos.add(photo);
+                    LoadImageView(FilePath, photo); //이미지 불러오기
+                    photos.add(photo);  //리스트에 추가
                 }
                 for(int i=0; i<photos.size(); i++) {
-                    layout.addView(photos.get(i));
+                    layout.addView(photos.get(i));  //화면에 추가
                 }
 
             }

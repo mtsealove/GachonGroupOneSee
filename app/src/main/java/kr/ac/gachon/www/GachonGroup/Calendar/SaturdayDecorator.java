@@ -9,7 +9,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 import java.util.Calendar;
 
-public class SaturdayDecorator implements DayViewDecorator {
+public class SaturdayDecorator implements DayViewDecorator { //토요일 장식
     private final Calendar calendar= Calendar.getInstance();
     @Override
     public boolean shouldDecorate(CalendarDay day) {

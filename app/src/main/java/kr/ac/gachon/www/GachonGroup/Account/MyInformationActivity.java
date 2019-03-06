@@ -1,6 +1,8 @@
 package kr.ac.gachon.www.GachonGroup.Account;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,10 +28,11 @@ import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestLogActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.Board.RequirementsActivity;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.VersionActivity;
 
-public class MyInformationActivity extends AppCompatActivity {
+public class MyInformationActivity extends AppCompatActivity { //내 정보 액티비티
     TextView nameTV, groupTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn, requirementsBtn, joinRequestLogBtn;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, myGroupScheduleBtn, requirementsBtn, joinRequestLogBtn, versionBtn;
     ImageView profileIcon;
     private String ID;
 
@@ -52,6 +55,7 @@ public class MyInformationActivity extends AppCompatActivity {
         removeAccountBtn= findViewById(R.id.removeAccountBtn);
         requirementsBtn= findViewById(R.id.requirementsBtn);
         joinRequestLogBtn=findViewById(R.id.joinRequestLogBtn);
+        versionBtn=findViewById(R.id.versionBtn);
 
         account=new Account();
         Intent intent=getIntent();
@@ -108,17 +112,19 @@ public class MyInformationActivity extends AppCompatActivity {
                 JoinRequestLog();
             }
         });
+        GetVersion();
     }
 
     //정보 수정
     private void Edit_information() {
         Intent intent=new Intent(MyInformationActivity.this, EditMyInformationActivity.class);
-        intent.putExtra("ID", ID);
+        intent.putExtra("ID", ID); //사용자 ID 전송
         startActivity(intent);
     }
     //로그아웃
     private void LogOut() {
         try {
+            //단말에 저장되어 있는 ID와 비밀번호 삭제
             BufferedWriter bw=new BufferedWriter(new FileWriter(new File(getFilesDir()+"login.dat"), false));
             bw.write("");
             bw.close();
@@ -126,9 +132,9 @@ public class MyInformationActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         HomeActivity HA=(HomeActivity)HomeActivity._Home_Activity;
-        HA.finish();
+        HA.finish(); //홈 액티비티 종료
         Intent intent=new Intent(MyInformationActivity.this, LoginActivity.class);
-        intent.putExtra("logout", true);
+        intent.putExtra("logout", true); //로그인 액티비티에 로그아웃 됬음 알림
         startActivity(intent);
         finish();
     }
@@ -186,6 +192,26 @@ public class MyInformationActivity extends AppCompatActivity {
         Intent intent=new Intent(MyInformationActivity.this, JoinRequestLogActivity.class);
         intent.putExtra("userID", ID);
         startActivity(intent); }
+    }
+
+    //버전 체크
+    private void GetVersion() {
+        PackageInfo packageInfo=null;
+        try {
+            packageInfo=getPackageManager().getPackageInfo(getPackageName(), 0);
+            String versionName=packageInfo.versionName;
+            versionBtn.setText("현재 버전: "+versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        versionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MyInformationActivity.this, VersionActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

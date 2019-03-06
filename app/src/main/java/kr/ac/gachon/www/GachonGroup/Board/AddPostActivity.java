@@ -29,7 +29,7 @@ import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 //게시글 작성 및 수정 클래스
-public class AddPostActivity extends AppCompatActivity {
+public class AddPostActivity extends AppCompatActivity { //게시글 작성
     private String boardName, userID, groupName;
     private String title, content;
     public static String boardID;
@@ -43,6 +43,7 @@ public class AddPostActivity extends AppCompatActivity {
     private ArrayList<String> removeFile=new ArrayList<>();
     private FirebasePost firebasePost;
     public static boolean temp=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +100,7 @@ public class AddPostActivity extends AppCompatActivity {
             }
         });
 
+        //화면에 추가될 이미지뷰들의 속성
         layoutParams=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.leftMargin=30;
         layoutParams.rightMargin=30;
@@ -107,7 +109,7 @@ public class AddPostActivity extends AppCompatActivity {
 
 
         firebasePost = new FirebasePost(AddPostActivity.this);
-        if(filePathStr!=null) LoadImages();
+        if(filePathStr!=null) LoadImages(); //업데이트인 경우 이미지 로드
         else {
             filePathStr=new ArrayList<>();
             //임시저장 확인
@@ -207,7 +209,7 @@ public class AddPostActivity extends AppCompatActivity {
     };
 
     //이미지 삽입 메서드
-    private void EditImage() {
+    private void EditImage() { //이미지 업로드
         Intent intent=new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -231,32 +233,27 @@ public class AddPostActivity extends AppCompatActivity {
     }
     View.OnClickListener TempPostListener=new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) { //일반 게시판의 게시글을 임시저장하는 리스너
             firebasePost.Post(boardName, userID, title, content, filePath, true);
             finish();
         }
     };
     View.OnClickListener TempGroupPostListener=new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) { //동아리 게시판의 게시글을 임시저장하는 리스너
             firebasePost.Post(groupName, boardID, userID, title, content, filePath, true);
         }
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //request코드가 0이고 OK를 선택했고 data에 뭔가가 들어 있다면
+        //결과가 있을 경우
         if(requestCode == 0 && resultCode == RESULT_OK){
             final Uri uri=data.getData();
             filePath.add(uri);
             try {
-                //Uri 파일을 Bitmap으로 만들어서 ImageView에 집어 넣는다.
-                //모든 뷰를 제거하고 입력란과 이미지 출력
-                /*
-                contentLayout.removeAllViews();
-                contentLayout.addView(contentET);
-                */
-
+                //화면에 이미지 추가
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath.get(filePath.size()-1));
                 final ImageView imageView=new ImageView(AddPostActivity.this);
                 imageView.setImageBitmap(bitmap);

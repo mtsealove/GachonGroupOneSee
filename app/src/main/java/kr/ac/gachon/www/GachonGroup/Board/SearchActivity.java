@@ -16,7 +16,7 @@ import android.widget.Toast;
 import kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity { //검색 액티비티
     TextView titleTV;
     Button searchBtn;
     EditText searchET;
@@ -27,6 +27,7 @@ public class SearchActivity extends AppCompatActivity {
     PRBoardActivity prBoardActivity;
     private String BoardName, groupName, userID;
     private String userGroup;
+
     @Override
     protected void onCreate(Bundle si) {
         super.onCreate(si);
@@ -36,7 +37,7 @@ public class SearchActivity extends AppCompatActivity {
         searchET=findViewById(R.id.searchET);
         searchET.requestFocus();
 
-        //액티비티 종료를 위해 설정
+        //액티비티 종료를 위해 액티비티 받아오기
         federationNoticeActivity=(FederationNoticeActivity)FederationNoticeActivity._FederationNoticeActivity;
         QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.Board.QnAActivity._QnAActivity;
         InformationActivity=(InformationBoardActivity)InformationBoardActivity._InformationActivity;
@@ -68,7 +69,7 @@ public class SearchActivity extends AppCompatActivity {
                 BoardNameKR="홍보게시판";
                 break;
         }
-        titleTV.setText(BoardNameKR);
+        titleTV.setText(BoardNameKR); //게시판 이름 설정
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,9 +97,9 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    //검색 버튼
-    private void Search() {
+    private void Search() { //검색
         String value=searchET.getText().toString();
+        //검색어 미입력 시
         if(value.length()==0) Toast.makeText(SearchActivity.this, "검색어를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
             Intent intent;

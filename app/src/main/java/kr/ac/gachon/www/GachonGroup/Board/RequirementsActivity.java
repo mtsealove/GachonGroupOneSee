@@ -16,7 +16,7 @@ import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
-public class RequirementsActivity extends AppCompatActivity {
+public class RequirementsActivity extends AppCompatActivity { //문의사항 액티비티
     EditText titleET, emailET, contentET;
     Button sendBtn, closeBtn;
     private String title, email, content, ID;
@@ -52,50 +52,50 @@ public class RequirementsActivity extends AppCompatActivity {
         FirebaseView firebaseView=new FirebaseView(RequirementsActivity.this);
         firebaseView.setEditText("email", ID, emailET);
     }
-    //버튼 클릭시 미입력 체크
-    private void setSendBtn() {
+
+
+    private void setSendBtn() { //전송 버튼
         title=titleET.getText().toString();
         email=emailET.getText().toString();
         content=contentET.getText().toString();
 
+        //버튼 클릭시 미입력 체크
         if(title.length()==0) Toast.makeText(RequirementsActivity.this, "제목을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(email.length()==0) Toast.makeText(RequirementsActivity.this, "이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(content.length()==0) Toast.makeText(RequirementsActivity.this, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if((!email.contains("@"))||((!email.contains(".com"))&&(!email.contains(".kr"))&&(!email.contains(".net"))))
             Toast.makeText(RequirementsActivity.this, "이메일 형식을 확인해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            SendRequirement();
+            SendRequirement(); //문의사항 전송
         }
     }
-    //보내기 버튼
-    private void SendRequirement() {
+
+    private void SendRequirement() { //문의사항 보내기
         alert.MsgDialogChoice("문의하신 내용을 보내시겠습니까?",  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다");
-                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요");
+                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다"); //성공적인 문의사항 전달
+                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요"); //전달 실패
             }
         });
     }
 
-    private void setCloseBtn() {
+    private void setCloseBtn() { //종료 버튼
         title=titleET.getText().toString();
         email=emailET.getText().toString();
         content=contentET.getText().toString();
 
-        if(title.length()==0&&email.length()==0&&content.length()==0) {
-            finish();
+        if(title.length()==0&&email.length()==0&&content.length()==0) { //아무것도 입력하지 않았을 경우
+            finish(); //그냥 종료
         } else {
-            setCloseDialog();
+            alert.MsgDialogChoice("작성을 취소하시겠습니까?",  new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            //물어보고 종료
         }
-    }
-    private void setCloseDialog() {
-        alert.MsgDialogChoice("작성을 취소하시겠습니까?",  new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     //메일 보내기
@@ -105,14 +105,14 @@ public class RequirementsActivity extends AppCompatActivity {
             String MailContent="보낸 사람: "+email;
             MailContent+="\n내용:\n"+content;
             sender.sendMail(title, MailContent,"werqtt18@gmail.com", "werqtt18@gmail.com");
-            return true;
+            return true; //성공 시 true 반환
         }catch (Exception e) {
             Log.d("RequirementActiviy", "메일 발송 실패");
-            return false;
+            return false; //실패 시 false 반환
         }
     }
     @Override
     public void onBackPressed() {
         setCloseBtn();
-    }
+    } //종료 버튼과 같은 활동 수행
 }

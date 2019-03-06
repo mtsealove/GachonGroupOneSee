@@ -29,7 +29,7 @@ import kr.ac.gachon.www.GachonGroup.Calendar.EventdayDecorator;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class FirebaseCalendar extends AppCompatActivity {
+public class FirebaseCalendar extends AppCompatActivity {   //firebase를 이용한 달력
     final Context context;
     FirebaseDatabase database;
     public FirebaseCalendar(Context context) {
@@ -44,15 +44,15 @@ public class FirebaseCalendar extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(TrimName(GroupName)).child("Schedule").getChildren()) {
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(TrimName(GroupName)).child("Schedule").getChildren()) {   //해당 동아리 스케줄에 날짜 포함 시
                     String eventDate=snapshot.child("EventDate").getValue(String.class);
                     String dates[]=eventDate.split(",");
                     int year=Integer.parseInt(dates[0]);
                     int month=Integer.parseInt(dates[1])-1;
                     int day=Integer.parseInt(dates[2]);
-                    days.add(CalendarDay.from(year, month, day));
+                    days.add(CalendarDay.from(year, month, day));   //날짜 리스트 추가
                 }
-                calendarView.addDecorators(new EventdayDecorator(days));
+                calendarView.addDecorators(new EventdayDecorator(days));    //리스트에 속한 날짜에 닷 표시
             }
 
             @Override
@@ -68,10 +68,10 @@ public class FirebaseCalendar extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean exist=false;
-                layout.removeAllViews();
-                layout.addView(no_Schedule);
+                layout.removeAllViews();    //모든 뷰 제거
+                layout.addView(no_Schedule);    //일정 없음 추가
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").child(TrimName(GroupName)).child("Schedule").getChildren()) {
-                    if(snapshot.child("EventDate").getValue(String.class).equals(Day)) {
+                    if(snapshot.child("EventDate").getValue(String.class).equals(Day)) {    //DB 상의 날짜와 일치하는 경우
                         String date=(snapshot.child("EventDate").getValue(String.class).split(","))[2];
                         final String fullDate=snapshot.child("EventDate").getValue(String.class);
                         final String name=snapshot.child("EventName").getValue(String.class);
@@ -83,15 +83,15 @@ public class FirebaseCalendar extends AppCompatActivity {
                         SchName.setText(name);
                         layout.addView(sub);
                         exist=true;
-                        //관리자이며 자신의 동아리일 경우
-                        if(isManager&&userGroup.equals(GroupName)) {
+                        //해당 일정 추가
+                        if(isManager&&userGroup.equals(GroupName)) {    //관리자이며 자신의 동아리일 경우
                             sub.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
-                                public boolean onLongClick(View v) {
+                                public boolean onLongClick(View v) {    //길게 눌러서
                                     ListView listView=new ListView(context);
                                     listView.setDivider(null);
                                     ArrayList<String> arrayList=new ArrayList<>();
-                                    arrayList.add("삭제");
+                                    arrayList.add("삭제");    //삭제 표시
                                     ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                                     listView.setAdapter(adapter);
                                     AlertDialog.Builder builder=new AlertDialog.Builder(context);
@@ -107,7 +107,7 @@ public class FirebaseCalendar extends AppCompatActivity {
                                                     alert.MsgDialogChoice("일정을 삭제하시겠습니까?", new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
-                                                            removeSchedule(GroupName,  fullDate, name);
+                                                            removeSchedule(GroupName,  fullDate, name);  //일정 삭제
                                                             Alert.dialog.cancel();
                                                         }
                                                     });
@@ -138,11 +138,11 @@ public class FirebaseCalendar extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
-                    String date=snapshot.child("EventDate").getValue(String.class);
-                    String name=snapshot.child("EventName").getValue(String.class);
-                    if(date.equals(EventDate)&&name.equals(EventName)) {
-                        snapshot.getRef().setValue(null);
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()) { //모든 일정 불러오기
+                    String date=snapshot.child("EventDate").getValue(String.class);    //일정 날짜
+                    String name=snapshot.child("EventName").getValue(String.class); //일정 이름
+                    if(date.equals(EventDate)&&name.equals(EventName)) {    //이름과 날짜가 일치하는 경우
+                        snapshot.getRef().setValue(null);   //삭제
                         Toast.makeText(context, "일정이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -156,23 +156,23 @@ public class FirebaseCalendar extends AppCompatActivity {
 
     }
 
-    //관리자용 스케줄 추가
+    //일정 추가
     public void AddEvent(final String groupName, int year, int month, int day, final String EventName) {
         final String EventDate=year+","+month+","+day;
-        if(year==0||month==0||day==0) {
+        if(year==0||month==0||day==0) { //날짜가 선택되지 않은 경우
             Toast.makeText(context, "날짜를 선택해 주세요", Toast.LENGTH_SHORT).show();
-            return;
+            return; //종료
         }
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count=0;
-                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child("Schedule").getChildren())
+                for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child("Schedule").getChildren())   //일정의 마지막으로
                     count=snapshot.child("id").getValue(Integer.class)+1;
                 reference.child("Groups").child(groupName).child("Schedule").child(Integer.toString(count)).child("id").setValue(count);
-                reference.child("Groups").child(groupName).child("Schedule").child(Integer.toString(count)).child("EventDate").setValue(EventDate);
-                reference.child("Groups").child(groupName).child("Schedule").child(Integer.toString(count)).child("EventName").setValue(EventName);
+                reference.child("Groups").child(groupName).child("Schedule").child(Integer.toString(count)).child("EventDate").setValue(EventDate); //날짜
+                reference.child("Groups").child(groupName).child("Schedule").child(Integer.toString(count)).child("EventName").setValue(EventName); //이름 추가
                 Toast.makeText(context, "일정이 추가되었습니다 ", Toast.LENGTH_SHORT).show();
             }
 

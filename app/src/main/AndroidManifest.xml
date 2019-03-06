@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kr.ac.gachon.www.GachonGroup">
+    package="kr.ac.gachon.www.GachonGroup" >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,8 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".etc.FullScreenImageActivity"></activity>
+        <activity android:name=".etc.VersionActivity"></activity>
+        <activity android:name=".etc.FullScreenImageActivity" />
         <activity android:name=".Group.GroupJoinRequestLogActivity" />
         <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity" />
         <activity android:name=".JoinRequest.JoinRequestLogActivity" />

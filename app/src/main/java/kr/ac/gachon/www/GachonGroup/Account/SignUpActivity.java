@@ -22,7 +22,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity { //회원가입 액티비티
     //회원가입에 사용할 입력창들
     EditText nameET;
     EditText IDET;
@@ -99,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        firebaseView.getAllGroupName(groupSP);
+        firebaseView.getAllGroupName(groupSP); //모든 동아리 이름을 Spinner에 매칭
         //동아리 선택 스피너
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -130,27 +130,26 @@ public class SignUpActivity extends AppCompatActivity {
             shortToast("아이디를 입력해주세요");
             IDreuse[0] = false;
         } else {
-            firebaseAccount.Check_ID_Reuse(IDstr, IDreuse);
+            firebaseAccount.Check_ID_Reuse(IDstr, IDreuse); //DB에 접근해 확인
         }
     }
 
-    //인증메일 발송 메서드
-    public static String verify_code; //인증번호
 
-    private void SendVerifyCode() {
+    public static String verify_code; //인증번호
+    private void SendVerifyCode() { //인증메일 발송 메서드
         String email = emailET.getText().toString();
         if (email.length() == 0) shortToast("이메일을 입력해주세요");
         else if ((!email.contains("@gachon.ac.kr")) && (!email.contains("@mc.gachon.ac.kr")) && (!email.contains("@gc.gachon.ac.kr"))) { //가천대학교 메일이 아닌 경우 알림 출력
             alert.MsgDialog("올바른 이메일을\n입력해주세요");
         } else {
             boolean reuse[] = {true};
-            firebaseAccount.Check_Email_Reuse(email, reuse);
+            firebaseAccount.Check_Email_Reuse(email, reuse); //재사용 확인 및 이메일 전송
         }
     }
 
     public static boolean Verified = false;
 
-    private void SignUp() {
+    private void SignUp() { //회원가입
         final String name = nameET.getText().toString();
         final String ID = IDET.getText().toString();
         final String email = emailET.getText().toString();
@@ -165,6 +164,7 @@ public class SignUpActivity extends AppCompatActivity {
         final String password = passwordET.getText().toString();
         String password_confirm = password_confirmET.getText().toString();
 
+        //가능하면 단말의 번호를 입력
         String myNumber = null;
         TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         try {
@@ -176,6 +176,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         }catch(Exception e){}
 
+        //모든 입력란을 입력했는지 확인
         if(name.length()==0) shortToast("이름을 입력하세요");
         else if(!IDreuse[0]) shortToast("아이디 중복을 확인하세요");
         else if(!Verified) shortToast("이메일 인증이 완료되지 않았습니다");

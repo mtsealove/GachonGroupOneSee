@@ -25,7 +25,7 @@ import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class LoadActivity extends AppCompatActivity {
+public class LoadActivity extends AppCompatActivity { //애플리케이션 시작 시 실행되는 로드 액티비티
     ProgressBar PB;
     public static final String WIFE_STATE = "WIFE";
     public static final String MOBILE_STATE = "MOBILE";
@@ -39,11 +39,11 @@ public class LoadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
 
-        String getNetwork =  getWhatKindOfNetwork(getApplication());
+        String getNetwork =  getWhatKindOfNetwork(getApplication()); //네트워크 상태 확인
         if(getNetwork.equals("NONE")){
             newtwork = false;
         }
-        //인터넷에 연결되어 있지 않으면 0.5초 후 종료
+        //인터넷에 연결되어 있지 않으면 1초 후 종료
         if(!newtwork) {
             Toast.makeText(getApplicationContext(), "인터넷 연결상태를 확인해 주세요\n프로그램을 종료합니다", Toast.LENGTH_SHORT).show();
             Handler handler=new Handler();
@@ -55,6 +55,7 @@ public class LoadActivity extends AppCompatActivity {
             }, 1000);
         }
 
+        //전화번호 읽기 권한 확인
         int phonePermission=ContextCompat.checkSelfPermission(LoadActivity.this, Manifest.permission.READ_PHONE_NUMBERS);
 
         if(phonePermission==PackageManager.PERMISSION_DENIED) {
@@ -62,25 +63,25 @@ public class LoadActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.READ_PHONE_NUMBERS},
                     PERMISSION_READ_PHONE_NUMBER);
         } else {
-            if(read_ID()) {
+            if(read_ID()) { //ID, 비밀번호가 존재하면
                 FirebaseAccount firebaseAccount=new FirebaseAccount(LoadActivity.this);
-                firebaseAccount.AutoLogin(ID, pw);
+                firebaseAccount.AutoLogin(ID, pw); //자동로그인 수행
             }
-            else Move_Login();
+            else Move_Login(); //존재하지 않으면 로그인 화면으로 이동
         }
     }
 
-    public static String getWhatKindOfNetwork(Context context) {
+    public static String getWhatKindOfNetwork(Context context) { //네트워크 상태 체크
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                return WIFE_STATE;
+                return WIFE_STATE; //Wi-Fi 사용 중
             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                return MOBILE_STATE;
+                return MOBILE_STATE; //모바일 데이터 사용 중
             }
         }
-        return NONE_STATE;
+        return NONE_STATE; //네트워크 연결 안됨
     }
     private void Move_Login() {
         //로그인 액티비티로 이동
@@ -89,13 +90,13 @@ public class LoadActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean read_ID() {
+    private boolean read_ID() { //ID, 비밀번호 단말에서 읽기
         try {
-            BufferedReader br=new BufferedReader(new FileReader(new File(getFilesDir()+"login.dat")));
+            BufferedReader br=new BufferedReader(new FileReader(new File(getFilesDir()+"login.dat"))); //ID, 비밀번호 저장 파일
             ID=br.readLine();
             pw=br.readLine();
             br.close();
-            if(ID!=null&&ID.length()>1)
+            if(ID!=null&&ID.length()>1) //ID를 읽었을 경우 true 반환
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

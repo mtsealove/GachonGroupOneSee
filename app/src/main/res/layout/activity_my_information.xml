@@ -164,14 +164,15 @@
                 android:textSize="20sp" />
 
             <Button
+                android:id="@+id/versionBtn"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-6dp"
                 android:background="@drawable/list_background"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="20dp"
                 android:paddingVertical="15dp"
+                android:paddingLeft="20dp"
                 android:text="@string/current_version"
                 android:textSize="20sp" />
 

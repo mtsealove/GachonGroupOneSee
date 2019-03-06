@@ -14,7 +14,7 @@ import java.io.InputStream;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImageLoader;
 
 @GlideModule
-public class MyGlideModule extends AppGlideModule {
+public class MyGlideModule extends AppGlideModule { //이미지 라이브러리 Glide를 사용하기위한 클래스
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         registry.append(StorageReference.class, InputStream.class, new FirebaseImageLoader.Factory());

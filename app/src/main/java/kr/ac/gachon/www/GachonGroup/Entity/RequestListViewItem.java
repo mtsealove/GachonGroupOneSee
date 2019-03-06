@@ -1,6 +1,6 @@
 package kr.ac.gachon.www.GachonGroup.Entity;
 
-public class ListViewItem {
+public class RequestListViewItem { //가입 리스트로 표시될 객체
     private String name;
     private String major;
 

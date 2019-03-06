@@ -37,8 +37,7 @@ import kr.ac.gachon.www.GachonGroup.Account.SignUpActivity;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
-//Firebase를 이용한 계정 접근 메서드
-public class FirebaseAccount extends AppCompatActivity {
+public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용한 계정 접근 클래스
     FirebaseDatabase database;
     final Context context;
 
@@ -47,17 +46,16 @@ public class FirebaseAccount extends AppCompatActivity {
         database=FirebaseDatabase.getInstance();
     }
 
-    //ID 찾기
-    public void Check_ID_Reuse(final String ID, final boolean[] reuse) {
+    public void Check_ID_Reuse(final String ID, final boolean[] reuse) { //ID 중복 확인
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("Account").child(ID).exists()) {
+                if(dataSnapshot.child("Account").child(ID).exists()) { //해당 ID의 데이터가 존재하면
                     Alert alert=new Alert(context);
                     alert.MsgDialog("중복된 아이디가 있습니다.\n다른 아이디를 입력해주세요");
                     reuse[0]=false;
-                } else {
+                } else { //사용 가능
                     reuse[0]=true;
                     Toast.makeText(context, "아이디를 사용할 수 있습니다", Toast.LENGTH_SHORT).show();
                 }
@@ -70,28 +68,29 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
-    public void Check_Email_Reuse(final String email, final boolean[] reuse) {
+    public void Check_Email_Reuse(final String email, final boolean[] reuse) { //이메일 사용 가능 여부 체크및 이메일 발송
         final GmailSender gmailSender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean reuseb=true;
-                for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) {
-                    if(snapshot.child("email").getValue(String.class).equals(email)) {
-                        reuseb=false;
+                for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) { //모든 계정의 이메일을 검색
+                    if(snapshot.child("email").getValue(String.class).equals(email)) { //같은 이메일이 존재하면
+                        reuseb=false; //사용 불가
+                        break;
                     }
                 }
-                if(!reuseb) {
+                if(!reuseb) { //사용불가하면
                     reuse[0]=false;
                     Alert alert=new Alert(context);
                     alert.MsgDialog("이미 사용중인 이메일입니다");
                 } else {
-
-                    SignUpActivity.verify_code=gmailSender.CreateVerifyCode();
+                    SignUpActivity.verify_code=gmailSender.CreateVerifyCode(); //인증번호 생성
                     String msg = "가천대학교 동아리 한눈에 보자 회원가입 인증번호는 " + SignUpActivity.verify_code + " 입니다";
                     //GMailSender.sendMail(제목, 본문내용, 보내는사람, 받는사람);
                     try {
+                        //메일로 인증번호 전송
                         gmailSender.sendMail("가천대학교 동아리 한눈에 보자 회원가입 인증메일입니다", msg, "werqtt18@gmail.com", email);
                         VerifyCode();
                     } catch (Exception e) {
@@ -111,7 +110,7 @@ public class FirebaseAccount extends AppCompatActivity {
     int time;
 
     private void VerifyCode() {
-        time=300;
+        time=300; //제한시간 5분
         //레이아웃 inflate
         LayoutInflater inflater=LayoutInflater.from(context);
         View layout=inflater.inflate(R.layout.dialog_verify_code, null);
@@ -127,11 +126,12 @@ public class FirebaseAccount extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(time<0) Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show();
+                        if(time<0) Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show(); //시간 만료
                         else {
                             time--;
                             int min = time / 60;
                             int sec = time % 60;
+                            //화면에 남은 시간 표시
                             timeTV.setText(min + "분 " + sec + "초 남음");
                         }
                     }
@@ -139,9 +139,7 @@ public class FirebaseAccount extends AppCompatActivity {
             }
         };
         Timer timer=new Timer();
-        timer.schedule(timerTask, 0, 1000);
-
-
+        timer.schedule(timerTask, 0, 1000); //1초에 한 번 시간 변경
 
         //다이얼로그 생성
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
@@ -155,20 +153,20 @@ public class FirebaseAccount extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String newCode=verifyET.getText().toString();
-                if(time<0) Toast.makeText(context,"시간이 만료되었습니다", Toast.LENGTH_SHORT).show();
-                else if(newCode.equals(SignUpActivity.verify_code)) {
+                if(time<0) Toast.makeText(context,"시간이 만료되었습니다", Toast.LENGTH_SHORT).show(); //시간 초과 시
+                else if(newCode.equals(SignUpActivity.verify_code)) { //입력받은 코드와 생성된 코드가 일치할 셩우
                     Toast.makeText(context, "인증이 완료되었습니다", Toast.LENGTH_SHORT).show();
                     SignUpActivity.Verified=true;
                     dialog.cancel();
                     SignUpActivity.emailET.setEnabled(false);
-                } else Toast.makeText(context, "인증번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                    //인증 완료
+                } else Toast.makeText(context, "인증번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show(); //인증번호 불일치
             }
         });
 
     }
 
-    //계정 생성 메서드
-    public void CreateAccount(final Account account) {
+    public void CreateAccount(final Account account) {  //계정 생성 메서드
         final String ID=account.ID;
         final DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -187,7 +185,7 @@ public class FirebaseAccount extends AppCompatActivity {
                     }
 
                 }
-                reference.child("Account").child(ID).setValue(account);
+                reference.child("Account").child(ID).setValue(account); //DB에 계정 저장
             }
 
             @Override
@@ -197,7 +195,7 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
-    //아이디 찾기 인증번호 발송 메서드
+    //아이디 찾기 인증번호 발송
     public void Find_ID_mail(final String email) {
         final GmailSender gmailSender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
         DatabaseReference reference=database.getReference();
@@ -205,24 +203,25 @@ public class FirebaseAccount extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String ID=null;
-                for(DataSnapshot snapshot:dataSnapshot.child("Account").getChildren()) {
-                    if (snapshot.child("email").getValue(String.class).equals(email)) {
-                        ID=snapshot.child("ID").getValue(String.class);
+                for(DataSnapshot snapshot:dataSnapshot.child("Account").getChildren()) {    //Account에서 모든 계정의 email검색
+                    if (snapshot.child("email").getValue(String.class).equals(email)) { //일치하는 계정 발견
+                        ID=snapshot.child("ID").getValue(String.class); //ID를 저장
                         break;
                     }
                 }
-                if(ID==null) Toast.makeText(context, "존재하지 않는 이메일입니다", Toast.LENGTH_SHORT).show();
-                else {
+                if(ID==null) Toast.makeText(context, "존재하지 않는 이메일입니다", Toast.LENGTH_SHORT).show();  //ID가 없으면
+                else {  //인증코드 생성
                     String verifyCode=gmailSender.CreateVerifyCode();
                     try {
+                        //메일로 인증번호 발송
                         gmailSender.sendMail("가천대학교 동아리 한눈에보자 ID 찾기 인증번호",
                                 "가천대학교 동아리 ID 찾기 인증번호는 "+verifyCode+"입니다.",
                                 "werqtt18@gmail.com",
                                 email);
                         Toast.makeText(context, "인증번호가 발송되었습니다", Toast.LENGTH_SHORT).show();
-                        FindIdActivity.VerifyCode=verifyCode;
-                        FindIdActivity.ID=ID;
-                        FindIdActivity.check_4_ID_btn.setVisibility(View.VISIBLE);
+                        FindIdActivity.VerifyCode=verifyCode;   //ID 찾기 액티비티의 인증번호 변경
+                        FindIdActivity.ID=ID;   //ID 찾기 액티비티의 ID 변경
+                        FindIdActivity.check_4_ID_btn.setVisibility(View.VISIBLE);  //인증번호 입력 버튼 활성화
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -236,8 +235,7 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
-    //비밀번호 찾기 메서드
-    public void Find_PW_mail(final String email, final String ID) {
+    public void Find_PW_mail(final String email, final String ID) { //비밀번호 찾기
         final GmailSender gmailSender=new GmailSender("werqtt18@gmail.com", "kffdmoebguyivmyh");
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -245,27 +243,28 @@ public class FirebaseAccount extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String PW=null;
                 for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) {
-                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
-                        if(snapshot.child("email").getValue(String.class).equals(email)) {
-                            PW=snapshot.child("password").getValue(String.class);
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {    //입력한 ID 일치하는 ID찾기
+                        if(snapshot.child("email").getValue(String.class).equals(email)) {  //입력한 ID의 이메일과 사용자가 입력한 이메일이 일치하는지 확인
+                            PW=snapshot.child("password").getValue(String.class);   //비밀번호 저장
+                            AES256Util aes256Util=new AES256Util();
                             break;
                         } else Toast.makeText(context, "메일 주소가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                     }
                 }
                 if(PW==null) Toast.makeText(context, "ID가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 else {
-                    String verifyCode=gmailSender.CreateVerifyCode();
-                    try {
+                    String verifyCode=gmailSender.CreateVerifyCode();   //인증번호 생성
+                    try {   //인증번호 메일로 발송
                         gmailSender.sendMail("가천대학교 동아리 한눈에보자 비밀번호 찾기 인증번호",
                                 "가천대학교 동아리 비밀번호 찾기 인증번호는 "+verifyCode+" 입니다.",
                                 "werqtt18@gmail.com",
                                 email);
                         Toast.makeText(context, "인증번호가 발송되었습니다" ,Toast.LENGTH_SHORT).show();
-                        FindIdActivity.VerifyCode=verifyCode;
+                        FindIdActivity.VerifyCode=verifyCode;   //비밀번호 찾기 액티비티의 인증번호 변경
                         AES256Util aes256Util=new AES256Util();
-                        PW=aes256Util.decrypt(PW);
+                        PW=aes256Util.decrypt(PW);  //비밀번호 복호화
                         FindIdActivity.password=PW;
-                        FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);
+                        FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);  //인증번호 입력 버튼 활성화
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -279,12 +278,12 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
-    //ID를 기반으로 다른 정보를 Account클래스에 저장
+    //ID를 기반으로 다른 정보를 Account클래스에 저장(계정 복사)
     public void GetAccount(final String ID, final Account account) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {  //ID를 기반으로 나머지 정보 가져오기
                 String name=dataSnapshot.child("Account").child(ID).child("name").getValue(String.class);
                 String email=dataSnapshot.child("Account").child(ID).child("email").getValue(String.class);
                 String major=dataSnapshot.child("Account").child(ID).child("major").getValue(String.class);
@@ -303,40 +302,16 @@ public class FirebaseAccount extends AppCompatActivity {
         });
     }
 
-    //로그인 메서드
-    public void Login(final String ID, final String PW) {
+    public void Login(final String ID, final String PW) {   //로그인
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean find=false;
                 for(DataSnapshot snapshot: dataSnapshot.child("Account").getChildren()) {
-                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {    //존재하는 ID 인지 확인
                         find=true;
-                        if(snapshot.child("password").getValue(String.class).equals(PW)) {
-                            /*
-                            if(isManager) {
-                                if(snapshot.child("is_manager").getValue(Boolean.class)==isManager) {
-                                    String name=snapshot.child("name").getValue(String.class);
-                                    String email=snapshot.child("email").getValue(String.class);
-                                    String major=snapshot.child("major").getValue(String.class);
-                                    int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
-                                    String group=snapshot.child("group").getValue(String.class);
-                                    String phone=snapshot.child("phone").getValue(String.class);
-                                    LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
-                                    moveHome(ID);
-                                } else Toast.makeText(context, "관리자 계정이 아닙니다", Toast.LENGTH_SHORT).show();
-                            } else {
-                                String name=snapshot.child("name").getValue(String.class);
-                                String email=snapshot.child("email").getValue(String.class);
-                                String major=snapshot.child("major").getValue(String.class);
-                                int StudentNumber=snapshot.child("StudentNumber").getValue(Integer.class);
-                                String group=snapshot.child("group").getValue(String.class);
-                                String phone=snapshot.child("phone").getValue(String.class);
-                                LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
-                                moveHome(ID);
-                            }
-                            */
+                        if(snapshot.child("password").getValue(String.class).equals(PW)) {  //비밀번호가 일치하는지 확인
                             String name=snapshot.child("name").getValue(String.class);
                             String email=snapshot.child("email").getValue(String.class);
                             String major=snapshot.child("major").getValue(String.class);
@@ -344,15 +319,18 @@ public class FirebaseAccount extends AppCompatActivity {
                             String group=snapshot.child("group").getValue(String.class);
                             String phone=snapshot.child("phone").getValue(String.class);
                             boolean isManager=snapshot.child("is_manager").getValue(Boolean.class);
-                            LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
-                            moveHome(ID);
+                            LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);  //계정 생성
+                            moveHome(ID);   //홈 액티비티로 이동
                         } else {
+                            LoginActivity.pendingLayout.setVisibility(View.GONE);
                             Toast.makeText(context, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-                if(!find)
+                if(!find) {
+                    LoginActivity.pendingLayout.setVisibility(View.GONE);
                     Toast.makeText(context, "일치하는 ID를 찾지 못했습니다", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -369,7 +347,7 @@ public class FirebaseAccount extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean done=false;
                 for(DataSnapshot snapshot:dataSnapshot.child("Account").getChildren()) {
-                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {
+                    if(snapshot.child("ID").getValue(String.class).equals(ID)) {    //ID와 비밀번호가 일치하면
                         if(snapshot.child("password").getValue(String.class).equals(PW)) {
                             String name=snapshot.child("name").getValue(String.class);
                             String email=snapshot.child("email").getValue(String.class);
@@ -380,11 +358,11 @@ public class FirebaseAccount extends AppCompatActivity {
                             boolean isManager=snapshot.child("is_manager").getValue(Boolean.class);
                             LoginActivity.account=new Account(name, ID, email, major, StudentNumber, group, PW, phone, isManager);
                             done=true;
-                            moveHome(ID);
+                            moveHome(ID);   //홈 화면으로 이동
                         } else moveLogin();
                     }
                 }
-                if(!done) moveLogin();
+                if(!done) moveLogin();  //일치하는 계정을 찾지 못하면 로그인 화면으로 이동(비밀번호가 변경된 사유)
             }
 
             @Override
@@ -398,23 +376,23 @@ public class FirebaseAccount extends AppCompatActivity {
     private void moveLogin() {
         Intent intent=new Intent(context, LoginActivity.class);
         context.startActivity(intent);
-        ((Activity)context).finish();
+        ((Activity)context).finish();   //현재 실행되는 액티비티 종료
     }
 
     //홈화면 이동
     private void moveHome(String ID) {
         Intent home=new Intent();
-        home.putExtra("ID", ID);
+        home.putExtra("ID", ID);    //ID전달
         home.setClass(context, HomeActivity.class);
         home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(home);
-        ((Activity)context).finish();
+        ((Activity)context).finish();   //현재 실행되는 액티비티 종료
     }
 
     //계정 정보 수정
     public void UpdateAccountData(final String ID, final String child, String value) {
         DatabaseReference reference=database.getReference();
-        if(child.equals("password")) {
+        if(child.equals("password")) {  //비밀번호일 경우 입력받은 값을 암호화
             try {
                 AES256Util aes256Util=new AES256Util();
                 value=aes256Util.encrypt(value);
@@ -424,17 +402,17 @@ public class FirebaseAccount extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        reference.child("Account").child(ID).child(child).setValue(value);
+        reference.child("Account").child(ID).child(child).setValue(value);  //DB 업데이트
     }
-    //계정 정보 수정(int값)
+    //계정 정보 수정(int 값)
     public void UpdateAccountData(final String ID, final String child, final int value) {
         DatabaseReference reference=database.getReference();
-        reference.child("Account").child(ID).child(child).setValue(value);
+        reference.child("Account").child(ID).child(child).setValue(value);  //DB 업데이트
     }
 
     //계정 삭제
     public void RemoveAccount(String ID) {
         DatabaseReference reference=database.getReference();
-        reference.child("Account").child(ID).setValue(null);
+        reference.child("Account").child(ID).setValue(null);    //데이터 삭제
     }
 }

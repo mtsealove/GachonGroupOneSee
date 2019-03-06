@@ -15,7 +15,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class InformationBoardActivity extends AppCompatActivity {
+public class InformationBoardActivity extends AppCompatActivity { //정보게시판 액티비티
     ListView boardLV;
     Button searchBtn, postBtn;
     TextView titleTV, groupNameTV;
@@ -71,7 +71,7 @@ public class InformationBoardActivity extends AppCompatActivity {
         });
     }
 
-    //검색 메서드
+    //검색
     private void Search() {
         Intent intent=new Intent(InformationBoardActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName);
@@ -82,7 +82,7 @@ public class InformationBoardActivity extends AppCompatActivity {
 
     //글 작성 메서드
     private void Post() {
-        if(account.group.equals(groupName)&&account.is_manager) {
+        if(account.group.equals(groupName)&&account.is_manager) { //해당 동아리 소속이며 관리자일 경우만 작성 가능
             Intent intent = new Intent(InformationBoardActivity.this, AddPostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);
@@ -97,6 +97,7 @@ public class InformationBoardActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        //글 작성 후 복귀시 업데이트 된 리스트 표시
         if(value==null)
             firebaseList.setGroupListView(groupName, userID, boardLV, BoardName);
         else firebaseList.setGroupListView(groupName, userID, boardLV, BoardName, value);

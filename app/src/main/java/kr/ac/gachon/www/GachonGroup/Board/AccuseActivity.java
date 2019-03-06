@@ -13,7 +13,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class AccuseActivity extends AppCompatActivity {
+public class AccuseActivity extends AppCompatActivity { //댓글/게시글 신고 액티비티
     int[] ButtonID=new int[6];
     TextView[] buttons=new TextView[6];
     EditText reasonET;
@@ -25,7 +25,7 @@ public class AccuseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse);
 
-        //각 버튼 매칭
+        //각 사유 버튼 매칭
         ButtonID[0]=R.id.accsue1;
         ButtonID[1]=R.id.accuse2;
         ButtonID[2]=R.id.accuse3;
@@ -35,7 +35,7 @@ public class AccuseActivity extends AppCompatActivity {
         reasonET=findViewById(R.id.reasonET);
         accuseBtn=findViewById(R.id.accuseBtn);
 
-        //사유를 누를 경우 표시
+        //각 사유를 누를 경우 해당 버튼만 표시
         for(int i=0; i<6; i++) {
             buttons[i] = findViewById(ButtonID[i]);
             final int finalI = i;
@@ -49,12 +49,13 @@ public class AccuseActivity extends AppCompatActivity {
             });
         }
 
+        //데이터 수신
         Intent intent=getIntent();
-        userID=intent.getStringExtra("userID");
-        boardName=intent.getStringExtra("boardName");
-        boardID=Integer.toString(intent.getIntExtra("id", 0));
-        groupName=intent.getStringExtra("groupName");
-        replyID=intent.getStringExtra("replyID");
+        userID=intent.getStringExtra("userID"); //신고자 ID
+        boardName=intent.getStringExtra("boardName"); //게시판 이름
+        boardID=Integer.toString(intent.getIntExtra("id", 0)); //게시글 ID
+        groupName=intent.getStringExtra("groupName"); //동아리 이름(없을 수도)
+        replyID=intent.getStringExtra("replyID"); //댓글 번호(없을 수도)
         accuseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

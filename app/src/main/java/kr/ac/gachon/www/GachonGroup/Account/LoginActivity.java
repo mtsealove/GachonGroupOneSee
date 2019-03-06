@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -27,11 +28,12 @@ import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.etc.BackPressCloseHandler;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity { //로그인 액티비티
     EditText ID_et;
     EditText PW_et;
     Button LoginBtn;
     RadioGroup UserCategoryRg;
+    public static RelativeLayout pendingLayout;
     public static Account account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         PW_et= findViewById(R.id.PW_et);
         LoginBtn= findViewById(R.id.LoginBtn);
         UserCategoryRg= findViewById(R.id.user_categoryRG);
+        pendingLayout=findViewById(R.id.pendingLayout);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,11 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent=getIntent();
         boolean logout=intent.getBooleanExtra("logout", false);
         if(!logout) {
-            /*
-            read_ID();
-            if (ID_et.length() != 0 && PW_et.length() != 0) LoginBtn.performClick();
-            */
-        } else {
+
+        } else { //로그아웃된 경우 로그아웃 되었음을 출력
             Alert alert=new Alert(LoginActivity.this);
             alert.MsgDialog("로그아웃 되었습니다");
         }
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         AES256Util aes256Util= null;
         try {
             aes256Util = new AES256Util();
-            password=aes256Util.encrypt(password);
+            password=aes256Util.encrypt(password); //비밀번호 암호화, 데이터베이스에 암호화 된 상태로 저장되어있기 때문
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
@@ -84,42 +84,22 @@ public class LoginActivity extends AppCompatActivity {
         if(ID.length()==0) Toast.makeText(LoginActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(password.length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
         else {
+            pendingLayout.setVisibility(View.VISIBLE);  //잠시만요
             FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
-            firebaseAccount.Login(ID, password);
-                write_ID(ID, password);
+            firebaseAccount.Login(ID, password); //로그인
+                write_ID(ID, password); //단말에 ID, 비밀번호 저장
         }
     }
 
-    private void write_ID(String ID, String password) {
+    private void write_ID(String ID, String password) { //단말에 ID, 비밀번호 저장
         try {
-            BufferedWriter bw=new BufferedWriter(new FileWriter(new File(getFilesDir()+"login.dat")));
+            BufferedWriter bw=new BufferedWriter(new FileWriter(new File(getFilesDir()+"login.dat"))); //저장할 파일
             bw.write(ID);
             bw.newLine();
             bw.write(password);
             bw.flush();
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void read_ID() {
-        try {
-            BufferedReader br=new BufferedReader(new FileReader(new File(getFilesDir()+"login.dat")));
-            String ID=br.readLine();
-            String pw=br.readLine();
-            AES256Util aes256Util=new AES256Util();
-            pw=aes256Util.decrypt(pw);
-            ID_et.setText(ID);
-            PW_et.setText(pw);
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
     }
@@ -137,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //뒤로가기 2번 눌러 종료
         BackPressCloseHandler backPressCloseHandler=new BackPressCloseHandler(LoginActivity.this);
         backPressCloseHandler.onBackPressed();
     }

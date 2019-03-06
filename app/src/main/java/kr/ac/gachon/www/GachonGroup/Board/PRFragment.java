@@ -17,9 +17,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 
 
-public class PRFragment extends Fragment {
-    ArrayList<String> titles;
-    ArrayList<Integer> ids;
+public class PRFragment extends Fragment { //홍보게시판의 페이지로 표시될 fragment
     ListView listView;
     int page;
     int count;
@@ -29,14 +27,16 @@ public class PRFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle si) {
         View view=inflater.inflate(R.layout.fragment_pr, container,false);
         listView=view.findViewById(R.id.listView);
+        listView.setHorizontalScrollBarEnabled(false);
         firebaseList=new FirebaseList(getContext());
 
         //아이템 받아오기
-        page=getArguments().getInt("page");
-        count=getArguments().getInt("count");
-        userID=getArguments().getString("userID");
-        value=getArguments().getString("value");
+        page=getArguments().getInt("page"); //페이지 번호
+        count=getArguments().getInt("count"); //페이지 당 표시될 개수
+        userID=getArguments().getString("userID"); //사용자 ID
+        value=getArguments().getString("value"); //검색 값
 
+        //리스트 뷰 설정
         if(value!=null) firebaseList.setCountListView(userID, listView, "PublicRelation", page, count, value);
         else firebaseList.setCountListView(userID, listView, "PublicRelation", page, count);
 

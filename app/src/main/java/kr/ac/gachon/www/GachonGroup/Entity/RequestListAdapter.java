@@ -11,21 +11,21 @@ import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class ListAdapter extends BaseAdapter {
-    private ArrayList<ListViewItem> listViewItems=new ArrayList<>();
+public class RequestListAdapter extends BaseAdapter { //가입 신청 표시용 어댑터
+    private ArrayList<RequestListViewItem> requestListViewItems =new ArrayList<>();
 
-    public ListAdapter() {
+    public RequestListAdapter() {
 
     }
 
     @Override
     public int getCount() {
-        return listViewItems.size();
+        return requestListViewItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listViewItems.get(position);
+        return requestListViewItems.get(position);
     }
 
     @Override
@@ -46,17 +46,17 @@ public class ListAdapter extends BaseAdapter {
         TextView nameTV= convertView.findViewById(R.id.nameTV);
         TextView majorTV= convertView.findViewById(R.id.majorTV);
 
-        ListViewItem listViewItem=listViewItems.get(position);
+        RequestListViewItem requestListViewItem = requestListViewItems.get(position);
 
-        nameTV.setText(listViewItem.getName());
-        majorTV.setText(listViewItem.getMajor());
+        nameTV.setText(requestListViewItem.getName());
+        majorTV.setText(requestListViewItem.getMajor());
         return convertView;
     }
 
     public void addItem(String name, String major) {
-        ListViewItem item=new ListViewItem();
-        item.setMajor(major);
-        item.setName(name);
-        listViewItems.add(item);
+        RequestListViewItem item=new RequestListViewItem();
+        item.setMajor(major); //전공
+        item.setName(name); //이름
+        requestListViewItems.add(item);
     }
 }

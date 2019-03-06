@@ -55,7 +55,7 @@
     <LinearLayout
         android:id="@+id/nextNprev"
         android:layout_above="@id/searchNenroll"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

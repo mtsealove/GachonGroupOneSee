@@ -160,4 +160,8 @@
     <string name="do_request">신청하기</string>
     <string name="join_request_log">동아리 신청 내역</string>
     <string name="remove">삭제하기</string>
+    <string name="app_version">애플리케이션 버전</string>
+    <string name="check_last_version">최신버전을 확인중입니다</string>
+    <string name="download_last">최신버전 다운받기</string>
+    <string name="login_plz_wait">로그인 중입니다\n잠시만 기다려주세요</string>
 </resources>

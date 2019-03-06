@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class Alert extends AppCompatActivity {
+public class Alert extends AppCompatActivity { //알림을 표시할 객체
     private final Context context;
     public static AlertDialog dialog;
 
     public Alert(Context context) {
         this.context=context;
-    }
-    //메세지 다이얼로그 출력 메서드
+    } //화면에 출력 시 필요한 context 받음
+
+    //메세지 다이얼로그 출력 메서드, 단순 출력
     public void MsgDialog(String msg) {
         //레이아웃을 inflate함
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -76,7 +77,8 @@ public class Alert extends AppCompatActivity {
         //출력
         dialog.show();
     }
-    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 지정 가능
+
+    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 1개 지정 가능
     public void MsgDialogChoice(String msg, View.OnClickListener positiveListener) {
         dialog=null;
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -94,12 +96,12 @@ public class Alert extends AppCompatActivity {
             public void onClick(View v) {
                 dialog.cancel();
             }
-        });
-        positive.setOnClickListener(positiveListener);
+        }); //(Cancel)다이얼로그 닫기
+        positive.setOnClickListener(positiveListener); //(OK)사용자의 리스너 지정
         dialog.show();
     }
 
-    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 지정 가능
+    //2개의 버튼 출력, 메세지와 onclicklistener를 통해 버튼 클릭 시 수행할 활동 2개 지정 가능
     public void MsgDialogChoice(String msg, View.OnClickListener positiveListener, View.OnClickListener negativeListener) {
         dialog=null;
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -112,8 +114,8 @@ public class Alert extends AppCompatActivity {
         Button positive=layout.findViewById(R.id.positive);
         dialog=builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-        negative.setOnClickListener(negativeListener);
-        positive.setOnClickListener(positiveListener);
+        negative.setOnClickListener(negativeListener);  //(Cancel)사용자 지정 리스너
+        positive.setOnClickListener(positiveListener);  //(OK)사용자 지정 리스너
         dialog.show();
     }
 }

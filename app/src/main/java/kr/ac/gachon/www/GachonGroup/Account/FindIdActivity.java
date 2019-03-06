@@ -11,7 +11,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class FindIdActivity extends AppCompatActivity {
+public class FindIdActivity extends AppCompatActivity { //ID찾기 액티비티
     EditText email_4_ID_et;
     EditText verify_4_ID_et;
     Button verify_4_ID_btn;
@@ -83,7 +83,7 @@ public class FindIdActivity extends AppCompatActivity {
         else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
             Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            firebaseAccount.Find_ID_mail(email);
+            firebaseAccount.Find_ID_mail(email); //메일로 인증번호를 전송
         }
     }
 
@@ -91,9 +91,9 @@ public class FindIdActivity extends AppCompatActivity {
     private void Check_VerifyCode_4_ID() {
         String newCode=verify_4_ID_et.getText().toString();
         if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
-        else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+        else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show(); //인증번호와 사용자가 입력한 값이 일치하는지 확인
         else {
-            alert.MsgDialog("회원님의 아이디는\n"+ID+" 입니다");
+            alert.MsgDialog("회원님의 아이디는\n"+ID+" 입니다"); //ID전달
        }
     }
 
@@ -106,7 +106,7 @@ public class FindIdActivity extends AppCompatActivity {
         else if((!email.contains("@gachon.ac.kr"))&&(!email.contains("@gc.gachon.ac.kr"))&&(!email.contains("@mc.gachon.ac.kr")))
             Toast.makeText(FindIdActivity.this, "올바른 이메일을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            firebaseAccount.Find_PW_mail(email, ID);
+            firebaseAccount.Find_PW_mail(email, ID); //메일로 비밀번호 인증번호 전송
         }
     }
 
@@ -116,7 +116,7 @@ public class FindIdActivity extends AppCompatActivity {
         if(newCode.length()==0) Toast.makeText(FindIdActivity.this, "인증번호를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(!newCode.equals(VerifyCode)) Toast.makeText(FindIdActivity.this, "인증번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
         else {
-            alert.MsgDialog("회원님의 비밀번호는\n"+password+" 입니다");
+            alert.MsgDialog("회원님의 비밀번호는\n"+password+" 입니다"); //비밀번호 전달
         }
     }
     public void close(View v) {

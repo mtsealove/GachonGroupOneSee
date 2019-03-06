@@ -35,7 +35,7 @@ import kr.ac.gachon.www.GachonGroup.etc.FullScreenImageActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class EditMyInformationActivity extends AppCompatActivity {
+public class EditMyInformationActivity extends AppCompatActivity { //정보 수정 액티비티
     private String ID;
     private Account account;
     private EditText nameET, IDET, emailET, studentNumberET, passwordET;
@@ -132,9 +132,11 @@ public class EditMyInformationActivity extends AppCompatActivity {
         //checkAccuse(ID);
     }
 
+    //이미지 클릭시 나타나는 활동
     private void ImageClick() {
         AlertDialog.Builder builder=new AlertDialog.Builder(EditMyInformationActivity.this);
         ListView listView=new ListView(EditMyInformationActivity.this);
+        //이미지 보기 및 편집 리스트로 표시
         ArrayList<String> arrayList=new ArrayList<>();
         arrayList.add("이미지 보기");
         arrayList.add("편집");
@@ -150,14 +152,14 @@ public class EditMyInformationActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dialog.cancel();
                 switch (position) {
-                    case 0:
+                    case 0: //이미지 보기
                         Intent intent=new Intent(EditMyInformationActivity.this, FullScreenImageActivity.class);
-                        intent.putExtra("userID", ID);
-                        intent.putExtra("Profile", true);
+                        intent.putExtra("userID", ID); //사용자 ID 전달
+                        intent.putExtra("Profile", true); //프로필 사진임을 표시
                         startActivity(intent);
                         break;
                     case 1:
-                        EditImage();
+                        EditImage(); //이미지 업로드
                         break;
                 }
             }
@@ -165,10 +167,10 @@ public class EditMyInformationActivity extends AppCompatActivity {
     }
 
     private Uri filePath;
-    private void EditImage() {
+    private void EditImage() { //이미지 업로드
         Intent intent=new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_GET_CONTENT); //이미지 업로드를 위한 인텐트
         startActivityForResult(Intent.createChooser(intent, "프로필 이미지를 선택하세요"), 0);
     }
 
@@ -180,23 +182,25 @@ public class EditMyInformationActivity extends AppCompatActivity {
             filePath = data.getData();
             Log.d("EditMyInformation", "uri:" + String.valueOf(filePath));
             try {
-                //Uri 파일을 Bitmap으로 만들어서 ImageView에 집어 넣는다.
+                //선택한 이미지를 프로필 사닞에 표시
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 profileIcon.setImageBitmap(bitmap);
                 FirebaseImage firebaseImage=new FirebaseImage(EditMyInformationActivity.this);
-                firebaseImage.UploadProfileImage(filePath, ID);
+                firebaseImage.UploadProfileImage(filePath, ID); //이미지 업로드
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    //변경한 내용 데이터베이스에 추가
     private void ApplyChange() {
         String name=nameET.getText().toString();
         String email=emailET.getText().toString();
         int studentNumber=Integer.parseInt(studentNumberET.getText().toString());
         String password=passwordET.getText().toString();
 
+        //모든 데이터 추가
         FirebaseAccount firebaseAccount=new FirebaseAccount(EditMyInformationActivity.this);
         firebaseAccount.UpdateAccountData(ID, "name", name);
         firebaseAccount.UpdateAccountData(ID, "email", email);

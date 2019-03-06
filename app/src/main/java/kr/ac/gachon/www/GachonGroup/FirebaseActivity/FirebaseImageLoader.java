@@ -47,7 +47,7 @@ import java.security.MessageDigest;
  *         .into(iv);
  * </pre>
  */
-public class FirebaseImageLoader implements ModelLoader<StorageReference, InputStream> {
+public class FirebaseImageLoader implements ModelLoader<StorageReference, InputStream> {    //glide에서 firebase 사용을 가능케 함
 
     private static final String TAG = "FirebaseImageLoader";
 

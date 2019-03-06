@@ -14,7 +14,7 @@ import kr.ac.gachon.www.GachonGroup.Group.GroupListActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.BackPressCloseHandler;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity { //로그인 후 나타나는 홈 액티비티
     //동아리 리스트 버튼
     Button GroupBtn[]=new Button[8];
     int buttonID[]=new int[8];
@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
         firebaseAccount.GetAccount(ID, account);
 
         backPressCloseHandler=new BackPressCloseHandler(this);
-
+        //동아리 분과 버튼들
         buttonID[0]=R.id.academicBtn;
         buttonID[1]=R.id.musicBtn;
         buttonID[2]=R.id.religionBtn;
@@ -91,9 +91,9 @@ public class HomeActivity extends AppCompatActivity {
                         categoryKR="취미봉사";
                         break;
                     }
-                    groupList.putExtra("category", category);
+                    groupList.putExtra("category", category); //동아리 분과 전송
                     groupList.putExtra("categorykr", categoryKR);
-                    groupList.putExtra("ID", ID);
+                    groupList.putExtra("ID", ID); //사용자 ID 전송
                     startActivity(groupList);
                 }
             });
@@ -124,28 +124,29 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    private void MyInformation() {
+    private void MyInformation() { //내 정보 바로가기
         Intent intent=new Intent(HomeActivity.this, MyInformationActivity.class);
         intent.putExtra("ID", account.ID);
         startActivity(intent);
     }
-    private void PRBoard() {
+    private void PRBoard() { //홍보게시판 바로가기
         Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);
         intent.putExtra("userID", ID);
         intent.putExtra("is_manager", account.is_manager);
         startActivity(intent);
     }
-    private void FederationNotice() {
+    private void FederationNotice() { //연합회 공지사항 바로가기
         Intent intent=new Intent(HomeActivity.this, FederationNoticeActivity.class);
         intent.putExtra("userID", ID);
         intent.putExtra("group", account.group);
         startActivity(intent);
     }
-    private void QnA() {
+    private void QnA() { //QnA바로가기
         Intent intent=new Intent(HomeActivity.this, QnAActivity.class);
         intent.putExtra("userID", ID);
         startActivity(intent);
     }
+    //뒤로가기 2번 눌러서 종료
     @Override
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();

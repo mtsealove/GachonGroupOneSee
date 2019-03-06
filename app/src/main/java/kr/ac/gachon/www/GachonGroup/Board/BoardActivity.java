@@ -26,7 +26,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class BoardActivity extends AppCompatActivity {
+public class BoardActivity extends AppCompatActivity { //게시글 글 보기 액티비티
     TextView authorTV, titleTV, contentTV, boardNameTV;
     Button functionBtn, replyBtn, removeBtn;
     LinearLayout ReplyShowLayout, ContentLayout;
@@ -43,6 +43,7 @@ public class BoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
 
+        //뷰 매칭
         authorTV= findViewById(R.id.authorTV);
         titleTV= findViewById(R.id.titleTV);
         contentTV= findViewById(R.id.contentTV);
@@ -62,18 +63,18 @@ public class BoardActivity extends AppCompatActivity {
         init();
     }
 
-    private void init() {
+    private void init() { //초기화
         Intent intent=getIntent();
-        boardName=intent.getStringExtra("boardName");
+        boardName=intent.getStringExtra("boardName"); //게시판 이름 수신
         String boardNameKR=null;
-        id=intent.getIntExtra("id", 0);
-        userID=intent.getStringExtra("userID");
-        groupName=intent.getStringExtra("groupName");
+        id=intent.getIntExtra("id", 0); //게시판 번호 수신
+        userID=intent.getStringExtra("userID"); //사용자 ID수신
+        groupName=intent.getStringExtra("groupName"); //동아리 이름 수신
         //게시판 이름에 따라 다르게 설정
         switch (boardName) {
             case "PublicRelation":
                 boardNameKR="홍보게시판";
-                functionBtn.setText("신고");
+                functionBtn.setText("신고"); //신고버튼 활성화
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -83,7 +84,7 @@ public class BoardActivity extends AppCompatActivity {
                 break;
             case "FederationNotice":
                 boardNameKR="연합회 공지사항";
-                functionBtn.setText("수정");
+                functionBtn.setText("수정"); //수정 버튼 활성화
                 break;
             case "QnA":
                 boardNameKR="Q&A";
@@ -109,7 +110,7 @@ public class BoardActivity extends AppCompatActivity {
             case "Information":
                 boardNameKR="정보게시판";
 
-                functionBtn.setText("신고");
+                functionBtn.setText("신고"); //신고 기능 활성화
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,6 +137,7 @@ public class BoardActivity extends AppCompatActivity {
                         Accuse();
                     }
                 });
+                //댓글 기능 활성화
                 ReplyShowLayout.setVisibility(View.VISIBLE);
                 ReplyInputLayout.setVisibility(View.VISIBLE);
                 //댓글 추가
@@ -151,15 +153,14 @@ public class BoardActivity extends AppCompatActivity {
         boardNameTV.setText(boardNameKR);
         FirebaseBoard firebaseBoard=new FirebaseBoard(BoardActivity.this);
         //동아리게시판인지 확인하고 해당하는 내용 불러오기
-        if(groupName==null) {
-            firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id);
-            firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn);
-            firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV);
-        }
-        else {
-            firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id);
-            firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn);
-            firebaseImage.getBoardPhotos(groupName, boardName, Integer.toString(id), ContentLayout, contentTV);
+        if(groupName==null) { //동아리 게시판이 아닐 경우
+            firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id); //게시물 불러오기
+            firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
+            firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
+        } else { //동아리 게시판일 경우
+            firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id); //게시물 불러오기
+            firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
+            firebaseImage.getBoardPhotos(groupName, boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
         }
     }
 
@@ -171,9 +172,9 @@ public class BoardActivity extends AppCompatActivity {
         else {
             //동아리의 게시판아니면
             if(groupName==null)
-                firebasePost.CommitReply(boardName, Integer.toString(id), userID, content);
+                firebasePost.CommitReply(boardName, Integer.toString(id), userID, content); //댓글 입력
             else //동아리게시판 명시
-                firebasePost.CommitReply(groupName,boardName, Integer.toString(id), userID, content);
+                firebasePost.CommitReply(groupName,boardName, Integer.toString(id), userID, content); //댓글 입력
             //댓글 입력창 초기화
             replyET.setText("");
             //키보드 내리기
@@ -185,6 +186,7 @@ public class BoardActivity extends AppCompatActivity {
     //신고 페이지로 이동
     private void Accuse() {
         Intent intent=new Intent(BoardActivity.this, AccuseActivity.class);
+        //게시글의 모든 정보 전송
         intent.putExtra("groupName", groupName);
         intent.putExtra("boardName", boardName);
         intent.putExtra("userID", userID);
@@ -199,6 +201,6 @@ public class BoardActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        init();
+        init(); //글 수정을 할 경우 글의 내용을 다시 불러오기
     }
 }

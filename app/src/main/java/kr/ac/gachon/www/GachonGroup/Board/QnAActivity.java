@@ -11,7 +11,7 @@ import android.widget.ListView;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class QnAActivity extends AppCompatActivity {
+public class QnAActivity extends AppCompatActivity { //Q&A 액티비티
     ListView boardLV;
     Button searchBtn, postBtn;
     private final String BoardName="QnA";
@@ -50,12 +50,13 @@ public class QnAActivity extends AppCompatActivity {
             }
         });
     }
-    private void Search() {
+
+    private void Search() { //검색
         Intent intent=new Intent(QnAActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName);
         startActivity(intent);
     }
-    private void Post() {
+    private void Post() { //게시글 작성
         Intent intent=new Intent(QnAActivity.this, AddPostActivity.class);
         intent.putExtra("boardName", BoardName);
         intent.putExtra("userID", userID);
@@ -63,7 +64,7 @@ public class QnAActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume() {
+    public void onResume() { //글 작성 후 복귀 시 업데이트
         super.onResume();
         if(value==null)
             firebaseList.setListView(userID, boardLV, BoardName);
