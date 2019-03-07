@@ -23,7 +23,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseCalendar;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class GroupScheduleActivity extends AppCompatActivity {
+public class GroupScheduleActivity extends AppCompatActivity {  //동아리 일정 액티비티
     TextView groupNameTV;
     MaterialCalendarView calendar;
     LinearLayout scheduleLayout;
@@ -38,16 +38,17 @@ public class GroupScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_schedule);
 
+        //데이터 받아오기
         Intent intent=getIntent();
-        groupName=intent.getStringExtra("groupName");
-        is_manager=intent.getBooleanExtra("is_manager", false);
-        userGroup=intent.getStringExtra("userGroup");
+        groupName=intent.getStringExtra("groupName");   //동아리 이름
+        is_manager=intent.getBooleanExtra("is_manager", false); //관리자 여부
+        userGroup=intent.getStringExtra("userGroup");   //사용자의 동아리
 
         groupNameTV= findViewById(R.id.groupNameTV);
         groupNameTV.setText(groupName);
 
         calendar= findViewById(R.id.Calendar);
-        calendar.addDecorators(new SundayDecorator(), new SaturdayDecorator(), new OneDayDecorator());
+        calendar.addDecorators(new SundayDecorator(), new SaturdayDecorator(), new OneDayDecorator());  //달력에 표시될 장식 추가
 
         scheduleLayout= findViewById(R.id.group_schedule_layout);
         noScheduleTV= findViewById(R.id.no_scheduleTV);
@@ -74,7 +75,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                 calendar.clearSelection();
             }
         });
-        firebaseCalendar.Add_EventDay(groupName, calendar);
+        firebaseCalendar.Add_EventDay(groupName, calendar); //동아리에 해당하는 일정 추가
     }
 
     //일정 추가 활성화
@@ -103,7 +104,7 @@ public class GroupScheduleActivity extends AppCompatActivity {
                                 if(EventName.length()==0) Toast.makeText(GroupScheduleActivity.this, "일정을 입력해주세요", Toast.LENGTH_SHORT).show();
                                 else
                                     try {
-                                        firebaseCalendar.AddEvent(groupName, Year, Month, Day, EventName);
+                                        firebaseCalendar.AddEvent(groupName, Year, Month, Day, EventName);  //DB에 등록
                                         init();
                                     } catch (Exception e) {
                                     }

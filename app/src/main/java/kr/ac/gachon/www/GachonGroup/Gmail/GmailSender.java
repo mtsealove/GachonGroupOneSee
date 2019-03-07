@@ -19,7 +19,7 @@ import javax.mail.internet.MimeMessage;
 
 import android.os.AsyncTask;
 
-public class GmailSender extends javax.mail.Authenticator {
+public class GmailSender extends javax.mail.Authenticator { //Gmail로 보내기 객체
     private String mailhost = "smtp.gmail.com";
     private String user;
     private String password;
@@ -30,7 +30,7 @@ public class GmailSender extends javax.mail.Authenticator {
     }
 
 
-    public GmailSender(String user, String password) {
+    public GmailSender(String user, String password) {  //계정과 비밀번호
         this.user = user;
         this.password = password;
 
@@ -50,10 +50,10 @@ public class GmailSender extends javax.mail.Authenticator {
     //인증번호 랜덤 생성
     public String CreateVerifyCode() {
         String code="";
-        String alpha="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String alpha="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";    //가질 수 있는 문자
         for(int i=0; i<8; i++) {
-            int num=(int)(Math.random()*35);
-            code+=alpha.charAt(num);
+            int num=(int)(Math.random()*35);    //중에 랜덤으로
+            code+=alpha.charAt(num);    //8개 추가
         }
         return code;
     }
@@ -63,7 +63,7 @@ public class GmailSender extends javax.mail.Authenticator {
     }
 
     public synchronized void sendMail(String subject, String body,
-                                      String sender, String recipients) {
+                                      String sender, String recipients) { //메일 보내기
         try {
             message = new MimeMessage(session);
             DataHandler handler = new DataHandler(new ByteArrayDataSource(
@@ -83,6 +83,7 @@ public class GmailSender extends javax.mail.Authenticator {
         }
     }
 
+    //여기서부터 왜있는지 몰라요. 내가 한거 아냐
     class tesetAsynTastk extends AsyncTask <Void, Void, Void> {
         @Override
         protected synchronized void onPreExecute() {

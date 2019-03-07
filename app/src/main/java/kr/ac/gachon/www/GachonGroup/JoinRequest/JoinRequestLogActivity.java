@@ -9,7 +9,7 @@ import android.widget.ListView;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class JoinRequestLogActivity extends AppCompatActivity {
+public class JoinRequestLogActivity extends AppCompatActivity { //일반 사용자의 동아리 신청 내역 조회(리스트)
     private ListView boardLV;
     private String ID;
     private FirebaseJoinRequest firebaseJoinRequest;

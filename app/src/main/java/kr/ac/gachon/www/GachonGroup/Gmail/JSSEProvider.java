@@ -3,7 +3,7 @@ package kr.ac.gachon.www.GachonGroup.Gmail;
 import java.security.AccessController;
 import java.security.Provider;
 
-public final class JSSEProvider extends Provider {
+public final class JSSEProvider extends Provider { //필요하다는데 왠지 몰라여
 
     public JSSEProvider() {
         super("HarmonyJSSE", 1.0, "Harmony JSSE Provider");

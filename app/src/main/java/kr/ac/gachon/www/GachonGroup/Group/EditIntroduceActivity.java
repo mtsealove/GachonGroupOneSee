@@ -28,7 +28,7 @@ import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.etc.FullScreenImageActivity;
 
-public class EditIntroduceActivity extends AppCompatActivity {
+public class EditIntroduceActivity extends AppCompatActivity {  //동아리 소개글 수정 액티비티
     private ImageView GroupIcon;
     private EditText locationET, introduceET;
     private Button functionBtn;
@@ -45,6 +45,7 @@ public class EditIntroduceActivity extends AppCompatActivity {
         functionBtn=findViewById(R.id.functionBtn);
         GroupIcon=findViewById(R.id.GroupIcon);
 
+        //이미 이전에 등록된 데이터가 있으면 데이터 받아오기
         Intent intent=getIntent();
         location=intent.getStringExtra("location");
         introduce=intent.getStringExtra("introduce");
@@ -53,18 +54,18 @@ public class EditIntroduceActivity extends AppCompatActivity {
         locationET.setText(location);
         introduceET.setText(introduce);
 
-        if(location==null&&introduce==null) {
+        if(location==null&&introduce==null) {   //이전에 등록한 적 없다면
             functionBtn.setText("등록하기");
             functionBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     setFunctionBtn(false);
                 }
-            });
+            }); //등록할 수 있게
             resultMsg="등록이 완료되었습니다";
         }
         else {
-            functionBtn.setText("수정하기");
+            functionBtn.setText("수정하기");    //이전에 등록한 적이 있다면 수정할 수 있게
             functionBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,8 +82,8 @@ public class EditIntroduceActivity extends AppCompatActivity {
     //동아리 아이콘 누르기
     private void setGroupIcon() {
         firebaseImage=new FirebaseImage(EditIntroduceActivity.this);
-        FilePath="Groups/"+group+"/"+group+"Icon.png";
-        firebaseImage.LoadImageView(FilePath, GroupIcon);
+        FilePath="Groups/"+group+"/"+group+"Icon.png";  //동아리 프로필 저장경로
+        firebaseImage.LoadImageView(FilePath, GroupIcon);   //경로를 통해 불러오기
 
         GroupIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +91,8 @@ public class EditIntroduceActivity extends AppCompatActivity {
                 AlertDialog.Builder builder=new AlertDialog.Builder(EditIntroduceActivity.this);
                 ListView listView=new ListView(EditIntroduceActivity.this);
                 ArrayList<String> arrayList=new ArrayList<>();
-                arrayList.add("이미지 보기");
-                arrayList.add("편집");
+                arrayList.add("이미지 보기");    //보기 가능
+                arrayList.add("편집");    //바꾸기 가능
                 ArrayAdapter adapter=new ArrayAdapter(EditIntroduceActivity.this, R.layout.support_simple_spinner_dropdown_item, arrayList);
                 listView.setAdapter(adapter);
                 builder.setView(listView);
@@ -103,11 +104,11 @@ public class EditIntroduceActivity extends AppCompatActivity {
                         switch (position) {
                             case 0:
                                 Intent intent=new Intent(EditIntroduceActivity.this, FullScreenImageActivity.class);
-                                intent.putExtra("FilePath", FilePath);
+                                intent.putExtra("FilePath", FilePath);  //전체화면으로 이미지 표시
                                 startActivity(intent);
                                 break;
                             case 1:
-                                EditImage();
+                                EditImage(); //이미지 수정
                                 break;
                         }
                     }
@@ -117,14 +118,14 @@ public class EditIntroduceActivity extends AppCompatActivity {
         });
     }
 
-    private void setFunctionBtn(boolean update) {
+    private void setFunctionBtn(boolean update) {   //수정 또는 등록 버튼, 업데이트 여부 판단
         location=locationET.getText().toString();
         introduce=introduceET.getText().toString();
 
         if(location.length()==0) Toast.makeText(EditIntroduceActivity.this, "동아리방을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(introduce.length()==0) Toast.makeText(EditIntroduceActivity.this, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else {
-            String msg;
+            String msg; //등록/수정에 따라 다른 메세지
             if (update) msg="작성한 내용을\n수정하시겠습니까?";
             else msg="작성한 내용을\n등록하시겠습니까?";
             Alert alert=new Alert(EditIntroduceActivity.this);
@@ -135,20 +136,21 @@ public class EditIntroduceActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             FirebasePost firebasePost=new FirebasePost(EditIntroduceActivity.this);
-            firebasePost.SetIntroduce(group, location, introduce);
+            firebasePost.SetIntroduce(group, location, introduce);  //동아리 정보 수정
             Toast.makeText(EditIntroduceActivity.this, resultMsg, Toast.LENGTH_SHORT).show();
             finish();
         }
     };
 
     private Uri filePath;
-    private void EditImage() {
+    private void EditImage() {  //이미지 불러오기
         Intent intent=new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "동아리 프로필 이미지를 선택하세요"), 0);
     }
 
+    //파일을 불러 온 다음에
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,11 +159,10 @@ public class EditIntroduceActivity extends AppCompatActivity {
             filePath = data.getData();
             Log.d("EditMyInformation", "uri:" + String.valueOf(filePath));
             try {
-                //Uri 파일을 Bitmap으로 만들어서 ImageView에 집어 넣는다.
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                GroupIcon.setImageBitmap(bitmap);
+                GroupIcon.setImageBitmap(bitmap);   //화면에 표시
                 FirebaseImage firebaseImage=new FirebaseImage(EditIntroduceActivity.this);
-                firebaseImage.UploadGroupImage(filePath, group);
+                firebaseImage.UploadGroupImage(filePath, group);    //파일 업로드
             } catch (IOException e) {
                 e.printStackTrace();
             }

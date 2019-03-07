@@ -29,8 +29,7 @@ import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
-//firebase를 이용한 개별 View 수정 클래스
-public class FirebaseView extends AppCompatActivity {
+public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 개별 View 수정 클래스
     final Context context;
     FirebaseDatabase database;
 
@@ -40,13 +39,13 @@ public class FirebaseView extends AppCompatActivity {
     }
 
     //텍스트뷰의 내용을 받아와 수정
-    public void setTextView(final String child, final String ID, final TextView textView) {
+    public void setTextView(final String child, final String ID, final TextView textView) { //계정에서 찾아 표시
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String result=dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
-                if(child.equals("name")) result+=" 님";
+                if(child.equals("name")) result+=" 님";  //이름일 경우 "님"을 붙임
                 textView.setText(result);
             }
 
@@ -58,14 +57,14 @@ public class FirebaseView extends AppCompatActivity {
     }
 
     //EditText의 내용을 수정
-    public void setEditText(final String child, final String ID, final EditText editText) {
+    public void setEditText(final String child, final String ID, final EditText editText) { //계정에서 찾아 표시
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!child.equals("StudentNumber")) {
+                if(!child.equals("StudentNumber")) {    //학번이 아닐 경우 문자열로 받음
                     String result = dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
-                    if(child.equals("password")) {
+                    if(child.equals("password")) {  //비밀번호인 경우 복호화
                         try {
                             AES256Util aes256Util=new AES256Util();
                             result=aes256Util.decrypt(result);
@@ -77,7 +76,7 @@ public class FirebaseView extends AppCompatActivity {
                     }
                     editText.setText(result);
                 } else {
-                    int studentNumber=dataSnapshot.child("Account").child(ID).child("StudentNumber").getValue(Integer.class);
+                    int studentNumber=dataSnapshot.child("Account").child(ID).child("StudentNumber").getValue(Integer.class);   //학번인 경우 정수형으로 받음
                     editText.setText(Integer.toString(studentNumber));
                 }
             }
@@ -96,7 +95,7 @@ public class FirebaseView extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").getChildren()) {
-                    //해당 카테고리의 데이터 삽
+                    //해당 카테고리의 데이터 삽입
                     if(snapshot.child("category").getValue(String.class).equals(category)) {
                         final String groupName=snapshot.child("name").getValue(String.class);
                         LayoutInflater inflater=LayoutInflater.from(context);
@@ -138,14 +137,14 @@ public class FirebaseView extends AppCompatActivity {
     //모든 동아리 이름 가져와서 spinner에 설정
     public void getAllGroupName(final Spinner spinner) {
         final ArrayList<String> arrayList=new ArrayList<>();
-        arrayList.add("동아리 선택");
-        arrayList.add("동아리 없음");
+        arrayList.add("동아리 선택");    //기본으로 표시될 내용
+        arrayList.add("동아리 없음");    //없을 수도 있으니까
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot:dataSnapshot.child("Groups").getChildren()) {
-                    String name=snapshot.child("name").getValue(String.class);
+                    String name=snapshot.child("name").getValue(String.class);  //이름 표시
                     arrayList.add(name);
                 }
                 ArrayAdapter<String> adapter=new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, arrayList);
@@ -159,17 +158,16 @@ public class FirebaseView extends AppCompatActivity {
         });
     }
 
-    //자신의 것과 일치하는 값을 스피너에 선택
+    //자신의 것(전공/동아리)과 일치하는 값을 스피너에 선택
     public void setSpinnerMatch(final Spinner spinner, final String child, final String ID) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value=dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
+                String value=dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);   //자신의 것
                 ArrayAdapter arrayAdapter= (ArrayAdapter) spinner.getAdapter();
-                int position=arrayAdapter.getPosition(value);
-                spinner.setSelection(position);
-
+                int position=arrayAdapter.getPosition(value);   //값 비교
+                spinner.setSelection(position); //선택
             }
 
             @Override
@@ -185,7 +183,7 @@ public class FirebaseView extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                textView.setText(alt);
+                textView.setText(alt);  //대체 텍스트, 없을 수도 있으니까
                 try {
                     String value = dataSnapshot.child(child1).child(child2).child(child3).getValue(String.class);
                     textView.setText(value);
@@ -206,11 +204,11 @@ public class FirebaseView extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String introduce=dataSnapshot.child("Groups").child(groupName).child("introduce").getValue(String.class);
-                if(introduce==null) {
-                    button.setText("등록하기");
+                String introduce=dataSnapshot.child("Groups").child(groupName).child("introduce").getValue(String.class);   //동아리의 소개글
+                if(introduce==null) {   //등록하지 않았다면
+                    button.setText("등록하기"); //등록
                 } else {
-                    button.setText("수정하기");
+                    button.setText("수정하기"); //이미 존재하면 수정
                 }
             }
 

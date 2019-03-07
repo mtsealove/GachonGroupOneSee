@@ -17,7 +17,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.Board.SearchActivity;
 
-public class GroupQnAActivity extends AppCompatActivity {
+public class GroupQnAActivity extends AppCompatActivity {   //동아리 Q&A 액티비티
     ListView boardLV;
     Button searchBtn, postBtn;
     TextView titleTV, groupNameTV;
@@ -72,29 +72,29 @@ public class GroupQnAActivity extends AppCompatActivity {
         });
     }
 
-    //검색 메서드
+    //검색
     private void Search() {
         Intent intent=new Intent(GroupQnAActivity.this, SearchActivity.class);
-        intent.putExtra("BoardName", BoardName);
-        intent.putExtra("groupName", groupName);
-        intent.putExtra("userID", userID);
-        startActivity(intent);
+        intent.putExtra("BoardName", BoardName);    //게시판 이름
+        intent.putExtra("groupName", groupName);    //동아리 이름
+        intent.putExtra("userID", userID);  //사용자 아이디 전송 및
+        startActivity(intent);  //검색 액티비티로 이동
     }
 
-    //글 작성 메서드
+    //글 작성
     private void Post() {
             Intent intent = new Intent(GroupQnAActivity.this, AddPostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);
             intent.putExtra("groupName", groupName);
-            startActivity(intent);
+            startActivity(intent);  //작성 액티비티
     }
     public void close(View v) {
         finish();
     }
 
     @Override
-    public void onResume() {
+    public void onResume() {    //게시글 작성 후 돌아오면 그 리스트 다시 표시
         super.onResume();
         if(value==null)
             firebaseList.setGroupListView(groupName, userID, boardLV, BoardName);
@@ -103,12 +103,12 @@ public class GroupQnAActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(value!=null) {
+        if(value!=null) { //만약 검색을 실시했을 경우 검색 없는 액티비티로 이동
             Intent intent=new Intent(GroupQnAActivity.this, GroupQnAActivity.class);
             intent.putExtra("groupName", groupName);
             intent.putExtra("ID", userID);
             startActivity(intent);
             finish();
-        } else super.onBackPressed();
+        } else super.onBackPressed();  //아니면 그냥 뒤로가기
     }
 }

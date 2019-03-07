@@ -12,7 +12,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
-public class JoinRequsetLogDetailActivity extends AppCompatActivity {
+public class JoinRequsetLogDetailActivity extends AppCompatActivity {   //동아리 신청 내역 조회(상세)
     private String ID;
     private String SelfIntroduce;
     private int StudentNumber;
@@ -42,7 +42,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         major=intent.getStringExtra("major");
         name=intent.getStringExtra("name");
         AbleTime=intent.getStringExtra("AbleTime");
-        boolean viewOnly=intent.getBooleanExtra("viewOnly", false);
+        boolean viewOnly=intent.getBooleanExtra("viewOnly", false); //관리자일 경우 볼 수만 있게
 
         //모든 뷰 매칭
         SelfIntroduceTV=findViewById(R.id.selfIntroduceTV);
@@ -56,6 +56,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         RemoveJoinRequestBtn=findViewById(R.id.removeBtn);
         updateJoinRequestBtn=findViewById(R.id.updateBtn);
 
+        //화면에 표시
         SelfIntroduceTV.setText(SelfIntroduce);
         StudentNuberTV.setText(StudentNumberStr);
         ageTV.setText(Integer.toString(age));
@@ -65,7 +66,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
         nameTV.setText(name);
         AbleTimeTV.setText(AbleTime);
 
-        if(viewOnly) {
+        if(viewOnly) {  //관리자면 삭제/수정 불가
             RemoveJoinRequestBtn.setVisibility(View.GONE);
             updateJoinRequestBtn.setVisibility(View.GONE);
         }
@@ -91,12 +92,12 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseJoinRequest firebaseJoinRequest=new FirebaseJoinRequest(JoinRequsetLogDetailActivity.this);
-                firebaseJoinRequest.RemoveJoinRequest(ID, group);
+                firebaseJoinRequest.RemoveJoinRequest(ID, group);   //DB에서 삭제
             }
         });
     }
 
-    private void setUpdateJoinRequestBtn() {
+    private void setUpdateJoinRequestBtn() {    //가입 신청 수정
         Alert alert=new Alert(JoinRequsetLogDetailActivity.this);
         alert.MsgDialogChoice("신청 내역을 수정하시겠습니까?", new View.OnClickListener() {
             @Override
@@ -113,7 +114,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {
                 intent.putExtra("ID", ID);
                 intent.putExtra("groupName", group);
                 intent.putExtra("update", true);
-                startActivity(intent);
+                startActivity(intent);  //수정하러 가기
             }
         });
     }

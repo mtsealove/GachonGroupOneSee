@@ -17,7 +17,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.Entity.JoinRequest;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class JoinRequestActivity extends AppCompatActivity {
+public class JoinRequestActivity extends AppCompatActivity {    //동아리 가입신청 액티비티
     private String ID, groupName, name, contact, major, ableTime, SelfIntroduce;
     private int age, StudentNumber;
     private EditText nameET, contactET, student_numberET, majorET, ageET, able_timeET, self_introduceET;
@@ -107,6 +107,7 @@ public class JoinRequestActivity extends AppCompatActivity {
         String able_time=able_timeET.getText().toString();
         String self_introduce=self_introduceET.getText().toString();
 
+        //모두 입력했는지 확인
         if(name.length()==0) Toast.makeText(JoinRequestActivity.this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(contact.length()==0) Toast.makeText(JoinRequestActivity.this, "연락처를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(student_number==0) Toast.makeText(JoinRequestActivity.this, "학번을 입력해 주세요", Toast.LENGTH_SHORT).show();
@@ -114,11 +115,11 @@ public class JoinRequestActivity extends AppCompatActivity {
         else if(age==0) Toast.makeText(JoinRequestActivity.this, "나이를 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(able_time.length()==0) Toast.makeText(JoinRequestActivity.this, "가능한 시간을 입력해 주세요", Toast.LENGTH_SHORT).show();
         else if(self_introduce.length()==0) Toast.makeText(JoinRequestActivity.this, "자기소개를 입력해 주세요", Toast.LENGTH_SHORT).show();
-        else {
+        else {  //그렇다면 새 가입신청 객체 생성
             JoinRequest joinRequest=new JoinRequest(name, contact, student_number, major, age, self_introduce, ID, groupName, able_time);
-            if(!update)
-                firebaseJoinRequest.MakeJoinRequest(joinRequest);
-            else firebaseJoinRequest.UpdateJoinRequest(ID, groupName, joinRequest);
+            if(!update) //수정이 아니면
+                firebaseJoinRequest.MakeJoinRequest(joinRequest);   //DB에 추가
+            else firebaseJoinRequest.UpdateJoinRequest(ID, groupName, joinRequest); //DB정보 수정
 
         }
     }

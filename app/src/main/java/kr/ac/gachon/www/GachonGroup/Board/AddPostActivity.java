@@ -113,7 +113,8 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
         else {
             filePathStr=new ArrayList<>();
             //임시저장 확인
-            firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);
+            if(groupName==null)firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);   //일반용
+            else firebasePost.CheckTempBoard(groupName, boardName, userID, titleET, contentET, contentLayout);  //동아리용
         }
 
     }
