@@ -39,6 +39,7 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
     private String ID;
     private Account account;
     private EditText nameET, IDET, emailET, studentNumberET, passwordET;
+    private boolean isManager;
     private Spinner majorSP, groupSP;
     ImageView profileIcon;
     Button editBtn;
@@ -66,6 +67,7 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
         //아이디 가져와서
         Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
+        isManager=intent.getBooleanExtra("isManager", false);
         //다른 정보들을 EditText 또는 Spinner로 출력
         FirebaseView firebaseView=new FirebaseView(EditMyInformationActivity.this);
         firebaseView.setEditText("name", ID, nameET);
@@ -112,6 +114,7 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
 
             }
         });
+
         groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -123,6 +126,8 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
 
             }
         });
+        if(isManager) groupSP.setClickable(false);  //관리자면 동아리 못 바꾸게
+
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

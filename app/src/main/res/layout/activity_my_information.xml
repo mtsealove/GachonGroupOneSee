@@ -99,6 +99,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/userLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <Button
                 android:id="@+id/joinRequestLogBtn"
                 style="?android:attr/borderlessButtonStyle"
@@ -125,18 +130,6 @@
                 android:text="@string/my_group"
                 android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/MyGroupSchduleBtn"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-6dp"
-                android:background="@drawable/list_background"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingVertical="15dp"
-                android:text="@string/my_group_schedule"
-                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/requirementsBtn"
@@ -149,6 +142,19 @@
                 android:paddingVertical="15dp"
                 android:paddingLeft="20dp"
                 android:text="@string/requirement"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/publicNoticeBtn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-6dp"
+                android:background="@drawable/list_background"
+                android:gravity="left|center_vertical"
+                android:paddingVertical="15dp"
+                android:paddingLeft="20dp"
+                android:text="@string/public_notice"
                 android:textSize="20sp" />
 
             <Button
@@ -175,6 +181,40 @@
                 android:paddingLeft="20dp"
                 android:text="@string/current_version"
                 android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:id="@+id/ManagerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/requirementsLogBtn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-6dp"
+                    android:background="@drawable/list_background"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingVertical="15dp"
+                    android:text="문의사항 내역"
+                    android:textSize="20sp" />
+                <Button
+                    android:id="@+id/accuseLogBtn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-6dp"
+                    android:background="@drawable/list_background"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingVertical="15dp"
+                    android:text="신고 내역"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/removeAccountBtn"

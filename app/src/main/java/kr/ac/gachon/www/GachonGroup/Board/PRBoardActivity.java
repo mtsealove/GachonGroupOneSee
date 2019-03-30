@@ -1,7 +1,6 @@
 package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -149,7 +146,7 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         if(!is_manger) { //관리자가 아닐 경우
             Toast.makeText(PRBoardActivity.this, "작성 권한이 없습니다", Toast.LENGTH_SHORT).show();
         } else { //관리자일 경우
-            Intent intent=new Intent(PRBoardActivity.this, AddPostActivity.class);
+            Intent intent=new Intent(PRBoardActivity.this, PostActivity.class);
             intent.putExtra("boardName", "PublicRelation");
             intent.putExtra("userID", userID);
             startActivity(intent);

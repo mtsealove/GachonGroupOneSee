@@ -17,8 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
-import kr.ac.gachon.www.GachonGroup.Board.PRBoardActivity;
+import kr.ac.gachon.www.GachonGroup.Board.PostActivity;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 게시글 확인 메서드 및 신고
@@ -30,7 +29,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
     }
 
     //게시판 내용 설정
-    public void setTextViewBoard(final TextView author, final TextView title, final TextView content, final String boardName , final int id) {  //작성자 TV, 제목 TV, 내용 TV, 게시판 이름, 게시글 번호
+    public void setTextViewBoard(final TextView author, final TextView title, final TextView content, final String boardName , final int id, final TextView timeTV) {  //작성자 TV, 제목 TV, 내용 TV, 게시판 이름, 게시글 번호
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -40,10 +39,12 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 String authorStr=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
                 String titleStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("title").getValue(String.class);
                 String contentStr=dataSnapshot.child(boardName).child(Integer.toString(id)).child("content").getValue(String.class);
+                String time=dataSnapshot.child(boardName).child(Integer.toString(id)).child("time").getValue(String.class);
                 //화면에 표시
                 author.setText("작성자: "+authorStr);
                 title.setText("제목: "+titleStr);
                 content.setText(contentStr);
+                timeTV.setText(time);
             }
 
             @Override
@@ -54,7 +55,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
     }
 
     //동아리 게시판 보드
-    public void setTextViewBoard(final String GroupName, final TextView author, final TextView title, final TextView content, final String boardName , final int id) {  //동아리 이름, 작성자 TV, 제목 TV, 내용 TV, 게시판 이름, 게시글 번호
+    public void setTextViewBoard(final String GroupName, final TextView author, final TextView title, final TextView content, final String boardName , final int id, final TextView timeTV) {  //동아리 이름, 작성자 TV, 제목 TV, 내용 TV, 게시판 이름, 게시글 번호
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -64,10 +65,12 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 String authorStr=dataSnapshot.child("Account").child(authorID).child("name").getValue(String.class);
                 String titleStr=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("title").getValue(String.class);
                 String contentStr=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("content").getValue(String.class);
+                String time=dataSnapshot.child("Groups").child(GroupName).child(boardName).child(Integer.toString(id)).child("time").getValue(String.class);
                 //화면에 표시
                 author.setText("작성자: "+authorStr);
                 title.setText("제목: "+titleStr);
                 content.setText(contentStr);
+                timeTV.setText(time);
             }
 
             @Override
@@ -139,7 +142,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 //Accuse에 새로운 데이터 추가
                 int countInt=0;
                 for(DataSnapshot snapshot:dataSnapshot.child("Accuse").getChildren()) { //마지막 번호 확인
-                    countInt=snapshot.child("id").getValue(Integer.class);
+                    countInt=snapshot.child("id").getValue(Integer.class)+1;
                 }
                 String count=Integer.toString(countInt);
                 reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
@@ -147,6 +150,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
                 reference.child("Accuse").child(count).child("Reason").setValue(reason);
                 reference.child("Accuse").child(count).child("ReplyID").setValue(replyID);
+                reference.child("Accuse").child(count).child("id").setValue(countInt);
             }
 
             @Override
@@ -163,13 +167,18 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Accuse에 새로운 데이터 추가
-                String count=Integer.toString((int)(dataSnapshot.child("Accuse").getChildrenCount()));
+                int countInt=0;
+                for(DataSnapshot snapshot:dataSnapshot.child("Accuse").getChildren()) { //마지막 번호 확인
+                    countInt=snapshot.child("id").getValue(Integer.class)+1;
+                }
+                String count=Integer.toString(countInt);
                 reference.child("Accuse").child(count).child("BoardName").setValue(boardName);
                 reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
                 reference.child("Accuse").child(count).child("Reason").setValue(reason);
                 reference.child("Accuse").child(count).child("GroupName").setValue(groupName);
                 reference.child("Accuse").child(count).child("ReplyID").setValue(ReplyID);
+                reference.child("Accuse").child(count).child("id").setValue(countInt);
             }
 
             @Override
@@ -195,11 +204,12 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                     final String title=dataSnapshot.child(boardName).child(boardID).child("title").getValue(String.class);
                     final String content=dataSnapshot.child(boardName).child(boardID).child("content").getValue(String.class);
                     //수정 활성화
+                    editBtn.setVisibility(View.VISIBLE);
                     editBtn.setText("수정");
                     editBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(context, AddPostActivity.class);
+                            Intent intent=new Intent(context, PostActivity.class);
                             //기본정보
                             intent.putExtra("boardName", boardName);
                             intent.putExtra("userID", userID);
@@ -252,11 +262,12 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                     final String title=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("title").getValue(String.class);
                     final String content=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("content").getValue(String.class);
                     //수정 활성화
+                    editBtn.setVisibility(View.VISIBLE);
                     editBtn.setText("수정");
                     editBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(context, AddPostActivity.class);
+                            Intent intent=new Intent(context, PostActivity.class);
                             //기본정보
                             intent.putExtra("boardName", boardName);
                             intent.putExtra("userID", userID);

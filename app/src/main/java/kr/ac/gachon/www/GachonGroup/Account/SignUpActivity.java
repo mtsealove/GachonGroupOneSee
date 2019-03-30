@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
     EditText nameET;
     EditText IDET;
     public static EditText emailET;
-    Spinner majorSP;
+    Spinner majorSP, domainSP;
     EditText StudentNumberET;
     Spinner groupSP;
     EditText passwordET;
@@ -41,6 +41,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
 
     private String major = "";
     private String group = "";
+    private String domainStr;
 
     Alert alert;
     FirebaseAccount firebaseAccount;
@@ -56,7 +57,6 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
         IDET = findViewById(R.id.ID_ET);
         emailET = findViewById(R.id.email_ET);
         majorSP =findViewById(R.id.major_SP);
-        majorET = findViewById(R.id.major_ET);
         StudentNumberET =findViewById(R.id.StdNumber_ET);
         groupSP =findViewById(R.id.group_SP);
         passwordET =findViewById(R.id.password_ET);
@@ -64,6 +64,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
         signUpBTN = findViewById(R.id.sign_up_btn);
         checkReuseBTN =findViewById(R.id.check_id_reuse_btn);
         sendVerifyBTN =findViewById(R.id.send_verify_btn);
+        domainSP=findViewById(R.id.domainSP);
 
         checkReuseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +85,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
         majorSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //기타 설정 시 EditText활성화
-                if (parent.getItemAtPosition(position).equals("기타"))
-                    majorET.setVisibility(View.VISIBLE);
-                else { //나머지 경우 학과 Str에 저장
-                    majorET.setVisibility(View.INVISIBLE);
                     major = parent.getItemAtPosition(position).toString();
-                }
             }
 
             @Override
@@ -105,6 +100,19 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 group = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //도메인 선택 스피너
+        domainSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(parent.getItemAtPosition(position).toString().equals("글로벌")) domainStr="@gc.gachon.ac.kr";
+                else if(parent.getItemAtPosition(position).toString().equals("메디컬")) domainStr="@mc.gachon.ac.kr";
             }
 
             @Override
@@ -137,13 +145,18 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
 
     public static String verify_code; //인증번호
     private void SendVerifyCode() { //인증메일 발송 메서드
-        String email = emailET.getText().toString();
-        if (email.length() == 0) shortToast("이메일을 입력해주세요");
-        else if ((!email.contains("@gachon.ac.kr")) && (!email.contains("@mc.gachon.ac.kr")) && (!email.contains("@gc.gachon.ac.kr"))) { //가천대학교 메일이 아닌 경우 알림 출력
-            alert.MsgDialog("올바른 이메일을\n입력해주세요");
-        } else {
-            boolean reuse[] = {true};
-            firebaseAccount.Check_Email_Reuse(email, reuse); //재사용 확인 및 이메일 전송
+        if(domainStr!=null) {
+            String email = emailET.getText().toString();
+            if (email.length() == 0) shortToast("이메일을 입력해주세요");
+            else if (email.length()<5) { //5자 이하일 경우
+                alert.MsgDialog("올바른 이메일을\n입력해주세요");
+            } else {
+                boolean reuse[] = {true};
+                email+=domainStr;   //이메일 ID에 도메인 추가
+                firebaseAccount.Check_Email_Reuse(email, reuse); //재사용 확인 및 이메일 전송
+            }
+        }else { //학교 도메인을 설정하지 않을 경우
+            alert.MsgDialog("캠퍼스를 선택해주세요");
         }
     }
 
@@ -171,10 +184,12 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 myNumber = mgr.getLine1Number();
                 myNumber = myNumber.replace("+82", "0");
-                Toast.makeText(SignUpActivity.this, "전화번호:" + myNumber, Toast.LENGTH_SHORT).show();
+                System.out.println("전화번호: "+myNumber);
             }
 
-        }catch(Exception e){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         //모든 입력란을 입력했는지 확인
         if(name.length()==0) shortToast("이름을 입력하세요");

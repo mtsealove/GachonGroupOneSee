@@ -21,7 +21,7 @@
 
     <string name="name">이름</string>
     <string name="ID">아이디</string>
-    <string name="email">이메일</string>
+    <string name="email">이메일 ID</string>
     <string name="major">학과</string>
     <string name="student_number">학번</string>
     <string name="group">동아리</string>
@@ -105,6 +105,11 @@
         <item>동아리 없음</item>
     </string-array>
 
+    <string-array name="domain">
+        <item>글로벌</item>
+        <item>메디컬</item>
+    </string-array>
+
     <string name="group_list">동아리 목록</string>
     <string name="pr_list">홍보게시판</string>
     <string name="federation_notice">연합회 공지사항</string>
@@ -164,4 +169,5 @@
     <string name="check_last_version">최신버전을 확인중입니다</string>
     <string name="download_last">최신버전 다운받기</string>
     <string name="login_plz_wait">로그인 중입니다\n잠시만 기다려주세요</string>
+    <string name="public_notice">공지사항</string>
 </resources>

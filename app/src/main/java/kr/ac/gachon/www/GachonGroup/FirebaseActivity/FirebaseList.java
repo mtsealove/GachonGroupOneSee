@@ -135,18 +135,25 @@ public class FirebaseList extends AppCompatActivity {   //firebase를 이용한 
                 }
                 Collections.reverse(titles);
                 Collections.reverse(ids);
-                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent=new Intent(context, BoardActivity.class);
-                        intent.putExtra("boardName", board_name);
-                        intent.putExtra("id", ids.get(position));
-                        intent.putExtra("userID", userID);
-                        context.startActivity(intent);
-                    }
-                });
+                if(ids.size()!=0) {
+                    ArrayAdapter adapter = new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(context, BoardActivity.class);
+                            intent.putExtra("boardName", board_name);
+                            intent.putExtra("id", ids.get(position));
+                            intent.putExtra("userID", userID);
+                            context.startActivity(intent);
+                        }
+                    });
+                } else {
+                    ArrayList<String> blankList=new ArrayList<>();
+                    blankList.add("검색 결과가 없습니다");
+                    ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, blankList);
+                    listView.setAdapter(adapter);
+                }
 
             }
 
@@ -176,19 +183,27 @@ public class FirebaseList extends AppCompatActivity {   //firebase를 이용한 
                 }
                 Collections.reverse(titles);
                 Collections.reverse(ids);
-                ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent=new Intent(context, BoardActivity.class);
-                        intent.putExtra("groupName", groupName);
-                        intent.putExtra("boardName", board_name);
-                        intent.putExtra("id", ids.get(position));
-                        intent.putExtra("userID", userID);
-                        context.startActivity(intent);
-                    }
-                });
+
+                if(ids.size()!=0) {
+                    ArrayAdapter adapter = new ArrayAdapter(context, R.layout.dropown_item_custom, titles);
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(context, BoardActivity.class);
+                            intent.putExtra("groupName", groupName);
+                            intent.putExtra("boardName", board_name);
+                            intent.putExtra("id", ids.get(position));
+                            intent.putExtra("userID", userID);
+                            context.startActivity(intent);
+                        }
+                    });
+                } else {
+                    ArrayList<String> blankList=new ArrayList<>();
+                    blankList.add("검색 결과가 없습니다");
+                    ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, blankList);
+                    listView.setAdapter(adapter);
+                }
 
             }
 

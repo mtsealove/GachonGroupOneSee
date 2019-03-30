@@ -1,8 +1,13 @@
 package kr.ac.gachon.www.GachonGroup.Account;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,24 +32,24 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.etc.BackPressCloseHandler;
+import kr.ac.gachon.www.GachonGroup.etc.LoadActivity;
 
 public class LoginActivity extends AppCompatActivity { //로그인 액티비티
     EditText ID_et;
     EditText PW_et;
     Button LoginBtn;
-    RadioGroup UserCategoryRg;
     public static RelativeLayout pendingLayout;
     public static Account account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ID_et= findViewById(R.id.ID_et);
-        PW_et= findViewById(R.id.PW_et);
-        LoginBtn= findViewById(R.id.LoginBtn);
-        UserCategoryRg= findViewById(R.id.user_categoryRG);
-        pendingLayout=findViewById(R.id.pendingLayout);
+        ID_et = findViewById(R.id.ID_et);
+        PW_et = findViewById(R.id.PW_et);
+        LoginBtn = findViewById(R.id.LoginBtn);
+        pendingLayout = findViewById(R.id.pendingLayout);
 
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,21 +58,17 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
             }
         });
 
-        Intent intent=getIntent();
-        boolean logout=intent.getBooleanExtra("logout", false);
-        if(!logout) {
+        Intent intent = getIntent();
+        boolean logout = intent.getBooleanExtra("logout", false);
+        if (!logout) {
 
         } else { //로그아웃된 경우 로그아웃 되었음을 출력
-            Alert alert=new Alert(LoginActivity.this);
+            Alert alert = new Alert(LoginActivity.this);
             alert.MsgDialog("로그아웃 되었습니다");
         }
     }
     //로그인 버튼 이벤트
     private void Login() {
-        int radioID=UserCategoryRg.getCheckedRadioButtonId();
-        String UserCategoryKR=((RadioButton)findViewById(radioID)).getText().toString();
-        boolean isManager;
-        isManager = UserCategoryKR.equals("관리자");
         String ID=ID_et.getText().toString();
         String password=PW_et.getText().toString();
         AES256Util aes256Util= null;

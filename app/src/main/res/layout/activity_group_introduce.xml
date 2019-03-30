@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Group.GroupIntroduceActivity"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/groupIntroduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/group_pr"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+        <Button
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/back"
+            android:onClick="close"/>
+
+        <View
+            android:layout_below="@id/groupIntroduce"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/GroupIcon"
+        android:src="@drawable/group_alt"
+        android:layout_marginTop="10dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        />
+
+    <TextView
+        android:id="@+id/locationTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="위치"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="479dp"
+            android:layout_above="@id/functionLayout"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="-66dp"
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/introduceTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:lineSpacingMultiplier="1.5"
+                android:text="소개"
+                android:textColor="#000000"
+                android:textSize="17sp" />
+        </ScrollView>
+        <LinearLayout
+            android:id="@+id/functionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            >
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:visibility="gone"
+                android:id="@+id/functionBtn"
+                android:paddingHorizontal="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:background="@drawable/btn_color"
+                android:text="@string/enrollment"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"/>
+
+            <Button
+                android:id="@+id/removeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/btn_normal_gray"
+                android:paddingHorizontal="20dp"
+                android:text="@string/remove"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -122,25 +122,26 @@
                 android:text="@string/email"
                 android:layout_weight="1"/>
 
-            <EditText
-                android:id="@+id/email_ET"
-                android:inputType="textEmailAddress"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:background="@drawable/input_background"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:padding="3dp"/>
+                <EditText
+                    android:layout_weight="1"
+                    android:id="@+id/email_ET"
+                    android:inputType="textEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@drawable/input_background"
+                    android:textSize="16sp"
+                    android:padding="3dp"/>
 
-            <Button
-                android:id="@+id/send_verify_btn"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/btn_gray_round"
-                android:text="@string/verify_code"
-                android:textSize="15sp" />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/send_verify_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/btn_gray_round"
+                    android:text="@string/verify_code"
+                    android:textSize="15sp" />
+
         </LinearLayout>
         <ImageView
             android:layout_marginTop="3dp"
@@ -176,18 +177,14 @@
                 android:textSize="16sp"
                 android:padding="3dp"
                 android:entries="@array/majors"/>
-            <EditText
-                android:gravity="center"
-                android:id="@+id/major_ET"
-                android:inputType="textPersonName"
+
+            <Spinner
+                android:id="@+id/domainSP"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
-                android:background="@drawable/input_background"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:padding="3dp"
-                android:hint="직접 입력"
-                android:visibility="invisible"/>
+                android:entries="@array/domain"
+                android:layout_marginHorizontal="10dp"></Spinner>
         </LinearLayout>
         <ImageView
             android:layout_marginTop="3dp"

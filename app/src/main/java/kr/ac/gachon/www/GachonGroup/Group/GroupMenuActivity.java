@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
-import kr.ac.gachon.www.GachonGroup.Board.InformationBoardActivity;
 import kr.ac.gachon.www.GachonGroup.JoinRequest.JoinRequestActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -71,11 +70,12 @@ public class GroupMenuActivity extends AppCompatActivity {  //동아리 메뉴
                 GroupQnA();
             }
         });
+
+        groupName=TrimName(groupName);
     }
 
     private void GroupSchedule() {  //동아리 일정 바로가기
         Intent intent=new Intent(GroupMenuActivity.this, GroupScheduleActivity.class);
-        groupName=TrimName(groupName);
         intent.putExtra("groupName", groupName);    //동아리 이름
         intent.putExtra("is_manager", account.is_manager);  //관리자인지
         intent.putExtra("userGroup", account.group);    //사용자의 동아리
@@ -83,8 +83,7 @@ public class GroupMenuActivity extends AppCompatActivity {  //동아리 메뉴
     }
 
     private void Introduce() {  //동아리 소개 바로가기
-        Intent intent=new Intent(GroupMenuActivity.this, IntroduceActivity.class);
-        groupName=TrimName(groupName);
+        Intent intent=new Intent(GroupMenuActivity.this, GroupIntroduceActivity.class);
         intent.putExtra("group", groupName);    //동아리 이름
         intent.putExtra("is_manager", account.is_manager);  //관리자인지
         intent.putExtra("userGroup", account.group);    //사용자의 동아리
@@ -97,22 +96,19 @@ public class GroupMenuActivity extends AppCompatActivity {  //동아리 메뉴
         else if(account.is_manager) Toast.makeText(GroupMenuActivity.this, "관리자는 가입신청을 할 수 없습니다", Toast.LENGTH_SHORT).show();   //내가 관리자일 경우
         else {  //모두 아니면
             Intent intent = new Intent(GroupMenuActivity.this, JoinRequestActivity.class);
-            groupName=TrimName(groupName);  //이름에서 '.'을 빼고
             intent.putExtra("groupName", groupName);    //동아리 이름과
             intent.putExtra("ID", ID);  //사용자의 ID를 보내고
             startActivity(intent);  //가입 신청 액티비티로 이동
         }
     }
     private void InformationBoard() {   //정보게시판
-        Intent intent=new Intent(GroupMenuActivity.this, InformationBoardActivity.class);
-        groupName=TrimName(groupName);  //이름에서 '.'을 빼고
+        Intent intent=new Intent(GroupMenuActivity.this, GroupInformationBoardActivity.class);
         intent.putExtra("groupName", groupName);    //동아리 이름과
         intent.putExtra("ID", ID);  //사용자 ID 보내고
         startActivity(intent);  //정보게시판 액티비티로 이동
     }
     private void GroupQnA() {   //동아리 Q&A
         Intent intent=new Intent(GroupMenuActivity.this, GroupQnAActivity.class);
-        groupName=TrimName(groupName);
         intent.putExtra("groupName", groupName);
         intent.putExtra("ID", ID);
         startActivity(intent);

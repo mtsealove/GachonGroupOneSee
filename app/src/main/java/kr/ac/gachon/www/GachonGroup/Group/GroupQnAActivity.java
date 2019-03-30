@@ -8,9 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
+import kr.ac.gachon.www.GachonGroup.Board.PostActivity;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
@@ -31,7 +30,7 @@ public class GroupQnAActivity extends AppCompatActivity {   //동아리 Q&A 액�
     @Override
     protected void onCreate(Bundle si) {
         super.onCreate(si);
-        setContentView(R.layout.activity_qna);
+        setContentView(R.layout.activity_list);
         _GroupQnAActivity= GroupQnAActivity.this;
         account=new Account();
         firebaseAccount=new FirebaseAccount(GroupQnAActivity.this);
@@ -83,7 +82,7 @@ public class GroupQnAActivity extends AppCompatActivity {   //동아리 Q&A 액�
 
     //글 작성
     private void Post() {
-            Intent intent = new Intent(GroupQnAActivity.this, AddPostActivity.class);
+            Intent intent = new Intent(GroupQnAActivity.this, PostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);
             intent.putExtra("groupName", groupName);

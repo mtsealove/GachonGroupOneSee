@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity;
+import kr.ac.gachon.www.GachonGroup.Group.GroupInformationBoardActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class SearchActivity extends AppCompatActivity { //검색 액티비티
@@ -22,7 +23,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
     EditText searchET;
     FederationNoticeActivity federationNoticeActivity;
     QnAActivity  QnAActivity;
-    InformationBoardActivity InformationActivity;
+    GroupInformationBoardActivity InformationActivity;
     GroupQnAActivity GroupQnAActivity;
     PRBoardActivity prBoardActivity;
     private String BoardName, groupName, userID;
@@ -40,7 +41,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
         //액티비티 종료를 위해 액티비티 받아오기
         federationNoticeActivity=(FederationNoticeActivity)FederationNoticeActivity._FederationNoticeActivity;
         QnAActivity=(QnAActivity) kr.ac.gachon.www.GachonGroup.Board.QnAActivity._QnAActivity;
-        InformationActivity=(InformationBoardActivity)InformationBoardActivity._InformationActivity;
+        InformationActivity=(GroupInformationBoardActivity) GroupInformationBoardActivity._InformationActivity;
         GroupQnAActivity=(GroupQnAActivity) kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity._GroupQnAActivity;
         prBoardActivity=(PRBoardActivity) PRBoardActivity.PRBActivity;
 
@@ -126,7 +127,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
                     break;
                 case "Information":
                     InformationActivity.finish();
-                    intent = new Intent(SearchActivity.this, InformationBoardActivity.class);
+                    intent = new Intent(SearchActivity.this, GroupInformationBoardActivity.class);
                     intent.putExtra("value", value);
                     intent.putExtra("groupName", groupName);
                     intent.putExtra("ID", userID);

@@ -45,7 +45,9 @@ public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String result=dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
+                Boolean isManager=dataSnapshot.child("Account").child(ID).child("is_manager").getValue(Boolean.class);
                 if(child.equals("name")) result+=" 님";  //이름일 경우 "님"을 붙임
+                else if(isManager) result+=" 임원";   //관리자일 경우 동아리 이름 뒤 임원 붙임
                 textView.setText(result);
             }
 
@@ -118,7 +120,8 @@ public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 
                                 Intent groupMenu=new Intent();
                                 groupMenu.setClass(context, GroupMenuActivity.class);
                                 groupMenu.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                groupMenu.putExtra("groupName",groupName);
+                                String Group=groupName.replace(".", "");    //DB특성 상 .제거
+                                groupMenu.putExtra("groupName",Group);
                                 groupMenu.putExtra("ID", ID);
                                 context.startActivity(groupMenu);
                             }

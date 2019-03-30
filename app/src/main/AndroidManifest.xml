@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kr.ac.gachon.www.GachonGroup" >
+    package="kr.ac.gachon.www.GachonGroup">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,11 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".etc.VersionActivity"></activity>
+        <activity android:name=".Manager.RequirementsLogDetialActivity"></activity>
+        <activity android:name=".Manager.RequirementLogActivity" />
+        <activity android:name=".Manager.AccuseLogDetailActivity" />
+        <activity android:name=".Manager.AccuseLogActivity" />
+        <activity android:name=".etc.VersionActivity" />
         <activity android:name=".etc.FullScreenImageActivity" />
         <activity android:name=".Group.GroupJoinRequestLogActivity" />
         <activity android:name=".JoinRequest.JoinRequsetLogDetailActivity" />
@@ -43,7 +48,7 @@
         <activity
             android:name=".Board.BoardActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Group.IntroduceActivity" />
+        <activity android:name=".Group.GroupIntroduceActivity" />
         <activity android:name=".Board.RequirementsActivity" />
         <activity
             android:name=".Board.FederationNoticeActivity"
@@ -52,12 +57,13 @@
         <activity
             android:name=".Board.QnAActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Board.AddPostActivity" />
+        <activity android:name=".Board.PostActivity" />
         <activity
-            android:name=".Board.InformationBoardActivity"
+            android:name=".Group.GroupInformationBoardActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Group.GroupQnAActivity" />
-        <activity android:name=".Group.EditIntroduceActivity" />
+        <activity android:name=".Group.EditGroupIntroduceActivity" />
+        <activity android:name=".Board.PublicNoticeActivity" />
     </application>
 
 </manifest>

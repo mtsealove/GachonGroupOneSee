@@ -1,10 +1,10 @@
 package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,16 +35,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import kr.ac.gachon.www.GachonGroup.Board.AccuseActivity;
-import kr.ac.gachon.www.GachonGroup.Board.AddPostActivity;
+import kr.ac.gachon.www.GachonGroup.Board.PostActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 게시글/댓글 삽입, 삭제, 수정
     FirebaseDatabase database;
     final Context context;
+    final Alert alert;
+    final SimpleDateFormat simpleDateFormat;
     public FirebasePost(Context context){
         this.context=context;
         database=FirebaseDatabase.getInstance();
+        alert=new Alert(context);
+        simpleDateFormat=new SimpleDateFormat("YY/MM/dd hh:mm");
     }
 
     @Override
@@ -58,11 +62,12 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                LayoutInflater inflater=LayoutInflater.from(context);
+                final LayoutInflater inflater=LayoutInflater.from(context);
                 layout.removeAllViews();    //모든 댓글 뷰 제거
                 ArrayList<View> replys=new ArrayList<>();
                 final ArrayList<String> userIDs=new ArrayList<>();
                 final ArrayList<Integer> replyIDS=new ArrayList<>();
+                final ArrayList<String> contents=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);  //각 댓글을 표시할 레이아웃
                     TextView authorTV=reply.findViewById(R.id.authorTV);    //댓글 작성자 TextView
@@ -75,26 +80,9 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
                     //시간 옵션
                     String time=snapshot.child("time").getValue(String.class);  //작성 시간
-                    Date date=new Date();   //현재 시간
-                    SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
-                    String now=dateFormat.format(date); //온라인 상의 데이터와 같으 형식으로 변경
-                    if(now.substring(7).equals(time.substring(7))) {    //같은 날짜(오늘)이면
-                        int hour1=Integer.parseInt(time.substring(8, 9));
-                        int hour2=Integer.parseInt(now.substring(8, 9));
-                        int min1=Integer.parseInt(time.substring(11, 12));
-                        int min2=Integer.parseInt(now.substring(11, 12));
-
-                        //시간 계산
-                        int hour=hour2-hour1;
-                        int min=min2-min1;
-                        if(min2-min1<0) {
-                            min+=60;
-                            hour--;
-                        }
-                        time=hour+"시간 "+min+"분 전";
-                    }
                     timeTV.setText(time);   //시간 표시
                     contentTV.setText(snapshot.child("content").getValue(String.class));    //내용 표시
+                    contents.add(snapshot.child("content").getValue(String.class));
                     replys.add(reply);  //표시되는 뷰 리스트에 추가
                     userIDs.add(authorID);  //표시되지 않는 작성자 ID리스트에 추가
                     replyIDS.add(snapshot.child("id").getValue(Integer.class)); //표시되지 않는 댓글 ID 리스트에 추가
@@ -104,20 +92,25 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                     replys.get(i).setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {    //댓글을 길게 눌렀을 때
-                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
-                            ArrayList<String> arrayList=new ArrayList<>();
-                            arrayList.add("신고하기");  //모든 사용자에 대해 신고 기능 추가
-                            if (userID.equals(userIDs.get(finalI))) arrayList.add("삭제하기");  //자신의 댓글이면 삭제 가능
+                            final AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                            final ArrayList<String> arrayList=new ArrayList<>();
+
+                            if (userID.equals(userIDs.get(finalI))) {
+                                arrayList.add("삭제하기");
+                                arrayList.add("수정하기");  //자신의 댓글이면 삭제 가능
+                            }
+                            else arrayList.add("신고하기");  //다른이의 댓글이면 신고 기능
+
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
-                            ListView listView=new ListView(context);
+                            final ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
                             builder.setView(listView);  //화면에 리스트 형식으로 삭제/신고 표시
                             final AlertDialog dialog=builder.create();
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {  //삭제/신고 클릭 시
-                                    switch (position) {
-                                        case 0: //신고
+                                    switch (arrayList.get(position)) {
+                                        case "신고하기": //신고
                                         dialog.cancel();
                                         //신고에 필요한 정보를 전송
                                         Intent intent = new Intent(context, AccuseActivity.class);
@@ -128,11 +121,34 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                         //신고 액티비티로 이동
                                         context.startActivity(intent);
                                         break;
-                                        case 1: //삭제
+                                        case "삭제하기": //삭제
                                             //DB에서 삭제
                                             reference.child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDS.get(finalI))).setValue(null);
                                             Toast.makeText(context, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                                             dialog.cancel();
+                                            break;
+                                        case "수정하기":    //수정
+                                            dialog.cancel();
+                                            AlertDialog.Builder builder1=new AlertDialog.Builder(context);
+                                            View layout=inflater.inflate(R.layout.dialog_update_reply, null);
+                                            builder1.setView(layout);
+                                            final EditText newReplyET=layout.findViewById(R.id.replyET);
+                                            newReplyET.setText(contents.get(finalI));
+                                            Button ok=layout.findViewById(R.id.okay);
+                                            final AlertDialog alertDialog=builder1.create();
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    String newReply=newReplyET.getText().toString();
+                                                    if(newReply.length()==0) Toast.makeText(context, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
+                                                    else {
+                                                        updateReply(null, boardName, Integer.toString(BoardID), Integer.toString(replyIDS.get(finalI)), newReply);
+                                                        alertDialog.cancel();
+                                                    }
+
+                                                }
+                                            });
+                                            alertDialog.show();
                                             break;
                                     }
                                 }
@@ -152,6 +168,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         });
     }
 
+
     //동아리 게시판 화면에 댓글 표시
     //동아리 이름, 댓글이 추가될 LinearLayout, 게시판 이름, 게시글 ID, Context
     public void AddReply(final String groupName, final LinearLayout layout,final String boardName, final int BoardID, final String userID) {
@@ -165,6 +182,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                 ArrayList<View> replys=new ArrayList<>();
                 final ArrayList<String> userIDs=new ArrayList<>();
                 final ArrayList<Integer> replyIDs=new ArrayList<>();
+                final ArrayList<String> contents=new ArrayList<>();
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);
                     TextView authorTV=reply.findViewById(R.id.authorTV);
@@ -178,26 +196,10 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
                     //시간 옵션
                     String time=snapshot.child("time").getValue(String.class);
-                    Date date=new Date();
-                    SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
-                    String now=dateFormat.format(date);
-                    if(now.substring(7).equals(time.substring(7))) {
-                        int hour1=Integer.parseInt(time.substring(8, 9));
-                        int hour2=Integer.parseInt(now.substring(8, 9));
-                        int min1=Integer.parseInt(time.substring(11, 12));
-                        int min2=Integer.parseInt(now.substring(11, 12));
-
-                        int hour=hour2-hour1;
-                        int min=min2-min1;
-                        if(min2-min1<0) {
-                            min+=60;
-                            hour--;
-                        }
-                        time=hour+"시간 "+min+"분 전";
-                    }
 
                     timeTV.setText(time);
                     contentTV.setText(snapshot.child("content").getValue(String.class));
+                    contents.add(snapshot.child("content").getValue(String.class));
 
                     replys.add(reply);
                     userIDs.add(authorID);
@@ -208,11 +210,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                     replys.get(i).setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
-                            ArrayList<String> arrayList=new ArrayList<>();
-                            arrayList.add("신고하기");
-                            if (userID.equals(userIDs.get(finalI))) arrayList.add("삭제하기");
+                            final AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                            final ArrayList<String> arrayList=new ArrayList<>();
 
+                            if (userID.equals(userIDs.get(finalI))) {
+                                arrayList.add("삭제하기");  //자신
+                                arrayList.add("수정하기");
+                            }
+                            else arrayList.add("신고하기"); //다른이
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
@@ -221,8 +226,8 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    switch (position) {
-                                        case 0:
+                                    switch (arrayList.get(position)) {
+                                        case "신고하기":
                                         dialog.cancel();
                                         Intent intent = new Intent(context, AccuseActivity.class);
                                         intent.putExtra("userID", id);
@@ -232,10 +237,34 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                         intent.putExtra("replyID", Integer.toString(replyIDs.get(finalI)));
                                         context.startActivity(intent);
                                         break;
-                                        case 1:
+                                        case "삭제하기":
                                             reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(BoardID)).child("reply").child(Integer.toString(replyIDs.get(finalI))).setValue(null);
                                             Toast.makeText(context, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                                             dialog.cancel();
+                                            break;
+                                        case "수정하기":    //수정
+                                            dialog.cancel();
+                                            AlertDialog.Builder builder1=new AlertDialog.Builder(context);
+                                            View layout=inflater.inflate(R.layout.dialog_update_reply, null);
+                                            builder1.setView(layout);
+                                            final EditText newReplyET=layout.findViewById(R.id.replyET);
+                                            newReplyET.setText(contents.get(finalI));
+                                            Button ok=layout.findViewById(R.id.okay);
+                                            final AlertDialog alertDialog=builder1.create();
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    String newReply=newReplyET.getText().toString();
+                                                    if(newReply.length()==0) Toast.makeText(context, "댓글을 입력해주세요", Toast.LENGTH_SHORT).show();
+                                                    else {
+                                                        updateReply(groupName, boardName, Integer.toString(BoardID), Integer.toString(replyIDs.get(finalI)), newReply);
+                                                        alertDialog.cancel();
+                                                    }
+
+                                                }
+                                            });
+                                            alertDialog.show();
+
                                             break;
                                     }
                                 }
@@ -254,6 +283,23 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
             }
         });
+    }
+
+    private void updateReply(String Group,String boardName, String boardId, String replyID, String NewContent) {   //댓글 수정
+        DatabaseReference reference;
+        Date date=new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yy/MM/dd HH:mm");
+        String time=dateFormat.format(date);
+
+        if(Group==null) {   //동아리 게시판이 아닐 때
+            reference=database.getReference().child(boardName).child(boardId).child("reply").child(replyID);
+
+        } else {
+            reference=database.getReference().child("Groups").child(Group).child(boardName).child(boardId).child("reply").child(replyID);
+        }
+        reference.child("content").setValue(NewContent);
+        reference.child("time").setValue(time);
+        Toast.makeText(context, "댓글이 수정되었습니다", Toast.LENGTH_SHORT).show();
     }
 
     //일반 게시판 댓글 작성
@@ -330,6 +376,11 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                 reference.child(boardName).child(Integer.toString(count)).child("content").setValue(content);   //내용
                 reference.child(boardName).child(Integer.toString(count)).child("title").setValue(title);   //제목
                 reference.child(boardName).child(Integer.toString(count)).child("id").setValue(count);  //글 ID
+
+                //작성 시간
+                Date date=new Date();
+                String time=simpleDateFormat.format(date);
+                reference.child(boardName).child(Integer.toString(count)).child("time").setValue(time);  //글 ID
                 if(temp) reference.child(boardName).child(Integer.toString(count)).child("temp").setValue("true");  //임시 저장 체크
                 FirebaseImage firebaseImage=new FirebaseImage(context);
                 for(int i=0; i<filePath.size(); i++) {
@@ -360,6 +411,9 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("content").setValue(content);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("title").setValue(title);
                 reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("id").setValue(count);
+                Date date=new Date();
+                String time=simpleDateFormat.format(date);
+                reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("time").setValue(time);
                 if(temp) reference.child("Groups").child(groupName).child(boardName).child(Integer.toString(count)).child("temp").setValue("true");
                 //받아온 이미지 개수만큼 이미지 업로드
                 FirebaseImage firebaseImage=new FirebaseImage(context);
@@ -381,6 +435,10 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         ref.child(boardName).child(boardID).child("title").setValue(title);
         ref.child(boardName).child(boardID).child("content").setValue(content);
         ref.child(boardName).child(boardID).child("temp").setValue(null);
+        //날짜 업뎃
+        Date date=new Date();
+        String time=simpleDateFormat.format(date);
+        ref.child(boardName).child(boardID).child("time").setValue(time);
 
         //삭제할 이미지 파일 삭제
         FirebaseStorage storage=FirebaseStorage.getInstance();
@@ -420,6 +478,10 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("title").setValue(title);
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("content").setValue(content);
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("temp").setValue(null);
+        //날짜 업뎃
+        Date date=new Date();
+        String time=simpleDateFormat.format(date);
+        ref.child(boardName).child(boardID).child("time").setValue(time);
         //삭제 파일 삭제
         FirebaseStorage storage=FirebaseStorage.getInstance();
         for(int i=0; i<RemoveFiles.size(); i++) {
@@ -532,6 +594,17 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         reference.child("Groups").child(group).child("introduce").setValue(introduce);
     }
 
+    public void RemoveIntroduce(String group) { //동아리 소개글 삭제
+        DatabaseReference reference=database.getReference().child("Groups").child(group);
+            reference.child("location").setValue(null); //위치정보 삭제
+            reference.child("introduce").setValue(null);    //소개글 삭제
+
+            FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
+            StorageReference storageReference=firebaseStorage.getReference().child("Groups").child(group).child(group+"Icon.png");
+            storageReference.delete();  //프로필 사진 삭제
+            alert.MsgDialog("소개글이 삭제되었습니다");
+    }
+
     //일반 게시판 임시저장 체크
     public void CheckTempBoard(final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
         DatabaseReference reference=database.getReference().child(boardName);
@@ -559,8 +632,8 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                     firebaseImage.getTempBoardPhotos(linearLayout, photoSnap.child("FilePath").getValue(String.class)); //경로에 포함된 사핀 표시
                                 }
                                 Alert.dialog.cancel();
-                                AddPostActivity.temp=true;  //임시저장됨을 알림
-                                AddPostActivity.boardID=boardId;    //게시글 ID 설정
+                                PostActivity.temp=true;  //임시저장됨을 알림
+                                PostActivity.boardID=boardId;    //게시글 ID 설정
                             }
                         });
 
@@ -602,13 +675,38 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                     firebaseImage.getTempBoardPhotos(linearLayout, photoSnap.child("FilePath").getValue(String.class)); //경로에 포함된 사핀 표시
                                 }
                                 Alert.dialog.cancel();
-                                AddPostActivity.temp=true;  //임시저장됨을 알림
-                                AddPostActivity.boardID=boardId;    //게시글 ID 설정
+                                PostActivity.temp=true;  //임시저장됨을 알림
+                                PostActivity.boardID=boardId;    //게시글 ID 설정
                             }
                         });
 
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void AddRequirement(final String userID,final String title, final String Email, final String content) {   //문의사항 추가하기
+        final DatabaseReference reference=database.getReference().child("Requirements");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int countInt=0;
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {    //마지막으로
+                    countInt=snapshot.child("id").getValue(Integer.class);
+                }
+                String ID=Integer.toString(countInt+1);
+                //내용 추가
+                reference.child(ID).child("userID").setValue(userID);
+                reference.child(ID).child("email").setValue(Email);
+                reference.child(ID).child("content").setValue(content);
+                reference.child(ID).child("title").setValue(title);
+                reference.child(ID).child("id").setValue(countInt+1);
             }
 
             @Override

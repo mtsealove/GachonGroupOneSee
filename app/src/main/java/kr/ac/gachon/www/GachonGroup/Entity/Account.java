@@ -9,6 +9,79 @@ public class Account { //계정 객체
     public String group; //동아리
     public String password; //비밀번호
     public String phone; //전화번호
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public int getStudentNumber() {
+        return StudentNumber;
+    }
+
+    public void setStudentNumber(int studentNumber) {
+        StudentNumber = studentNumber;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isIs_manager() {
+        return is_manager;
+    }
+
+    public void setIs_manager(boolean is_manager) {
+        this.is_manager = is_manager;
+    }
+
     public boolean is_manager; //관리자 여부
 
     //모든 정보를 알 때 사용하는 생성자

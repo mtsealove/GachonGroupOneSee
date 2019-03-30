@@ -125,9 +125,10 @@ public class HomeActivity extends AppCompatActivity { //로그인 후 나타나�
         });
     }
     private void MyInformation() { //내 정보 바로가기
-        Intent intent=new Intent(HomeActivity.this, MyInformationActivity.class);
-        intent.putExtra("ID", account.ID);
-        startActivity(intent);
+            Intent intent = new Intent(HomeActivity.this, MyInformationActivity.class);
+            intent.putExtra("group", account.group);
+            intent.putExtra("ID", account.ID);
+            startActivity(intent);
     }
     private void PRBoard() { //홍보게시판 바로가기
         Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);

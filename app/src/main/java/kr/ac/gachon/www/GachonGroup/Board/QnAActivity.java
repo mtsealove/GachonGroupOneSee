@@ -21,7 +21,7 @@ public class QnAActivity extends AppCompatActivity { //Q&A 액티비티
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qna);
+        setContentView(R.layout.activity_list);
         _QnAActivity=QnAActivity.this;
         Intent intent=getIntent();
         value=intent.getStringExtra("value");
@@ -57,7 +57,7 @@ public class QnAActivity extends AppCompatActivity { //Q&A 액티비티
         startActivity(intent);
     }
     private void Post() { //게시글 작성
-        Intent intent=new Intent(QnAActivity.this, AddPostActivity.class);
+        Intent intent=new Intent(QnAActivity.this, PostActivity.class);
         intent.putExtra("boardName", BoardName);
         intent.putExtra("userID", userID);
         startActivity(intent);

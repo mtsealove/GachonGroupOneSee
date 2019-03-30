@@ -7,21 +7,26 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.Account.SignUpActivity;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -58,16 +63,20 @@ public class LoadActivity extends AppCompatActivity { //애플리케이션 시�
         //전화번호 읽기 권한 확인
         int phonePermission=ContextCompat.checkSelfPermission(LoadActivity.this, Manifest.permission.READ_PHONE_NUMBERS);
 
-        if(phonePermission==PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(LoadActivity.this,
-                    new String[]{Manifest.permission.READ_PHONE_NUMBERS},
-                    PERMISSION_READ_PHONE_NUMBER);
+        if(phonePermission==PackageManager.PERMISSION_DENIED) { //권한 확인
+            TedPermission.with(LoadActivity.this)
+                    .setPermissionListener(PhonePermissionListener)
+                    .setRationaleMessage("한눈에 보자를 사용하기 위해 권한이 필요합니다")
+                    .setPermissions(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_SMS)
+                    .check();
         } else {
             if(read_ID()) { //ID, 비밀번호가 존재하면
                 FirebaseAccount firebaseAccount=new FirebaseAccount(LoadActivity.this);
                 firebaseAccount.AutoLogin(ID, pw); //자동로그인 수행
             }
-            else Move_Login(); //존재하지 않으면 로그인 화면으로 이동
+            else {
+                Move_Login(); //존재하지 않으면 로그인 화면으로 이동
+            }
         }
     }
 
@@ -106,23 +115,23 @@ public class LoadActivity extends AppCompatActivity { //애플리케이션 시�
         return false;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult){
-        super.onRequestPermissionsResult(requestCode, permissions, grantResult);
-        switch (requestCode) {
-            case PERMISSION_READ_PHONE_NUMBER:
-                if(grantResult.length>0) {
-                    Move_Login();
-                } else {
-                    Toast.makeText(getApplicationContext(), "전화번호 읽기 권한을 설정하지 않으면 회원가입을 할 수 없습니다\n곧 애플리케이션이 종료됩니다", Toast.LENGTH_SHORT).show();
-                    Handler handler=new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.exit(0);
-                        }
-                    }, 2000);
-                }
+
+    PermissionListener PhonePermissionListener=new PermissionListener() {
+        @Override
+        public void onPermissionGranted() { //권한 허용 시
+            Move_Login(); //로그인 화면으로 이동
         }
-    }
+
+        @Override
+        public void onPermissionDenied(ArrayList<String> deniedPermissions) {   //권한 미허용 시
+            Toast.makeText(getApplicationContext(), "권한을 설정하지 않으면 회원가입을 할 수 없습니다\n곧 애플리케이션이 종료됩니다", Toast.LENGTH_SHORT).show();
+            Handler handler=new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    System.exit(0);
+                }
+            }, 2000);   //2초 후 프로그램 종료
+        }
+    };
 }

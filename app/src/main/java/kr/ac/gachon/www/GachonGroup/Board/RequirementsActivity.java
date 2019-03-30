@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
@@ -74,8 +75,10 @@ public class RequirementsActivity extends AppCompatActivity { //문의사항 액
         alert.MsgDialogChoice("문의하신 내용을 보내시겠습니까?",  new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SendMail()) alert.MsgDialogEnd("문의사항이 전달되었습니다"); //성공적인 문의사항 전달
-                else alert.MsgDialogEnd("메일 발송에 실패하였습니다\n잠시 후 다시 시도해 주세요"); //전달 실패
+                Alert.dialog.cancel();
+                FirebasePost firebasePost=new FirebasePost(RequirementsActivity.this);
+                firebasePost.AddRequirement(ID, title, email, content);
+                alert.MsgDialogEnd("문의사항이 전달되었습니다");
             }
         });
     }

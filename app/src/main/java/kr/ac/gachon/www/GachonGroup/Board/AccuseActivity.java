@@ -69,7 +69,7 @@ public class AccuseActivity extends AppCompatActivity { //댓글/게시글 신�
         //기타 사유가 있으면 기타 사유로 변경
         if(reasonET.getText().toString().length()!=0) Reason=reasonET.getText().toString();
         //사유 체크 여부 확인
-        if(Reason.length()==0) Toast.makeText(AccuseActivity.this, "신고 내용을 선택하세요", Toast.LENGTH_SHORT).show();
+        if(Reason==null||Reason.length()==0) Toast.makeText(AccuseActivity.this, "신고 내용을 선택하세요", Toast.LENGTH_SHORT).show();
         else {
             Alert alert=new Alert(AccuseActivity.this);
             alert.MsgDialogChoice("신고하시겠습니까?",  new View.OnClickListener() {

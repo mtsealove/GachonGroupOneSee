@@ -34,27 +34,6 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <RadioGroup
-        android:id="@+id/user_categoryRG"
-        android:layout_marginTop="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/managerRB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/manager"/>
-
-        <RadioButton
-            android:id="@+id/userRB"
-            android:checked="true"
-            android:layout_marginStart="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user"/>
-    </RadioGroup>
 
     <!--ID, 비밀번호 입력-->
     <EditText

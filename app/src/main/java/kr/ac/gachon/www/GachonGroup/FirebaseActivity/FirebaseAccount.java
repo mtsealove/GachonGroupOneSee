@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.UnsupportedEncodingException;
+
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
@@ -39,11 +39,13 @@ import kr.ac.gachon.www.GachonGroup.Gmail.GmailSender;
 
 public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용한 계정 접근 클래스
     FirebaseDatabase database;
+    Alert alert;
     final Context context;
 
     public FirebaseAccount(Context context) {
         this.context=context;
         database=FirebaseDatabase.getInstance();
+        alert=new Alert(context);
     }
 
     public void Check_ID_Reuse(final String ID, final boolean[] reuse) { //ID 중복 확인
@@ -106,10 +108,9 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
         });
     }
 
-    //인증번호 확인 메서드
-    int time;
 
-    private void VerifyCode() {
+    int time;   //제한시간
+    private void VerifyCode() { //인증번호 확인 메서드
         time=300; //제한시간 5분
         //레이아웃 inflate
         LayoutInflater inflater=LayoutInflater.from(context);
@@ -141,14 +142,14 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
         Timer timer=new Timer();
         timer.schedule(timerTask, 0, 1000); //1초에 한 번 시간 변경
 
-        //다이얼로그 생성
+        //인증번호 입력 다이얼로그 생성
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setView(layout);
         final AlertDialog dialog=builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         dialog.show();
 
-        //확인 버튼
+        //확인 버튼리스너 설정
         okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

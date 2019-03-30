@@ -2,39 +2,43 @@ package kr.ac.gachon.www.GachonGroup.Board;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 
-public class FederationNoticeActivity extends AppCompatActivity { //연합회 공시사항 액티비티
+public class PublicNoticeActivity extends AppCompatActivity {
     ListView boardLV;
     Button searchBtn, postBtn;
-    private final String BoardName="FederationNotice";
+    TextView titleTV;
+    private final String BoardName="PublicNotice";
     private String ID, value, group;
-    public static Activity _FederationNoticeActivity;
+    public static Activity _PublicNoticeActivity;
     FirebaseList firebaseList;
-    FirebaseAccount firebaseAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_federation_notice);
-        _FederationNoticeActivity=FederationNoticeActivity.this;
-        //데이터 수신
+        setContentView(R.layout.activity_list);
+
         Intent intent=getIntent();
-        ID=intent.getStringExtra("userID");
+        ID=intent.getStringExtra("userID"); //사용자 ID
         value=intent.getStringExtra("value"); //검색 값
-        group=intent.getStringExtra("group"); //사용자 동아리(연합회인지 확인)
+        group=intent.getStringExtra("group");
+        _PublicNoticeActivity= PublicNoticeActivity.this;
+
         boardLV= findViewById(R.id.boardLV);
         searchBtn=findViewById(R.id.searchBtn);
         postBtn=findViewById(R.id.postBtn);
+        titleTV=findViewById(R.id.titleTV);
+        titleTV.setText("공지사항");
 
-        firebaseList=new FirebaseList(FederationNoticeActivity.this);
+        firebaseList=new FirebaseList(PublicNoticeActivity.this);
 
         init(); //초기화
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -45,12 +49,12 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         });
     }
     private void Search() { //검색버튼
-        Intent intent=new Intent(FederationNoticeActivity.this, SearchActivity.class);
+        Intent intent=new Intent(PublicNoticeActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName); //게시판 이름 전송
         intent.putExtra("userGroup", group); //사용자 동아리 전송
+        intent.putExtra("userID", ID);
         startActivity(intent);
     }
-
     private void init() { //시작
         //검색어가 없으면 모든 리스트 표시
         if(value==null)
@@ -58,8 +62,8 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
             //존재하면 검색어를 포함하는 리스트 표시
         else firebaseList.setListView(ID, boardLV, BoardName, value);
 
-        //연합회일 경우 모든 작성 버튼 활성화
-        if(group.contains("연합회")) {
+        //관리자일 경우 모든 작성 버튼 활성화
+        if(group.contains("관리자")) {
             postBtn.setVisibility(View.VISIBLE);
             postBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -68,11 +72,10 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
                 }
             });
         }
-
     }
 
     private void Post() { //게시글 작성
-        Intent intent=new Intent(FederationNoticeActivity.this, PostActivity.class);
+        Intent intent=new Intent(PublicNoticeActivity.this, PostActivity.class);
         intent.putExtra("boardName", BoardName);
         intent.putExtra("userID", ID);
 
@@ -91,7 +94,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
     @Override
     public void onBackPressed() { //검색을 했던 경우 검색 없는 액티비티 생성
         if(value!=null) {
-            Intent intent=new Intent(FederationNoticeActivity.this, FederationNoticeActivity.class);
+            Intent intent=new Intent(PublicNoticeActivity.this, FederationNoticeActivity.class);
             intent.putExtra("userID", ID);
             intent.putExtra("group", group);
             startActivity(intent);

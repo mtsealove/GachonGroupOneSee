@@ -16,20 +16,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
-import kr.ac.gachon.www.GachonGroup.Account.EditMyInformationActivity;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 //게시글 작성 및 수정 클래스
-public class AddPostActivity extends AppCompatActivity { //게시글 작성
+public class PostActivity extends AppCompatActivity { //게시글 작성
     private String boardName, userID, groupName;
     private String title, content;
     public static String boardID;
@@ -54,6 +50,7 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
         userID=intent.getStringExtra("userID");
         //동아리용 게시판일 경우 사용
         groupName=intent.getStringExtra("groupName");
+
         //기존 게시글 업데이트용 추가정보
         title=intent.getStringExtra("title");
         content=intent.getStringExtra("content");
@@ -96,7 +93,7 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
                 //이미지가 5장 이하일 경우 추가 가능
                 if(filePath.size()<MaxImage)
                     EditImage();
-                else Toast.makeText(AddPostActivity.this, "이미지는"+MaxImage+"장까지 첨부할 수 있습니다", Toast.LENGTH_SHORT).show();
+                else Toast.makeText(PostActivity.this, "이미지는"+MaxImage+"장까지 첨부할 수 있습니다", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -108,22 +105,26 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
         layoutParams.bottomMargin=30;
 
 
-        firebasePost = new FirebasePost(AddPostActivity.this);
+        firebasePost = new FirebasePost(PostActivity.this);
         if(filePathStr!=null) LoadImages(); //업데이트인 경우 이미지 로드
         else {
-            filePathStr=new ArrayList<>();
-            //임시저장 확인
-            if(groupName==null)firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);   //일반용
-            else firebasePost.CheckTempBoard(groupName, boardName, userID, titleET, contentET, contentLayout);  //동아리용
+            if(title==null) {   //수정이 아니라면
+                filePathStr = new ArrayList<>();
+                //임시저장 확인
+                if (groupName == null)
+                    firebasePost.CheckTempBoard(boardName, userID, titleET, contentET, contentLayout);   //일반용
+                else
+                    firebasePost.CheckTempBoard(groupName, boardName, userID, titleET, contentET, contentLayout);  //동아리용
+            }
         }
 
     }
 
     //업데이트 시 원래 업로드 되었던 이미지 불러오기
     private void LoadImages() {
-        FirebaseImage firebaseImage=new FirebaseImage(AddPostActivity.this);
+        FirebaseImage firebaseImage=new FirebaseImage(PostActivity.this);
         for(int i=0; i<filePathStr.size(); i++) {
-            final ImageView imageView=new ImageView(AddPostActivity.this);
+            final ImageView imageView=new ImageView(PostActivity.this);
             firebaseImage.LoadImageView(filePathStr.get(i), imageView);
             Log.d("ImageFilePath", filePathStr.get(i));
             imageView.setLayoutParams(layoutParams);
@@ -137,7 +138,7 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
                     //진동 반응
                     Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(5);
-                    Alert alert=new Alert(AddPostActivity.this);
+                    Alert alert=new Alert(PostActivity.this);
                     alert.MsgDialogChoice("이미지를 삭제하시겠습니까?", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -158,10 +159,10 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
     private void Post() {
         title=titleET.getText().toString();
         content=contentET.getText().toString();
-        if(title.length()==0) Toast.makeText(AddPostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
-        else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
+        if(title.length()==0) Toast.makeText(PostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+        else if(content.length()==0) Toast.makeText(PostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else {
-            Alert alert=new Alert(AddPostActivity.this);
+            Alert alert=new Alert(PostActivity.this);
             //동아리게시판||업데이트 여부에 따라 다른 메서드 설정
             if(boardID==null) {
                 if (groupName == null)
@@ -220,10 +221,10 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
     private void TempPost() {
         title=titleET.getText().toString();
         content=contentET.getText().toString();
-        if(title.length()==0) Toast.makeText(AddPostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
-        else if(content.length()==0) Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
+        if(title.length()==0) Toast.makeText(PostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+        else if(content.length()==0) Toast.makeText(PostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else {
-            Alert alert=new Alert(AddPostActivity.this);
+            Alert alert=new Alert(PostActivity.this);
             if(boardID==null) {
                 if(groupName==null)
                     alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempPostListener);
@@ -256,7 +257,7 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
             try {
                 //화면에 이미지 추가
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath.get(filePath.size()-1));
-                final ImageView imageView=new ImageView(AddPostActivity.this);
+                final ImageView imageView=new ImageView(PostActivity.this);
                 imageView.setImageBitmap(bitmap);
                 imageView.setLayoutParams(layoutParams);
                 contentLayout.addView(imageView);
@@ -267,7 +268,7 @@ public class AddPostActivity extends AppCompatActivity { //게시글 작성
                         //진동 반응
                         Vibrator vibrator=(Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
                         vibrator.vibrate(5);
-                        Alert alert=new Alert(AddPostActivity.this);
+                        Alert alert=new Alert(PostActivity.this);
                         alert.MsgDialogChoice("이미지를 삭제하시겠습니까?", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

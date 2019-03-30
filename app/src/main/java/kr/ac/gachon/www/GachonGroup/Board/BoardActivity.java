@@ -27,7 +27,7 @@ import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class BoardActivity extends AppCompatActivity { //게시글 글 보기 액티비티
-    TextView authorTV, titleTV, contentTV, boardNameTV;
+    TextView authorTV, titleTV, contentTV, boardNameTV, timeTV;
     Button functionBtn, replyBtn, removeBtn;
     LinearLayout ReplyShowLayout, ContentLayout;
     FrameLayout ReplyInputLayout;
@@ -51,6 +51,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         functionBtn=findViewById(R.id.functionBtn);
         removeBtn=findViewById(R.id.removeBtn);
         ContentLayout=findViewById(R.id.contentLayout);
+        timeTV=findViewById(R.id.timeTV);
         //댓글 출력 레이아웃
         ReplyShowLayout=findViewById(R.id.ShowReplyLayout);
         ReplyInputLayout=findViewById(R.id.InputReplyLayout);
@@ -74,6 +75,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         switch (boardName) {
             case "PublicRelation":
                 boardNameKR="홍보게시판";
+                functionBtn.setVisibility(View.VISIBLE);
                 functionBtn.setText("신고"); //신고버튼 활성화
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -84,10 +86,11 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                 break;
             case "FederationNotice":
                 boardNameKR="연합회 공지사항";
-                functionBtn.setText("수정"); //수정 버튼 활성화
+                functionBtn.setVisibility(View.GONE);
                 break;
             case "QnA":
                 boardNameKR="Q&A";
+                functionBtn.setVisibility(View.VISIBLE);
                 functionBtn.setText("신고");
                 //댓글 기능 활성화
                 ReplyInputLayout.setVisibility(View.VISIBLE);
@@ -109,7 +112,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                 break;
             case "Information":
                 boardNameKR="정보게시판";
-
+                functionBtn.setVisibility(View.VISIBLE);
                 functionBtn.setText("신고"); //신고 기능 활성화
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -130,6 +133,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                 });
             case "GroupQnA":
                 boardNameKR="Q&A";
+                functionBtn.setVisibility(View.VISIBLE);
                 functionBtn.setText("신고");
                 functionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -154,11 +158,11 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         FirebaseBoard firebaseBoard=new FirebaseBoard(BoardActivity.this);
         //동아리게시판인지 확인하고 해당하는 내용 불러오기
         if(groupName==null) { //동아리 게시판이 아닐 경우
-            firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id); //게시물 불러오기
+            firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id, timeTV); //게시물 불러오기
             firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
             firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
         } else { //동아리 게시판일 경우
-            firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id); //게시물 불러오기
+            firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id, timeTV); //게시물 불러오기
             firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
             firebaseImage.getBoardPhotos(groupName, boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
         }
@@ -201,6 +205,5 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
     @Override
     public void onResume(){
         super.onResume();
-        init(); //글 수정을 할 경우 글의 내용을 다시 불러오기
     }
 }
