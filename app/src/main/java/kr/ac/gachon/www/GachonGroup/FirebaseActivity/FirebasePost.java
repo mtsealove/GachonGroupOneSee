@@ -312,7 +312,11 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                 //마지막 글로
                 int count=0;
                 for(DataSnapshot snapshot:dataSnapshot.child(boardName).child(boardID).child("reply").getChildren()) {  //해당 게시글의 마지막 댓글로
-                    count=snapshot.child("id").getValue(Integer.class)+1;
+                    try {
+                        count = snapshot.child("id").getValue(Integer.class) + 1;
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);   //작성자 ID추가
                 reference.child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content); //내용 추가
@@ -341,7 +345,11 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                 //해당 게시글의 마지막 댓글로
                 int count=0;
                 for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").getChildren()) {
-                    count=snapshot.child("id").getValue(Integer.class)+1;
+                    try {
+                        count = snapshot.child("id").getValue(Integer.class) + 1;
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("author").setValue(userID);
                 reference.child("Groups").child(groupName).child(boardName).child(boardID).child("reply").child(Integer.toString(count)).child("content").setValue(Content);
@@ -615,6 +623,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                     String userID=snapshot.child("author").getValue(String.class);
                     String temp=snapshot.child("temp").getValue(String.class);
                     //ID가 일치하며 임시 글인 경우
+                    try {
                     if(userID.equals(ID)&&temp!=null) {
                         final Alert alert=new Alert(context);
                         alert.MsgDialogChoice("임시저장한 내용을\n불러오시겠습니까?", new View.OnClickListener() {
@@ -637,6 +646,8 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                             }
                         });
 
+                    }} catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
