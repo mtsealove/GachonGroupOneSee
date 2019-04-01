@@ -175,18 +175,28 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //관리자 child에 해당 전화번호가 존재하면 관리자 여부를 true로 설정
                 for(DataSnapshot snapshot:dataSnapshot.child("Manager").getChildren()) {
-                    if(snapshot.child("phone").getValue(String.class).equals(account.phone))
-                        account.is_manager=true;
+                    if (snapshot.child("phone").getValue(String.class).equals(account.phone))
+                        account.is_manager = true;
                     //비밀번호 암호화
                     try {
-                        AES256Util aes256Util=new AES256Util();
+                        AES256Util aes256Util = new AES256Util();
                         account.password=aes256Util.encrypt(account.password);
                     } catch (GeneralSecurityException e) {
                         e.printStackTrace();
                     }
-
                 }
-                reference.child("Account").child(ID).setValue(account); //DB에 계정 저장
+
+                //DB에 모든 정보 저장
+                reference.child("Account").child(ID).child("ID").setValue(account.getID());
+                reference.child("Account").child(ID).child("StudentNumber").setValue(account.getStudentNumber());
+                reference.child("Account").child(ID).child("email").setValue(account.getEmail());
+                reference.child("Account").child(ID).child("is_manager").setValue(account.isIs_manager());
+                reference.child("Account").child(ID).child("major").setValue(account.getMajor());
+                reference.child("Account").child(ID).child("group").setValue(account.getGroup());
+                reference.child("Account").child(ID).child("name").setValue(account.getName());
+                reference.child("Account").child(ID).child("password").setValue(account.getPassword());
+                reference.child("Account").child(ID).child("phone").setValue(account.getPhone());
+
             }
 
             @Override
@@ -263,7 +273,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                         Toast.makeText(context, "인증번호가 발송되었습니다" ,Toast.LENGTH_SHORT).show();
                         FindIdActivity.VerifyCode=verifyCode;   //비밀번호 찾기 액티비티의 인증번호 변경
                         AES256Util aes256Util=new AES256Util();
-                        PW=aes256Util.decrypt(PW);  //비밀번호 복호화
+                        PW=aes256Util.decrypt(aes256Util.decrypt(PW));  //비밀번호 복호화
                         FindIdActivity.password=PW;
                         FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);  //인증번호 입력 버튼 활성화
                     } catch (Exception e) {

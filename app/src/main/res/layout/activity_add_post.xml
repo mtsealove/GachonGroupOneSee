@@ -129,14 +129,6 @@
             android:background="@drawable/image"
             android:layout_margin="10dp"/>
 
-        <Button
-            android:layout_toRightOf="@id/imageBtn"
-            android:id="@+id/clipBtn"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/clip"/>
     </RelativeLayout>
 
 </RelativeLayout>

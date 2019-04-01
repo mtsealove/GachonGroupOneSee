@@ -127,7 +127,9 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
                 SignUp();
             }
         });
+        //가능하면 단말의 번호를 입력
     }
+
 
     //아이디 중복 확인 메서드
     boolean IDreuse[] = {false}; //메서드의 결과를 반환할 변수
@@ -165,7 +167,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
     private void SignUp() { //회원가입
         final String name = nameET.getText().toString();
         final String ID = IDET.getText().toString();
-        final String email = emailET.getText().toString();
+        final String email = emailET.getText().toString()+domainStr;
 
         int stdNumberTry;
         try {
@@ -184,6 +186,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 myNumber = mgr.getLine1Number();
                 myNumber = myNumber.replace("+82", "0");
+
                 System.out.println("전화번호: "+myNumber);
             }
 

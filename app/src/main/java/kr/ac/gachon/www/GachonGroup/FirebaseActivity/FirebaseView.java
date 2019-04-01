@@ -69,7 +69,7 @@ public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 
                     if(child.equals("password")) {  //비밀번호인 경우 복호화
                         try {
                             AES256Util aes256Util=new AES256Util();
-                            result=aes256Util.decrypt(result);
+                            result=aes256Util.decrypt(aes256Util.decrypt(result));
                         } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
                         } catch (GeneralSecurityException e) {

@@ -126,7 +126,10 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
 
             }
         });
-        if(isManager) groupSP.setClickable(false);  //관리자면 동아리 못 바꾸게
+        if(isManager) {
+            groupSP.setClickable(false);  //관리자면 동아리 못 바꾸게
+            groupSP.setEnabled(false);
+        }
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,119 +224,4 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
         finish();
     }
 
-    //신고 체크, 신고당했을 경우 정보 변경 비활성화
-    private void checkAccuse(final String userID) {
-        final FirebaseDatabase database=FirebaseDatabase.getInstance();
-        DatabaseReference reference=database.getReference().child("Accuse");
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                    String BoardID=null, BoardName=null, ReplyID=null, GroupName=null;
-                    BoardID=snapshot.child("BoardID").getValue(String.class);
-                    BoardName=snapshot.child("BoardName").getValue(String.class);
-                    try {
-                        GroupName=snapshot.child("GroupName").getValue(String.class);
-                    } catch (Exception e) {
-                    }
-                    try {
-                        ReplyID=snapshot.child("ReplyID").getValue(String.class);
-                    } catch (Exception e) {
-                    }
-                    DatabaseReference resultRef;
-                    //동아리 게시물이 아닐 경우
-                    if(GroupName==null) {
-                        if(ReplyID==null) { //댓글이 아닐 경우
-                            resultRef=database.getReference().child(BoardName).child(BoardID);
-                            resultRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.child("author").getValue(String.class).equals(userID))
-                                        DisableEdit();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else { //댓글일 경우
-                            resultRef=database.getReference().child(BoardName).child(BoardID).child("reply");
-                            resultRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
-                                        if(snapshot.child("author").getValue(String.class).equals(userID))
-                                            DisableEdit();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                        //동아리 게시물일 경우
-                    } else {
-                        if(ReplyID==null) { //댓글이 아닐 경우
-                            resultRef=database.getReference().child("Groups").child(GroupName).child(BoardName).child(BoardID);
-                            resultRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.child("author").getValue(String.class).equals(userID))
-                                        DisableEdit();
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else { //댓글일 경우
-                            resultRef=database.getReference().child("Groups").child(GroupName).child(BoardName).child(BoardID).child("reply");
-                            resultRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                                        if(snapshot.child("author").getValue(String.class).equals(userID))
-                                            DisableEdit();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    boolean disabled=false;
-    private void DisableEdit() {
-        if(!disabled) {
-            disabled=true;
-            Alert alert=new Alert(EditMyInformationActivity.this);
-            alert.MsgDialog("신고당한 계정은 정보를 수정할 수 없습니다");
-
-            nameET.setEnabled(false);
-            IDET.setEnabled(false);
-            emailET.setEnabled(false);
-            studentNumberET.setEnabled(false);
-            passwordET.setEnabled(false);
-            majorSP.setEnabled(false);
-            groupSP.setEnabled(false);
-            profileIcon.setClickable(false);
-        }
-    }
 }

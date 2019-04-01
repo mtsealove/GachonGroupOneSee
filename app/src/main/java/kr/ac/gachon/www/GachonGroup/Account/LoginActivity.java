@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
         AES256Util aes256Util= null;
         try {
             aes256Util = new AES256Util();
-            password=aes256Util.encrypt(password); //비밀번호 암호화, 데이터베이스에 암호화 된 상태로 저장되어있기 때문
+            password=aes256Util.encrypt(aes256Util.encrypt(password)); //비밀번호 암호화, 데이터베이스에 암호화 된 상태로 저장되어있기 때문
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {

@@ -30,7 +30,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     private String title, content;
     public static String boardID;
     private EditText titleET, contentET;
-    private Button commitBtn, tmpCommitBtn, imageBtn, clipBtn;
+    private Button commitBtn, tmpCommitBtn, imageBtn;
     private LinearLayout contentLayout;
     private LinearLayout.LayoutParams layoutParams;
     private final int MaxImage=5;
@@ -63,7 +63,6 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
         commitBtn=findViewById(R.id.commitBtn);
         tmpCommitBtn=findViewById(R.id.tmpCommitBtn);
         imageBtn=findViewById(R.id.imageBtn);
-        clipBtn=findViewById(R.id.clipBtn);
         contentLayout=findViewById(R.id.contentLayout);
 
         //업데이트 시 제목과 내용 설정
