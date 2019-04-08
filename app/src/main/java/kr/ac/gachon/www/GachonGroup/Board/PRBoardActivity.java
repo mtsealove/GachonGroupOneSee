@@ -117,6 +117,7 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         Intent intent=new Intent(PRBoardActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName); //게시판 이름 전송
         intent.putExtra("userGroup", userGroup); //사용자 동아리 전송
+        intent.putExtra("is_manager", is_manger);   //임원임을 전송
         startActivity(intent);
     }
 
