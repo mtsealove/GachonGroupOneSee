@@ -115,7 +115,11 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
             }
         });
 
-        groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        if(isManager) {
+            groupSP.setClickable(false);  //관리자면 동아리 못 바꾸게
+            groupSP.setEnabled(false);
+        } else
+            groupSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 group=parent.getItemAtPosition(position).toString();
@@ -126,10 +130,7 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
 
             }
         });
-        if(isManager) {
-            groupSP.setClickable(false);  //관리자면 동아리 못 바꾸게
-            groupSP.setEnabled(false);
-        }
+
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +138,6 @@ public class EditMyInformationActivity extends AppCompatActivity { //정보 수�
                 ApplyChange();
             }
         });
-        //checkAccuse(ID);
     }
 
     //이미지 클릭시 나타나는 활동

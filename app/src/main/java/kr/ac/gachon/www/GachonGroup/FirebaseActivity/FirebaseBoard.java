@@ -194,8 +194,8 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {    //자신의 글이라면
+                String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class); //관리자 파악을 위해
+                if(dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)||UserGroup.equals("관리자")) {    //자신의 글 또는 관리자이면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진의 경로
                     for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
                         String path=snapshot.child("FilePath").getValue(String.class);
@@ -253,7 +253,8 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)) {   //자신의 글이라면
+                String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
+                if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)||UserGroup.equals("관리자")) {   //자신의 글 또는 관리자라면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진 경로
                     for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("Photos").getChildren()) {
                         String path=snapshot.child("FilePath").getValue(String.class);
