@@ -131,6 +131,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                         InputReply();
                     }
                 });
+                break;
             case "GroupQnA":
                 boardNameKR="Q&A";
                 functionBtn.setVisibility(View.VISIBLE);
@@ -152,6 +153,10 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                         InputReply();
                     }
                 });
+                break;
+            case "PublicNotice":
+                boardNameKR="공지사항";
+                break;
         }
 
         boardNameTV.setText(boardNameKR);

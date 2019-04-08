@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,35 +21,47 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액티비티
     public static Activity PRBActivity;
     Button prevBtn, nextBtn, searchBtn,addBtn;
+    TextView titleTV;
     public static ArrayList<PRFragment> fragments;
+    private final String BoardName="PublicRelation";
     static int pageCount=0;
     int page;
     boolean is_manger;
-    private String userID;
+    private String userID, userGroup;
     private String value;
+    ListView boardLV;
+    FirebaseList firebaseList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prboard);
+        setContentView(R.layout.activity_list);
         PRBActivity=PRBoardActivity.this;
         //버튼 매칭
         prevBtn= findViewById(R.id.prevBtn);
         nextBtn= findViewById(R.id.nextBtn);
         searchBtn= findViewById(R.id.searchBtn);
-        addBtn= findViewById(R.id.addBtn);
+        addBtn= findViewById(R.id.postBtn);
+        titleTV=findViewById(R.id.titleTV);
+        titleTV.setText("홍보게시판");
         //프래그먼트 arraylist 생성
 
         Intent intent=getIntent();
         userID=intent.getStringExtra("userID");
         is_manger=intent.getBooleanExtra("is_manager", false);
         value=intent.getStringExtra("value");
+        userGroup=intent.getStringExtra("group");
+        boardLV= findViewById(R.id.boardLV);
 
+
+        /*
         createFragment();
+
 
         prevBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +86,49 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
             public void onClick(View v) {
                 setAddBtn();
             }
+        });*/
+
+        firebaseList=new FirebaseList(PRBoardActivity.this);
+        init();
+    }
+
+    private void init() { //시작
+        //검색어가 없으면 모든 리스트 표시
+        if(value==null)
+            firebaseList.setListView(userID, boardLV, BoardName);
+            //존재하면 검색어를 포함하는 리스트 표시
+        else firebaseList.setListView(userID, boardLV, BoardName, value);
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Search();
+            }
+        });
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Post();
+            }
         });
     }
 
+    private void Search() { //검색버튼
+        Intent intent=new Intent(PRBoardActivity.this, SearchActivity.class);
+        intent.putExtra("BoardName", BoardName); //게시판 이름 전송
+        intent.putExtra("userGroup", userGroup); //사용자 동아리 전송
+        startActivity(intent);
+    }
+
+    private void Post() { //게시글 작성
+        Intent intent=new Intent(PRBoardActivity.this, PostActivity.class);
+        intent.putExtra("boardName", BoardName);
+        intent.putExtra("userID", userID);
+
+        startActivity(intent);
+    }
+
+    /*
     //프래그먼트 설정
     private void createFragment() {
         FirebaseDatabase database=FirebaseDatabase.getInstance();
@@ -185,12 +239,15 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
             if(i==6) break;
         }
     }
+    */
 
     @Override
     public void onResume(){ //작성 후 복귀 시 업데이트 된 리스트 표시
         super.onResume();
+        /*
             fragments=new ArrayList<>();
             createFragment();
+            */
     }
     @Override
     public void onBackPressed() { //검색 값이 있을 경우 검색 없는 액티비티로 이동
@@ -203,6 +260,7 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         } else super.onBackPressed();
     }
 
+    /*
     //화면 비율에 따라 다른 리스트 개수 반환
     private int getScreenRatio() {
         DisplayMetrics displayMetrics=new DisplayMetrics();
@@ -214,4 +272,5 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         if(ratio>2) return 9; //2:1 이상일 경우 9개
         else return 6; //이하일 경우 6개 표시
     }
+    */
 }

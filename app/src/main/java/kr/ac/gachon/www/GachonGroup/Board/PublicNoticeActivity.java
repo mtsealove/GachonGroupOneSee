@@ -71,6 +71,8 @@ public class PublicNoticeActivity extends AppCompatActivity {
                     Post();
                 }
             });
+        } else {    //관리자가 아니면 등록 버튼 소멸
+            postBtn.setVisibility(View.GONE);
         }
     }
 

@@ -64,34 +64,12 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         userLayout=findViewById(R.id.userLayout);
         managerLayout=findViewById(R.id.ManagerLayout);
         accuseLogBtn=findViewById(R.id.accuseLogBtn);
-        requirementLogBtn=findViewById(R.id.requirementsLogBtn);
 
         account=new Account();
         final Intent intent=getIntent();
         ID=intent.getStringExtra("ID");
         group=intent.getStringExtra("group");   //관리자 인지를 판단
-        //관리자 여부에 따라 다른 레이아웃 출력
-        if(group.equals("관리자")){
-            userLayout.setVisibility(View.GONE);
-            managerLayout.setVisibility(View.VISIBLE);
-            accuseLogBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent1=new Intent(MyInformationActivity.this, AccuseLogActivity.class);
-                    startActivity(intent1);
-                }
-            });
-            requirementLogBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent1=new Intent(MyInformationActivity.this, RequirementLogActivity.class);
-                    startActivity(intent1);
-                }
-            });
-        } else {
-            userLayout.setVisibility(View.VISIBLE);
-            managerLayout.setVisibility(View.GONE);
-        }
+
 
         firebaseAccount=new FirebaseAccount(MyInformationActivity.this);
         firebaseAccount.GetAccount(ID, account);
@@ -147,6 +125,31 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         });
 
         versionBtn.setText("현재 버전: "+GetVersion());
+
+        //관리자 여부에 따라 다른 레이아웃 출력
+        if(group.equals("관리자")){
+            //userLayout.setVisibility(View.GONE);
+            //managerLayout.setVisibility(View.VISIBLE);
+
+            joinRequestLogBtn.setVisibility(View.GONE);
+            myGroupBtn.setVisibility(View.GONE);
+            requirementsBtn.setText("문의사항 조회");
+            requirementsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent1=new Intent(MyInformationActivity.this, RequirementLogActivity.class);
+                    startActivity(intent1);
+                }
+            });
+            accuseLogBtn.setVisibility(View.VISIBLE);
+            accuseLogBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent1=new Intent(MyInformationActivity.this, AccuseLogActivity.class);
+                    startActivity(intent1);
+                }
+            });
+        }
     }
 
     //정보 수정

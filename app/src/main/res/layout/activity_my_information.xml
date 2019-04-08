@@ -169,6 +169,20 @@
                 android:text="@string/service_legal"
                 android:textSize="20sp" />
 
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/accuseLogBtn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-6dp"
+                    android:background="@drawable/list_background"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingVertical="15dp"
+                    android:text="신고 내역"
+                    android:textSize="20sp" />
+
             <Button
                 android:id="@+id/versionBtn"
                 style="?android:attr/borderlessButtonStyle"
@@ -184,35 +198,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
+
                 android:orientation="vertical"
                 android:id="@+id/ManagerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/requirementsLogBtn"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-6dp"
-                    android:background="@drawable/list_background"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingVertical="15dp"
-                    android:text="문의사항 내역"
-                    android:textSize="20sp" />
-                <Button
-                    android:id="@+id/accuseLogBtn"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-6dp"
-                    android:background="@drawable/list_background"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingVertical="15dp"
-                    android:text="신고 내역"
-                    android:textSize="20sp" />
+
 
             </LinearLayout>
 

@@ -134,6 +134,7 @@ public class HomeActivity extends AppCompatActivity { //로그인 후 나타나�
         Intent intent=new Intent(HomeActivity.this, PRBoardActivity.class);
         intent.putExtra("userID", ID);
         intent.putExtra("is_manager", account.is_manager);
+        intent.putExtra("group", account.group);
         startActivity(intent);
     }
     private void FederationNotice() { //연합회 공지사항 바로가기

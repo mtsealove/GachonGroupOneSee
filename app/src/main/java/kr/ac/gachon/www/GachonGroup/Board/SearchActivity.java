@@ -66,7 +66,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
             case "GroupQnA":
                 BoardNameKR="Q&A";
                 break;
-            case "PRBoard":
+            case "PublicRelation":
                 BoardNameKR="홍보게시판";
                 break;
         }
@@ -143,11 +143,12 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
                     startActivity(intent);
                     finish();
                     break;
-                case "PRBoard":
+                case "PublicRelation":
                     prBoardActivity.finish();
                     intent = new Intent(SearchActivity.this, PRBoardActivity.class);
                     intent.putExtra("value", value);
                     intent.putExtra("userID", userID);
+                    intent.putExtra("group", userGroup);
                     startActivity(intent);
                     finish();
                     break;
