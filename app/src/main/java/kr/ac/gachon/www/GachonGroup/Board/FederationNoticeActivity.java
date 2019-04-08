@@ -76,7 +76,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         intent.putExtra("boardName", BoardName);
         intent.putExtra("userID", ID);
 
-        startActivity(intent);ㅓ
+        startActivity(intent);
     }
     public void close(View v){
         finish();
