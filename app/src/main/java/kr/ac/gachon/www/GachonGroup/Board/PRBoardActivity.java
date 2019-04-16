@@ -58,35 +58,7 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         userGroup=intent.getStringExtra("group");
         boardLV= findViewById(R.id.boardLV);
 
-
-        /*
-        createFragment();
-
-
-        prevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPrevBtn();
-            }
-        });
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNextBtn();
-            }
-        });
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setSearchBtn();
-            }
-        });
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAddBtn();
-            }
-        });*/
+        if(!is_manger) addBtn.setVisibility(View.GONE);
 
         firebaseList=new FirebaseList(PRBoardActivity.this);
         init();
@@ -118,6 +90,7 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
         intent.putExtra("BoardName", BoardName); //게시판 이름 전송
         intent.putExtra("userGroup", userGroup); //사용자 동아리 전송
         intent.putExtra("is_manager", is_manger);   //임원임을 전송
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
 
@@ -259,6 +232,10 @@ public class PRBoardActivity extends AppCompatActivity { //홍보게시판 액�
             startActivity(intent);
             finish();
         } else super.onBackPressed();
+    }
+
+    public void close(View v) { //뒤로가기
+        onBackPressed();
     }
 
     /*

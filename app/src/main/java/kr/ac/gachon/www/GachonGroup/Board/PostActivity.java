@@ -30,7 +30,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     private String title, content;
     public static String boardID;
     private EditText titleET, contentET;
-    private Button commitBtn, tmpCommitBtn, imageBtn;
+    private Button commitBtn, tmpCommitBtn, imageBtn, closeBtn;
     private LinearLayout contentLayout;
     private LinearLayout.LayoutParams layoutParams;
     private final int MaxImage=5;
@@ -64,6 +64,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
         tmpCommitBtn=findViewById(R.id.tmpCommitBtn);
         imageBtn=findViewById(R.id.imageBtn);
         contentLayout=findViewById(R.id.contentLayout);
+        closeBtn=findViewById(R.id.closeBtn);
 
         //업데이트 시 제목과 내용 설정
         titleET.setText(title);
@@ -79,6 +80,12 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
             @Override
             public void onClick(View v) {
                 TempPost();
+            }
+        });
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CancelPost();
             }
         });
 
@@ -176,6 +183,44 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
             }
         }
     }
+
+    //임시저장 메서드
+    private void TempPost() {
+        title=titleET.getText().toString();
+        content=contentET.getText().toString();
+        if(title.length()==0) Toast.makeText(PostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+        else if(content.length()==0) Toast.makeText(PostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
+        else {
+            Alert alert=new Alert(PostActivity.this);
+            if(boardID==null) { //수정이 아닐 때
+                if(groupName==null)
+                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempPostListener);
+                else
+                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempGroupPostListener);
+            } else {
+                if(groupName==null)
+                    alert.MsgDialogChoice("수정한 내용을\n임시저장하시겠습니까?", TempUpdateListener);
+                else
+                    alert.MsgDialogChoice("수정한 내용을\n임시저장하시겠습니까?", TempGroupUpdateListener);
+            }
+        }
+    }
+
+    //게시글 작성 취소
+    private void CancelPost() {
+        title=titleET.getText().toString();
+        content=contentET.getText().toString();
+        if(title.length()!=0||content.length()!=0) {    //글을 작성하려 했다면
+            Alert alert=new Alert(PostActivity.this);
+            alert.MsgDialogChoice("게시글 작성을 취소하시겠습니까?", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        } else finish();    //아니면 그냥 종료
+    }
+
     //일반 게시판의 게시글을 작성하는 메서드를 가진 리스너
     View.OnClickListener postListener=new View.OnClickListener() {
         @Override
@@ -196,7 +241,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     View.OnClickListener UpdateListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            firebasePost.Update(boardName, title, content, boardID, removeFile, filePath);
+            firebasePost.Update(boardName, title, content, boardID, removeFile, filePath, false);
             finish();
         }
     };
@@ -204,7 +249,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     View.OnClickListener GroupUpdateListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            firebasePost.Update(groupName, boardName, title, content, boardID, removeFile, filePath);
+            firebasePost.Update(groupName, boardName, title, content, boardID, removeFile, filePath, false);
             finish();
         }
     };
@@ -216,22 +261,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요"), 0);
     }
-    //임시저장 메서드
-    private void TempPost() {
-        title=titleET.getText().toString();
-        content=contentET.getText().toString();
-        if(title.length()==0) Toast.makeText(PostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
-        else if(content.length()==0) Toast.makeText(PostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
-        else {
-            Alert alert=new Alert(PostActivity.this);
-            if(boardID==null) {
-                if(groupName==null)
-                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempPostListener);
-                else
-                    alert.MsgDialogChoice("작성한 내용을\n임시저장하시겠습니까?", TempGroupPostListener);
-            }
-        }
-    }
+
     View.OnClickListener TempPostListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) { //일반 게시판의 게시글을 임시저장하는 리스너
@@ -242,7 +272,22 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     View.OnClickListener TempGroupPostListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) { //동아리 게시판의 게시글을 임시저장하는 리스너
-            firebasePost.Post(groupName, boardID, userID, title, content, filePath, true);
+            firebasePost.Post(groupName, boardName, userID, title, content, filePath, true);
+            finish();
+        }
+    };
+    View.OnClickListener TempUpdateListener=new View.OnClickListener() {    //일반게시판 수정/임시저장
+        @Override
+        public void onClick(View v) {
+            firebasePost.Update(boardName, title, content, boardID, removeFile, filePath, true);
+            finish();
+        }
+    };
+    View.OnClickListener TempGroupUpdateListener=new View.OnClickListener() {   //동아리게시판 수정/임시저장
+        @Override
+        public void onClick(View v) {
+            firebasePost.Update(groupName, boardName, title, content, boardID, removeFile, filePath, true);
+            finish();
         }
     };
 

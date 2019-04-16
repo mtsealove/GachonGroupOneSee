@@ -210,5 +210,6 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
     @Override
     public void onResume(){
         super.onResume();
+        init();
     }
 }

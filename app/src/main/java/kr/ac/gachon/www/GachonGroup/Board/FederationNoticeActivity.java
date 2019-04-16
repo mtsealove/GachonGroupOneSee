@@ -48,6 +48,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         Intent intent=new Intent(FederationNoticeActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName); //게시판 이름 전송
         intent.putExtra("userGroup", group); //사용자 동아리 전송
+        intent.putExtra("userID", ID);  //사용자 ID 전송
         startActivity(intent);
     }
 
@@ -79,7 +80,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         startActivity(intent);
     }
     public void close(View v){
-        finish();
+        onBackPressed();
     }
 
     @Override

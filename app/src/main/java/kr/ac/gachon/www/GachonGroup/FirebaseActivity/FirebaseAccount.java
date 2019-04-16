@@ -120,6 +120,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
         final EditText verifyET=layout.findViewById(R.id.verify_code_ET);
         Button okay= layout.findViewById(R.id.okay);
 
+        final Timer timer=new Timer();
         //남은 시간 표시
         TimerTask timerTask=new TimerTask() {
             @Override
@@ -127,7 +128,10 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(time<0) Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show(); //시간 만료
+                        if(time<=0) {
+                            Toast.makeText(context, "시간이 만료되었습니다", Toast.LENGTH_SHORT).show(); //시간 만료
+                            timer.cancel(); //타이머 종료
+                        }
                         else {
                             time--;
                             int min = time / 60;
@@ -139,7 +143,6 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                 });
             }
         };
-        Timer timer=new Timer();
         timer.schedule(timerTask, 0, 1000); //1초에 한 번 시간 변경
 
         //인증번호 입력 다이얼로그 생성
@@ -160,6 +163,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                     SignUpActivity.Verified=true;
                     dialog.cancel();
                     SignUpActivity.emailET.setEnabled(false);
+                    timer.cancel(); //실행하던 타이머 종료
                     //인증 완료
                 } else Toast.makeText(context, "인증번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show(); //인증번호 불일치
             }
@@ -334,13 +338,13 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                             moveHome(ID);   //홈 액티비티로 이동
                         } else {
                             LoginActivity.pendingLayout.setVisibility(View.GONE);
-                            Toast.makeText(context, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "로그인 실패", Toast.LENGTH_SHORT).show();  //비밀번호 불일치
                         }
                     }
                 }
                 if(!find) {
                     LoginActivity.pendingLayout.setVisibility(View.GONE);
-                    Toast.makeText(context, "일치하는 ID를 찾지 못했습니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "로그인 실패", Toast.LENGTH_SHORT).show();    //ID가 존재하지 않음
                 }
             }
 

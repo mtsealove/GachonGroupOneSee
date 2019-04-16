@@ -54,6 +54,7 @@ public class QnAActivity extends AppCompatActivity { //Q&A 액티비티
     private void Search() { //검색
         Intent intent=new Intent(QnAActivity.this, SearchActivity.class);
         intent.putExtra("BoardName", BoardName);
+        intent.putExtra("userID", userID);
         startActivity(intent);
     }
     private void Post() { //게시글 작성
@@ -72,7 +73,7 @@ public class QnAActivity extends AppCompatActivity { //Q&A 액티비티
         else firebaseList.setListView(userID, boardLV, BoardName, value);
     }
     public void close(View v) {
-        finish();
+        onBackPressed();
     }
 
     @Override

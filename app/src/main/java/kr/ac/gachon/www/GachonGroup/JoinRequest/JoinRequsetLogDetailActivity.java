@@ -115,6 +115,7 @@ public class JoinRequsetLogDetailActivity extends AppCompatActivity {   //동아
                 intent.putExtra("groupName", group);
                 intent.putExtra("update", true);
                 startActivity(intent);  //수정하러 가기
+                Alert.dialog.cancel();
             }
         });
     }

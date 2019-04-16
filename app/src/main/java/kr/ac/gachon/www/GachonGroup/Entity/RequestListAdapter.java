@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,8 +46,18 @@ public class RequestListAdapter extends BaseAdapter { //가입 신청 표시용 
             convertView=inflater.inflate(R.layout.join_request_list, parent, false);
         }
 
-        TextView nameTV= convertView.findViewById(R.id.nameTV);
-        TextView majorTV= convertView.findViewById(R.id.majorTV);
+        TextView nameTV= convertView.findViewById(R.id.nameTV); //이름
+        TextView majorTV= convertView.findViewById(R.id.majorTV);   //전공
+        final CheckBox checkBox=convertView.findViewById(R.id.joinCheck); //쪽지 및 삭제를 위한
+        checkBox.setVisibility(View.GONE);
+        checkBox.setChecked(((ListView)parent).isItemChecked(pos));
+        checkBox.setFocusable(false);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {  //체크 지정
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                requestListViewItems.get(pos).setChecked(isChecked);
+            }
+        });
 
         RequestListViewItem requestListViewItem = requestListViewItems.get(position);
 

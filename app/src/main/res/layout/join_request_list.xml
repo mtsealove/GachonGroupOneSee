@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:layout_height="wrap_content"
     android:background="@drawable/btn_clear_list"
     >
 
     <TextView
-
+        android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:id="@+id/nameTV"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="이름"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <View
+        android:layout_centerVertical="true"
+        android:id="@+id/div"
+        android:layout_toRightOf="@id/nameTV"
         android:layout_width="1dp"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:background="#bdbdbd" />
 
     <TextView
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/div"
         android:layout_margin="10dp"
         android:id="@+id/majorTV"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="학과"
         android:textColor="#000000"
         android:textSize="20sp"/>
 
-</LinearLayout>
+    <CheckBox
+        android:id="@+id/joinCheck"
+        android:layout_margin="10dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -152,6 +152,8 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
             if (email.length() == 0) shortToast("이메일을 입력해주세요");
             else if (email.length()<5) { //5자 이하일 경우
                 alert.MsgDialog("올바른 이메일을\n입력해주세요");
+            } else if(email.contains("@")||email.contains("com")||email.contains("net")) {
+                alert.MsgDialog("가천대학교 ID를 입력해주세요");
             } else {
                 boolean reuse[] = {true};
                 email+=domainStr;   //이메일 ID에 도메인 추가
@@ -172,7 +174,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
         int stdNumberTry;
         try {
             stdNumberTry = Integer.parseInt(StudentNumberET.getText().toString());
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             stdNumberTry = 0;
         }
         final int stdNumber = stdNumberTry;

@@ -411,6 +411,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //해당 게시판의 마지막 글로
                 int count=0;
+                System.out.println("동아리명:"+groupName+" 게시판명: "+boardName);
                 for (DataSnapshot snapshot:dataSnapshot.child("Groups").child(groupName).child(boardName).getChildren()) {
                     count=snapshot.child("id").getValue(Integer.class)+1;
                 }
@@ -437,12 +438,13 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
     }
 
     //게시글 수정
-    public void Update(final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath) {
+    public void Update(final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath, final boolean temp) {
         DatabaseReference ref=database.getReference();
         //화면에 표시될 제목 및 내용 설정
         ref.child(boardName).child(boardID).child("title").setValue(title);
         ref.child(boardName).child(boardID).child("content").setValue(content);
-        ref.child(boardName).child(boardID).child("temp").setValue(null);
+        if(!temp)ref.child(boardName).child(boardID).child("temp").setValue(null);
+        else ref.child(boardName).child(boardID).child("temp").setValue("true");
         //날짜 업뎃
         Date date=new Date();
         String time=simpleDateFormat.format(date);
@@ -480,12 +482,13 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         Toast.makeText(context, "게시글이 수정되었습니다", Toast.LENGTH_SHORT).show();
     }
 
-    public void Update(final String GroupName, final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath) {
+    public void Update(final String GroupName, final String boardName, final String title, final String content, final String boardID, final ArrayList<String> RemoveFiles, final ArrayList<Uri> FilePath, final boolean temp) {
         DatabaseReference ref=database.getReference();
         //제목 및 내용 변경
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("title").setValue(title);
         ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("content").setValue(content);
-        ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("temp").setValue(null);
+        if(!temp)ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("temp").setValue(null);
+        else ref.child("Groups").child(GroupName).child(boardName).child(boardID).child("temp").setValue("true");
         //날짜 업뎃
         Date date=new Date();
         String time=simpleDateFormat.format(date);

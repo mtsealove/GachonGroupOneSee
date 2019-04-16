@@ -1,5 +1,6 @@
 package kr.ac.gachon.www.GachonGroup.Manager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,15 +23,23 @@ import java.util.ArrayList;
 import kr.ac.gachon.www.GachonGroup.R;
 
 public class RequirementLogActivity extends AppCompatActivity {
+    String boardName="Requirement";
+    public static Activity _requirementLogActivity;
     Button postBtn;
     ListView boardLV;
+    TextView titleTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
         postBtn=findViewById(R.id.postBtn);
         postBtn.setVisibility(View.GONE);
         boardLV=findViewById(R.id.boardLV);
+        titleTV=findViewById(R.id.titleTV);
+        titleTV.setText("문의사항");
+
+        _requirementLogActivity=RequirementLogActivity.this;
 
         FirebaseDatabase database=FirebaseDatabase.getInstance();
         DatabaseReference reference=database.getReference().child("Requirements");
@@ -61,5 +71,9 @@ public class RequirementLogActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void close(View v) {
+        finish();
     }
 }

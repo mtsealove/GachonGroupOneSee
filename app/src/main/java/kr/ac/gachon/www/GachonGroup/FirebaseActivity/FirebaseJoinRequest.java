@@ -195,7 +195,7 @@ public class FirebaseJoinRequest extends AppCompatActivity {    //firebase를 �
     }
 
     //자신의 동아리에 신청한 내역 조회(관리자)
-    public void GroupJoinRequestLog(final ListView listView, final String group) {
+    public void GroupJoinRequestLog(final ListView listView, final String group, final ArrayList<Integer> ids) {
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -212,6 +212,8 @@ public class FirebaseJoinRequest extends AppCompatActivity {    //firebase를 �
                         requestListAdapter.addItem(name, major);    //전공 이름 표시
                     }
                 }
+                for(int id: requestIDs)
+                    ids.add(id);
                 listView.setAdapter(requestListAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -250,5 +252,10 @@ public class FirebaseJoinRequest extends AppCompatActivity {    //firebase를 �
 
             }
         });
+    }
+
+    public void RemoveJoinRequest(int requestID) {  //신청 내역 삭제
+        DatabaseReference reference=database.getReference().child("JoinRequest").child(Integer.toString(requestID));
+        reference.setValue(null);
     }
 }

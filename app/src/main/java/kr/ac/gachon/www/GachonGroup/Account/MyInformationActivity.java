@@ -149,6 +149,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
                     startActivity(intent1);
                 }
             });
+            removeAccountBtn.setVisibility(View.GONE);
         }
     }
 
@@ -180,7 +181,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
     //회원 탈퇴 메서드
     private void Remove_Account() {
         final Alert alert=new Alert(MyInformationActivity.this);
-        alert.MsgDialogChoice("회원을 탙퇴하십니까?", new View.OnClickListener() {
+        alert.MsgDialogChoice("회원을 탈퇴하십니까?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 firebaseAccount.RemoveAccount(ID);
@@ -258,18 +259,5 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         Intent intent=new Intent(MyInformationActivity.this, RequirementsActivity.class);
         intent.putExtra("ID", ID);
         startActivity(intent);
-    }
-
-    //내 동아리 일정 바로가기
-    private void MyGroupSchedule() {
-        if(account.group.equals("동아리 없음"))
-            Toast.makeText(MyInformationActivity.this, "가입된 동아리가 없습니다", Toast.LENGTH_SHORT).show();
-        else {
-            Intent intent = new Intent(MyInformationActivity.this, GroupScheduleActivity.class);
-            intent.putExtra("groupName", account.group);
-            intent.putExtra("is_manager", account.is_manager);
-            intent.putExtra("userGroup", account.group);
-            startActivity(intent);
-        }
     }
 }

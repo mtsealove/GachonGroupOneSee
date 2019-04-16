@@ -38,13 +38,16 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
     EditText ID_et;
     EditText PW_et;
     Button LoginBtn;
-    public static RelativeLayout pendingLayout;
+    public static RelativeLayout pendingLayout; //로그인 기다려주세요 레이아웃
     public static Account account;
+    private BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        backPressCloseHandler=new BackPressCloseHandler(LoginActivity.this);
 
         ID_et = findViewById(R.id.ID_et);
         PW_et = findViewById(R.id.PW_et);
@@ -83,7 +86,7 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
 
         //아이디, 비밀번호 미입력 체크
         if(ID.length()==0) Toast.makeText(LoginActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
-        else if(password.length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
+        else if(PW_et.getText().toString().length()==0) Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
         else {
             pendingLayout.setVisibility(View.VISIBLE);  //잠시만요
             FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
@@ -119,7 +122,6 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
 
     @Override
     public void onBackPressed() { //뒤로가기 2번 눌러 종료
-        BackPressCloseHandler backPressCloseHandler=new BackPressCloseHandler(LoginActivity.this);
         backPressCloseHandler.onBackPressed();
     }
 
