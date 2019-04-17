@@ -36,7 +36,7 @@ import kr.ac.gachon.www.GachonGroup.etc.VersionActivity;
 
 public class MyInformationActivity extends AppCompatActivity { //내 정보 액티비티
     TextView nameTV, groupTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn, noteBtn;
     ImageView profileIcon;
     private String ID, group;
     LinearLayout userLayout, managerLayout;
@@ -64,6 +64,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         userLayout=findViewById(R.id.userLayout);
         managerLayout=findViewById(R.id.ManagerLayout);
         accuseLogBtn=findViewById(R.id.accuseLogBtn);
+        noteBtn=findViewById(R.id.noteBtn);
 
         account=new Account();
         final Intent intent=getIntent();
@@ -121,6 +122,12 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
             @Override
             public void onClick(View v) {
                 JoinRequestLog();
+            }
+        });
+        noteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Note();
             }
         });
 
@@ -201,6 +208,12 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
             intent.putExtra("groupName", account.group);
             startActivity(intent);
         }
+    }
+
+    private void Note() {   //쪽지함
+        Intent intent=new Intent(MyInformationActivity.this, NoteListActivity.class);
+        intent.putExtra("userID", ID);
+        startActivity(intent);
     }
 
     private void PublicNotice() { //공지사항 조회

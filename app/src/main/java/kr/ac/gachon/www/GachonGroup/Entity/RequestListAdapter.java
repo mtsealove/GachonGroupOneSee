@@ -49,7 +49,7 @@ public class RequestListAdapter extends BaseAdapter { //가입 신청 표시용 
         TextView nameTV= convertView.findViewById(R.id.nameTV); //이름
         TextView majorTV= convertView.findViewById(R.id.majorTV);   //전공
         final CheckBox checkBox=convertView.findViewById(R.id.joinCheck); //쪽지 및 삭제를 위한
-        checkBox.setVisibility(View.GONE);
+        //checkBox.setVisibility(View.GONE);
         checkBox.setChecked(((ListView)parent).isItemChecked(pos));
         checkBox.setFocusable(false);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {  //체크 지정
