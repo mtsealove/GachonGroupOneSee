@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".Account.NoteDetailActivity">
+    tools:context=".Note.NoteDetailActivity">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
@@ -38,19 +38,114 @@
     </RelativeLayout>
 
     <LinearLayout
+
         android:layout_below="@id/titleLayout"
+        android:layout_above="@id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!--보낸/받는 사람 -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_margin="15dp"
+                android:id="@+id/otherTV"
+                android:textColor="#666666"
+                android:textSize="20sp"
+                android:text="보낸 사람"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/otherContent"
+                android:layout_toRightOf="@id/otherTV"
+                android:layout_marginVertical="15dp"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:text="보낸 사람"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+            <View
+                android:layout_below="@id/otherTV"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="#e0e0e0" />
+
         </RelativeLayout>
+
+        <!--보낸/받는 시간 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_margin="15dp"
+                android:id="@+id/timeTV"
+                android:textColor="#666666"
+                android:textSize="20sp"
+                android:text="보낸 사람"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/timeContent"
+                android:layout_toRightOf="@id/timeTV"
+                android:layout_marginVertical="15dp"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:text="2019-04-16 12:00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_below="@id/timeTV"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="#e0e0e0" />
+
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/contentTV"
+                android:padding="10dp"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:text="언제 면접보러 오세요"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#BDBDBD" />
+
+        <Button
+            android:id="@+id/returnBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/btn_color"
+            android:text="답장"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </RelativeLayout>
 
 </RelativeLayout>

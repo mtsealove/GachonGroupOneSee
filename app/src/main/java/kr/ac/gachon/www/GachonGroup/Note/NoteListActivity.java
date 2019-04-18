@@ -1,4 +1,4 @@
-package kr.ac.gachon.www.GachonGroup.Account;
+package kr.ac.gachon.www.GachonGroup.Note;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -68,6 +68,12 @@ public class NoteListActivity extends AppCompatActivity {
         firebaseNote.GetReceiveNote(userID, receiveList, receiveIDS);
         firebaseNote.GetSendNote(userID, sendList, sendIDS);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
 
     public void close(View v) {
         finish();

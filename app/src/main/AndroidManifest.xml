@@ -17,8 +17,9 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Account.NoteDetailActivity"></activity>
-        <activity android:name=".Account.NoteListActivity" />
+        <activity android:name=".Note.SendNoteActivity"></activity>
+        <activity android:name=".Note.NoteDetailActivity" />
+        <activity android:name=".Note.NoteListActivity" />
         <activity android:name=".Manager.RequirementsLogDetialActivity" />
         <activity android:name=".Manager.RequirementLogActivity" />
         <activity android:name=".Manager.AccuseLogDetailActivity" />

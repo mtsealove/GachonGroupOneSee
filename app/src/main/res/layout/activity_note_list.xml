@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context=".Account.NoteListActivity">
+    tools:context=".Note.NoteListActivity">
 
     <RelativeLayout
         android:id="@+id/titleLayout"
