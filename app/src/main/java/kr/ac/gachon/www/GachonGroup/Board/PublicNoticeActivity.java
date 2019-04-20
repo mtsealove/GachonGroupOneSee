@@ -96,7 +96,7 @@ public class PublicNoticeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() { //검색을 했던 경우 검색 없는 액티비티 생성
         if(value!=null) {
-            Intent intent=new Intent(PublicNoticeActivity.this, FederationNoticeActivity.class);
+            Intent intent=new Intent(PublicNoticeActivity.this,PublicNoticeActivity.class);
             intent.putExtra("userID", ID);
             intent.putExtra("group", group);
             startActivity(intent);
