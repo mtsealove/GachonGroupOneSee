@@ -18,9 +18,7 @@ public class SendNoteActivity extends AppCompatActivity {
     EditText receiverET, contentET;
     Button sendBtn;
     Alert alert;
-    private String Sender, Receiver;
-
-    private String receiver, content;
+    private String Sender, Receiver, content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +43,17 @@ public class SendNoteActivity extends AppCompatActivity {
         Intent intent=getIntent();
         Sender=intent.getStringExtra("Sender");
         Receiver=intent.getStringExtra("Receiver");
-        if(Receiver.length()!=0) {  //미리 입력받았다면
+        if(Receiver!=null&&Receiver.length()!=0) {  //미리 입력받았다면
             receiverET.setText(Receiver);
         }
     }
 
     private boolean CheckInput() {  //정확히 입력했는지 확인
         boolean result=false;
-        receiver=receiverET.getText().toString();
+        Receiver=receiverET.getText().toString();
         content=contentET.getText().toString();
 
-        if(receiver.length()==0) Toast.makeText(SendNoteActivity.this, "받는 사람을 입력하세요", Toast.LENGTH_SHORT).show();
+        if(Receiver.length()==0) Toast.makeText(SendNoteActivity.this, "받는 사람을 입력하세요", Toast.LENGTH_SHORT).show();
         else if(content.length()==0) Toast.makeText(SendNoteActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
         else result=true;
 

@@ -94,7 +94,7 @@ public class FirebaseCalendar extends AppCompatActivity {   //firebase를 이용
                         layout.addView(sub);    //화면에 추가
                         exist=true;
                         //해당 일정 추가
-                        if(isManager&&userGroup.equals(GroupName)) {    //관리자이며 자신의 동아리일 경우
+                        if(isManager&&userGroup.equals(GroupName)||userGroup.equals("관리자")) {    //관리자이며 자신의 동아리일 경우
                             sub.setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
                                 public boolean onLongClick(View v) {    //길게 눌러서

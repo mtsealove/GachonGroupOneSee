@@ -55,6 +55,7 @@
 
 
         <EditText
+            android:inputType="textPersonName"
             android:id="@+id/receiverET"
             android:padding="15dp"
             android:background="@drawable/btn_clear_list"

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import kr.ac.gachon.www.GachonGroup.Group.GroupQnAActivity;
 import kr.ac.gachon.www.GachonGroup.Group.GroupInformationBoardActivity;
+import kr.ac.gachon.www.GachonGroup.Manager.AccuseLogActivity;
 import kr.ac.gachon.www.GachonGroup.Manager.RequirementLogActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -29,6 +30,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
     PRBoardActivity prBoardActivity;
     PublicNoticeActivity publicNoticeActivity;
     RequirementLogActivity requirementLogActivity;
+    AccuseLogActivity accuseLogActivity;
     private String BoardName, groupName, userID;
     private String userGroup;
     private boolean is_manager;
@@ -50,7 +52,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
         prBoardActivity=(PRBoardActivity) PRBoardActivity.PRBActivity;
         publicNoticeActivity=(PublicNoticeActivity)PublicNoticeActivity._PublicNoticeActivity;
         requirementLogActivity=(RequirementLogActivity)RequirementLogActivity._requirementLogActivity;
-
+        accuseLogActivity=(AccuseLogActivity)AccuseLogActivity.accuseLogActivity;
 
         //게시판 이름과 동아리 이름을 받아옴
         Intent intent=getIntent();
@@ -83,6 +85,9 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
                 break;
             case "Requirement":
                 BoardNameKR="문의사항";
+                break;
+            case "Accuse":
+                BoardNameKR="신고 내역";
                 break;
         }
         titleTV.setText(BoardNameKR); //게시판 이름 설정
@@ -184,6 +189,13 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
                     intent.putExtra("userID", userID);
                     intent.putExtra("group", groupName);
                     intent.putExtra("is_manager", is_manager);
+                    startActivity(intent);
+                    finish();
+                    break;
+                case "Accuse":
+                    accuseLogActivity.finish();
+                    intent=new Intent(this, AccuseLogActivity.class);
+                    intent.putExtra("value", value);
                     startActivity(intent);
                     finish();
                     break;

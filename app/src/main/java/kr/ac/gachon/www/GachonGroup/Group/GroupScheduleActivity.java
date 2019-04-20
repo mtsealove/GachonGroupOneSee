@@ -56,8 +56,8 @@ public class GroupScheduleActivity extends AppCompatActivity {  //동아리 일�
 
         firebaseCalendar=new FirebaseCalendar(GroupScheduleActivity.this);
         init();
-        //관리자이며 자신의 동아리 일 경우 일정 추가 활성화
-        if(is_manager&&userGroup.equals(groupName)) WriteAble();
+        //관리자이며 자신의 동아리 일 경우 일정 추가 활성화  //관리자 포함
+        if(is_manager&&userGroup.equals(groupName)||userGroup.equals("관리자")) WriteAble();
     }
     //초기화
     private void init() {

@@ -10,14 +10,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import kr.ac.gachon.www.GachonGroup.Board.PublicNoticeActivity;
 import kr.ac.gachon.www.GachonGroup.Entity.RequestListViewItem;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseJoinRequest;
+import kr.ac.gachon.www.GachonGroup.Note.SendNoteActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class GroupJoinRequestLogActivity extends AppCompatActivity {    //특정 동아리에 가입신청된 기록을 조회하는 액티비티, 관리자만 접근 가능
     ListView boarLV;
-    private String groupName;
+    private String groupName, userID;
     Button noteBtn, removeBtn;
     ArrayList<Integer> requestIds;
     Alert alert;
@@ -33,6 +35,7 @@ public class GroupJoinRequestLogActivity extends AppCompatActivity {    //특정
         alert=new Alert(this);
         Intent intent=getIntent();
         groupName=intent.getStringExtra("groupName");
+        userID=intent.getStringExtra("userID");
 
         init();
 
@@ -47,6 +50,13 @@ public class GroupJoinRequestLogActivity extends AppCompatActivity {    //특정
                 }
                 if(!exist) Toast.makeText(GroupJoinRequestLogActivity.this, "신청 내역을\n선택해주세요", Toast.LENGTH_SHORT).show();
                 else RemoveJoinRequest();
+            }
+        });
+
+        noteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendNote();
             }
         });
     }
@@ -73,6 +83,36 @@ public class GroupJoinRequestLogActivity extends AppCompatActivity {    //특정
                 init(); //삭제 후 리로드
             }
         });
+    }
+
+    private void SendNote() {
+        final ArrayList<String> ids=new ArrayList<>();
+        for(int i=0; i<boarLV.getAdapter().getCount(); i++) {
+            RequestListViewItem item= (RequestListViewItem) boarLV.getAdapter().getItem(i);
+            if(item.isChecked()) {  //체크되어 있다면
+                ids.add(item.getUserID());  //사용자의 ID추가
+            }
+        }
+        if(ids.size()==0) alert.MsgDialog("신청 내역을\n선택해주세요");
+        else {
+            alert.MsgDialogChoice("쪽지를 보내시겠습니까?", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(GroupJoinRequestLogActivity.this, SendNoteActivity.class);
+                    intent.putExtra("Sender", userID);
+                    StringBuffer Receivers=new StringBuffer();
+                    for(String id:ids){
+                        Receivers.append(id);
+                        Receivers.append(",");
+                    }
+                    Receivers.deleteCharAt(Receivers.length()-1);
+                    intent.putExtra("Receiver", Receivers.toString());
+                    startActivity(intent);
+                    Alert.dialog.cancel();
+                }
+            });
+        }
+
     }
 
     @Override

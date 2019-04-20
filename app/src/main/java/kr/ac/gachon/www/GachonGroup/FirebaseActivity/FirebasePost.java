@@ -36,6 +36,7 @@ import java.util.Date;
 
 import kr.ac.gachon.www.GachonGroup.Board.AccuseActivity;
 import kr.ac.gachon.www.GachonGroup.Board.PostActivity;
+import kr.ac.gachon.www.GachonGroup.Note.SendNoteActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
@@ -62,12 +63,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String userGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
                 final LayoutInflater inflater=LayoutInflater.from(context);
                 layout.removeAllViews();    //모든 댓글 뷰 제거
                 ArrayList<View> replys=new ArrayList<>();
                 final ArrayList<String> userIDs=new ArrayList<>();
                 final ArrayList<Integer> replyIDS=new ArrayList<>();
                 final ArrayList<String> contents=new ArrayList<>();
+
                 for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(Integer.toString(BoardID)).child("reply").getChildren()) {
                     View reply=inflater.inflate(R.layout.sub_reply, null);  //각 댓글을 표시할 레이아웃
                     TextView authorTV=reply.findViewById(R.id.authorTV);    //댓글 작성자 TextView
@@ -95,11 +98,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                             final AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             final ArrayList<String> arrayList=new ArrayList<>();
 
-                            if (userID.equals(userIDs.get(finalI))) {
+                            if (userID.equals(userIDs.get(finalI))||userGroup.equals("관리자")) {
                                 arrayList.add("삭제하기");
                                 arrayList.add("수정하기");  //자신의 댓글이면 삭제 가능
                             }
-                            else arrayList.add("신고하기");  //다른이의 댓글이면 신고 기능
+                            else {
+                                arrayList.add("신고하기");  //다른이의 댓글이면 신고 기능
+                                arrayList.add("쪽기 보내기");    //쪽지 가능
+                            }
 
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             final ListView listView=new ListView(context);
@@ -150,6 +156,13 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                             });
                                             alertDialog.show();
                                             break;
+                                        case "쪽기 보내기":  //쪽지
+                                            Intent NoteIntent=new Intent(context, SendNoteActivity.class);
+                                            NoteIntent.putExtra("Sender", userID);
+                                            NoteIntent.putExtra("Receiver", userIDs.get(finalI));
+                                            context.startActivity(NoteIntent);
+                                            dialog.cancel();
+                                            break;
                                     }
                                 }
                             });
@@ -176,6 +189,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String userGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
                 final LayoutInflater inflater=LayoutInflater.from(context);
                 //데이터가 업데이트 되면 모든 뷰를 추가하기 때문에 모든 뷰 삭제
                 layout.removeAllViews();
@@ -213,11 +227,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                             final AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             final ArrayList<String> arrayList=new ArrayList<>();
 
-                            if (userID.equals(userIDs.get(finalI))) {
+                            if (userID.equals(userIDs.get(finalI))||userGroup.equals("관리자")) {
                                 arrayList.add("삭제하기");  //자신
                                 arrayList.add("수정하기");
                             }
-                            else arrayList.add("신고하기"); //다른이
+                            else {
+                                arrayList.add("신고하기"); //다른이
+                                arrayList.add("쪽기 보내기");    //쪽지 가능
+                            }
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
@@ -264,7 +281,13 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                                 }
                                             });
                                             alertDialog.show();
-
+                                            break;
+                                        case "쪽기 보내기":  //쪽지
+                                            Intent NoteIntent=new Intent(context, SendNoteActivity.class);
+                                            NoteIntent.putExtra("Sender", userID);
+                                            NoteIntent.putExtra("Receiver", userIDs.get(finalI));
+                                            context.startActivity(NoteIntent);
+                                            dialog.cancel();
                                             break;
                                     }
                                 }
@@ -728,5 +751,10 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
             }
         });
+    }
+
+    public void RemoveRequire(String requirementID) {   //문의사항 삭제
+        DatabaseReference reference=database.getReference().child("Requirements").child(requirementID);
+        reference.setValue(null);
     }
 }

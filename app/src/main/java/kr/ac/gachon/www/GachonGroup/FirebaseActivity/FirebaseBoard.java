@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.Board.PostActivity;
+import kr.ac.gachon.www.GachonGroup.Note.SendNoteActivity;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
 
 public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 게시글 확인 메서드 및 신고
@@ -98,6 +99,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 reference.child("Accuse").child(count).child("BoardID").setValue(boardID);
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
                 reference.child("Accuse").child(count).child("Reason").setValue(reason);
+                reference.child("Accuse").child(count).child("Read").setValue(false);
             }
 
             @Override
@@ -125,6 +127,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                 reference.child("Accuse").child(count).child("UserID").setValue(userID);
                 reference.child("Accuse").child(count).child("Reason").setValue(reason);
                 reference.child("Accuse").child(count).child("GroupName").setValue(groupName);
+                reference.child("Accuse").child(count).child("Read").setValue(false);
             }
 
             @Override
@@ -189,13 +192,14 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
     }
 
     //자신의 글인지 확인(일반 게시판)
-    public void MyContent(final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn){
+    public void MyContent(final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn, final Button noteBtn){
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class); //관리자 파악을 위해
-                if(dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)||UserGroup.equals("관리자")) {    //자신의 글 또는 관리자이면
+                final String author=dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class);
+                if(author.equals(userID)||UserGroup.equals("관리자")) {    //자신의 글 또는 관리자이면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진의 경로
                     for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
                         String path=snapshot.child("FilePath").getValue(String.class);
@@ -237,6 +241,17 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                             });
                         }
                     });
+                } else {
+                    noteBtn.setVisibility(View.VISIBLE);    //쪽지
+                    noteBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(context, SendNoteActivity.class);
+                            intent.putExtra("Sender", userID);
+                            intent.putExtra("Receiver", author);
+                            context.startActivity(intent);
+                        }
+                    });
                 }
             }
 
@@ -248,13 +263,14 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
     }
 
     //자신의 글인지 확인(동아리 게시판)
-    public void MyContent(final String groupName, final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn){
+    public void MyContent(final String groupName, final String boardName, final String boardID, final String userID, final Button editBtn, final Button removeBtn, final Button noteBtn){
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
-                if(dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class).equals(userID)||UserGroup.equals("관리자")) {   //자신의 글 또는 관리자라면
+                final String author=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class);
+                if(author.equals(userID)||UserGroup.equals("관리자")) {   //자신의 글 또는 관리자라면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진 경로
                     for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("Photos").getChildren()) {
                         String path=snapshot.child("FilePath").getValue(String.class);
@@ -296,6 +312,17 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                                     ((Activity)context).finish();   //현재 액티비티 종료
                                 }
                             });
+                        }
+                    });
+                } else {
+                    noteBtn.setVisibility(View.VISIBLE);    //쪽지
+                    noteBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(context, SendNoteActivity.class);
+                            intent.putExtra("Sender", userID);
+                            intent.putExtra("Receiver", author);
+                            context.startActivity(intent);
                         }
                     });
                 }

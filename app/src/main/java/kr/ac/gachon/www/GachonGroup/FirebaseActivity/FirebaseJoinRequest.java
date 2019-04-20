@@ -208,8 +208,9 @@ public class FirebaseJoinRequest extends AppCompatActivity {    //firebase를 �
                         String major=snapshot.child("major").getValue(String.class);    //전공
                         String name=snapshot.child("name").getValue(String.class);      //이름
                         int requestID=snapshot.child("requestID").getValue(Integer.class);  //신청 ID
+                        String userID=snapshot.child("ID").getValue(String.class);
                         requestIDs.add(requestID);
-                        requestListAdapter.addItem(name, major);    //전공 이름 표시
+                        requestListAdapter.addItem(name, major, userID);    //전공 이름 표시
                     }
                 }
                 for(int id: requestIDs)

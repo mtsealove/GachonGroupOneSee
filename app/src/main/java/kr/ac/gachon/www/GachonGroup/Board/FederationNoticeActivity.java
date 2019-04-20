@@ -60,7 +60,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         else firebaseList.setListView(ID, boardLV, BoardName, value);
 
         //연합회일 경우 모든 작성 버튼 활성화
-        if(group.contains("연합회")||group.contains("관리자")) {
+        if(group.contains("연합회")) {
             postBtn.setVisibility(View.VISIBLE);
             postBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

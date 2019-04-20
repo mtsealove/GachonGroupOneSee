@@ -92,6 +92,7 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
         //동아리거나 홍보게시판이면 내용을 입력해주세요로 설정
         if(groupName!=null) contentET.setHint("내용을 입력해주세요");
         else if(boardName.equals("PublicRelation")) contentET.setHint("내용을 입력해주세요");
+        else if(boardName.equals("PublicNotice")) contentET.setHint("공지사항을 입력해주세요");
 
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override

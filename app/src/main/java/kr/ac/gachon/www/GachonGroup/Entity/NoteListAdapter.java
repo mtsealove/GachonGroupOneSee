@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -56,14 +57,14 @@ public class NoteListAdapter extends BaseAdapter { //가입 신청 표시용 어
         checkBox.setFocusable(false);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {  //체크 지정
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {    //체크하면 참으로 변경
                 noteItems.get(pos).setChecked(isChecked);
             }
         });
 
         NoteItem noteItem = noteItems.get(position);
 
-        String content4show=noteItem.getContent();
+        String content4show=noteItem.getContent().replace("\n", " ");
         if(content4show.length()>10) content4show=content4show.substring(0, 10)+"...";
         contentTV.setText(content4show);
         String date4show=noteItem.getDate().substring(5, 7)+"/"+noteItem.getDate().substring(8, 10);
@@ -82,6 +83,6 @@ public class NoteListAdapter extends BaseAdapter { //가입 신청 표시용 어
         noteItem.setRead(read); //읽었는지
         noteItem.setSender(sender); //보내는 사람
         noteItem.setReceiver(receiver); //받는 사람
-        noteItems.add(noteItem);
+        noteItems.add(0, noteItem); //마지막에 넣기
     }
 }

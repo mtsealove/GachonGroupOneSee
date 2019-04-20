@@ -66,10 +66,11 @@ public class RequestListAdapter extends BaseAdapter { //가입 신청 표시용 
         return convertView;
     }
 
-    public void addItem(String name, String major) {
+    public void addItem(String name, String major, String userID) {
         RequestListViewItem item=new RequestListViewItem();
         item.setMajor(major); //전공
         item.setName(name); //이름
-        requestListViewItems.add(item);
+        item.setUserID(userID);
+        requestListViewItems.add(0, item);
     }
 }

@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import kr.ac.gachon.www.GachonGroup.Account.EditMyInformationActivity;
+import kr.ac.gachon.www.GachonGroup.Account.LoginActivity;
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseBoard;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebasePost;
@@ -28,7 +31,7 @@ import kr.ac.gachon.www.GachonGroup.R;
 
 public class BoardActivity extends AppCompatActivity { //게시글 글 보기 액티비티
     TextView authorTV, titleTV, contentTV, boardNameTV, timeTV;
-    Button functionBtn, replyBtn, removeBtn;
+    Button functionBtn, replyBtn, removeBtn, noteBtn;
     LinearLayout ReplyShowLayout, ContentLayout;
     FrameLayout ReplyInputLayout;
     EditText replyET;
@@ -52,6 +55,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         removeBtn=findViewById(R.id.removeBtn);
         ContentLayout=findViewById(R.id.contentLayout);
         timeTV=findViewById(R.id.timeTV);
+        noteBtn=findViewById(R.id.noteBtn);
         //댓글 출력 레이아웃
         ReplyShowLayout=findViewById(R.id.ShowReplyLayout);
         ReplyInputLayout=findViewById(R.id.InputReplyLayout);
@@ -71,6 +75,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         id=intent.getIntExtra("id", 0); //게시판 번호 수신
         userID=intent.getStringExtra("userID"); //사용자 ID수신
         groupName=intent.getStringExtra("groupName"); //동아리 이름 수신
+
         //게시판 이름에 따라 다르게 설정
         switch (boardName) {
             case "PublicRelation":
@@ -164,11 +169,11 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
         //동아리게시판인지 확인하고 해당하는 내용 불러오기
         if(groupName==null) { //동아리 게시판이 아닐 경우
             firebaseBoard.setTextViewBoard(authorTV, titleTV, contentTV, boardName, id, timeTV); //게시물 불러오기
-            firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
+            firebaseBoard.MyContent(boardName, Integer.toString(id), userID, functionBtn, removeBtn, noteBtn); //자신의 글인지 확인
             firebaseImage.getBoardPhotos(boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
         } else { //동아리 게시판일 경우
             firebaseBoard.setTextViewBoard(groupName, authorTV, titleTV, contentTV, boardName, id, timeTV); //게시물 불러오기
-            firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn); //자신의 글인지 확인
+            firebaseBoard.MyContent(groupName, boardName, Integer.toString(id), userID, functionBtn, removeBtn, noteBtn); //자신의 글인지 확인
             firebaseImage.getBoardPhotos(groupName, boardName, Integer.toString(id), ContentLayout, contentTV); //해당하는 사진 불러오기
         }
     }

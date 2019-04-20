@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import kr.ac.gachon.www.GachonGroup.Board.RequirementsActivity;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseNote;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.Group.GroupJoinRequestLogActivity;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
@@ -35,16 +37,18 @@ import kr.ac.gachon.www.GachonGroup.etc.Alert;
 import kr.ac.gachon.www.GachonGroup.etc.VersionActivity;
 
 public class MyInformationActivity extends AppCompatActivity { //내 정보 액티비티
-    TextView nameTV, groupTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn, noteBtn;
+    TextView nameTV, groupTV, UnreadNoteTV;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn;
     ImageView profileIcon;
     private String ID, group;
     LinearLayout userLayout, managerLayout;
+    RelativeLayout noteLayout;
 
     Account account;
     FirebaseAccount firebaseAccount;
     FirebaseView firebaseView;
     FirebaseImage firebaseImage;
+    FirebaseNote firebaseNote;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +68,8 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         userLayout=findViewById(R.id.userLayout);
         managerLayout=findViewById(R.id.ManagerLayout);
         accuseLogBtn=findViewById(R.id.accuseLogBtn);
-        noteBtn=findViewById(R.id.noteBtn);
+        noteLayout=findViewById(R.id.noteLayout);
+        UnreadNoteTV=findViewById(R.id.unReadNoteTV);
 
         account=new Account();
         final Intent intent=getIntent();
@@ -81,6 +86,9 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
 
         firebaseImage=new FirebaseImage(MyInformationActivity.this);
         firebaseImage.ShowProfileIcon(ID, profileIcon);
+
+        firebaseNote=new FirebaseNote(this);
+        firebaseNote.SetUnReadNotes(ID, UnreadNoteTV);
 
         EditInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +132,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
                 JoinRequestLog();
             }
         });
-        noteBtn.setOnClickListener(new View.OnClickListener() {
+        noteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Note();
@@ -229,6 +237,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         if(account.is_manager) {
             Intent intent=new Intent(MyInformationActivity.this, GroupJoinRequestLogActivity.class);
             intent.putExtra("groupName", account.group);
+            intent.putExtra("userID", ID);
             startActivity(intent);
         } else { //일반회원이면 자신이 신청한 동아리 내역 조회
             Intent intent=new Intent(MyInformationActivity.this, JoinRequestLogActivity.class);
@@ -246,6 +255,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         firebaseView.setTextView("group", ID, groupTV);
         firebaseImage.ShowProfileIcon(ID, profileIcon);
         firebaseAccount.GetAccount(ID, account);
+        firebaseNote.SetUnReadNotes(ID, UnreadNoteTV);
     }
 
     private String GetVersion() { //버전 확인

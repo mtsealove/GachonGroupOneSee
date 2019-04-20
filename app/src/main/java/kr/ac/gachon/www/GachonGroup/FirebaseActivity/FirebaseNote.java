@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import kr.ac.gachon.www.GachonGroup.Note.NoteDetailActivity;
@@ -51,6 +54,8 @@ public class FirebaseNote extends AppCompatActivity {   //쪽지 읽기 클래�
                         ids.add(id);    //삭제를 위한 ID추가
                     }
                 }
+
+                Collections.reverse(ids);
                 listView.setAdapter(noteListAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -95,6 +100,9 @@ public class FirebaseNote extends AppCompatActivity {   //쪽지 읽기 클래�
                         ids.add(id);    //삭제를 위한 ID추가
                     }
                 }
+
+                Collections.reverse(ids);
+
                 listView.setAdapter(noteListAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -140,25 +148,28 @@ public class FirebaseNote extends AppCompatActivity {   //쪽지 읽기 클래�
                 }
 
                 for(int i=0; i<Receivers.length; i++) { //상대의 수만큼
+                    Log.e("FirebaseNote", "수신자"+i+": "+Receivers[i]);
                     final int finalI = i;
                     final int finalCount = count[0];
+                    Date date=new Date();
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    String dateStr=dateFormat.format(date);
+                    DatabaseReference ref=reference.child(Integer.toString(finalCount));
+                    ref.child("ID").setValue(finalCount);
+                    ref.child("Content").setValue(Content);
+                    ref.child("Read").setValue(false);
+                    ref.child("Sender").setValue(Sender);
+                    ref.child("Receiver").setValue(Receivers[finalI]);
+                    ref.child("Date").setValue(dateStr);
+                    count[0]++;
+                    Toast.makeText(context, "쪽지가 발송되었습니다", Toast.LENGTH_SHORT).show();
+
                     AccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.child(Receivers[finalI]).exists()) {    //존재하면
-                                Date date=new Date();
-                                SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                String dateStr=dateFormat.format(date);
-                                DatabaseReference ref=reference.child(Integer.toString(finalCount));
-                                ref.child("ID").setValue(finalCount);
-                                ref.child("Content").setValue(Content);
-                                ref.child("Read").setValue(false);
-                                ref.child("Sender").setValue(Sender);
-                                ref.child("Receiver").setValue(Receivers[finalI]);
-                                ref.child("Date").setValue(dateStr);
-                                count[0]++;
                             }
-                            Toast.makeText(context, "쪽지가 발송되었습니다", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(context, Receivers[finalI]+"는(은) 존재하지 않는 ID입니다", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -178,10 +189,32 @@ public class FirebaseNote extends AppCompatActivity {   //쪽지 읽기 클래�
     }
 
 
-    public void DeleteReceiveNote(String userID, int NoteID) {   //받은 쪽지 삭제
-        DatabaseReference reference=database.getReference().child("Account").child(userID).child("Note").child("Receive").child(Integer.toString(NoteID));
+    public void DeleteReceiveNote(int NoteID) {   //받은 쪽지 삭제
+        DatabaseReference reference=database.getReference().child("Note").child(Integer.toString(NoteID));
         reference.setValue(null);   //삭제
     }
 
+    public void SetUnReadNotes(final String userID, final TextView textView) {  //안읽은 쪽지 표시
+        DatabaseReference reference=database.getReference().child("Note");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count=0;
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
+                    String Receiver=snapshot.child("Receiver").getValue(String.class);
+                    boolean Read=snapshot.child("Read").getValue(Boolean.class);
+                    if(Receiver.equals(userID)&&(!Read)) count++;
+                    Log.e("FirebaseNote", "안읽음: "+count);
+                }
+                if(count!=0) textView.setText("new("+count+")");
+                else textView.setText("");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
