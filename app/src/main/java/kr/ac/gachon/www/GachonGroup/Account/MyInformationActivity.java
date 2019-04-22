@@ -34,11 +34,12 @@ import kr.ac.gachon.www.GachonGroup.Manager.RequirementLogActivity;
 import kr.ac.gachon.www.GachonGroup.Note.NoteListActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
+import kr.ac.gachon.www.GachonGroup.etc.ServicePolicyActivity;
 import kr.ac.gachon.www.GachonGroup.etc.VersionActivity;
 
 public class MyInformationActivity extends AppCompatActivity { //내 정보 액티비티
     TextView nameTV, groupTV, UnreadNoteTV;
-    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn;
+    Button EditInfoBtn, logoutBtn, removeAccountBtn, myGroupBtn, requirementsBtn, joinRequestLogBtn, versionBtn, publicNoticeBtn, requirementLogBtn, accuseLogBtn, servicePlicyBtn;
     ImageView profileIcon;
     private String ID, group;
     LinearLayout userLayout, managerLayout;
@@ -70,6 +71,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         accuseLogBtn=findViewById(R.id.accuseLogBtn);
         noteLayout=findViewById(R.id.noteLayout);
         UnreadNoteTV=findViewById(R.id.unReadNoteTV);
+        servicePlicyBtn=findViewById(R.id.servicePolicyBtn);
 
         account=new Account();
         final Intent intent=getIntent();
@@ -136,6 +138,12 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
             @Override
             public void onClick(View v) {
                 Note();
+            }
+        });
+        servicePlicyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServicePolicy();
             }
         });
 
@@ -281,6 +289,11 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
     private void Requirements() {
         Intent intent=new Intent(MyInformationActivity.this, RequirementsActivity.class);
         intent.putExtra("ID", ID);
+        startActivity(intent);
+    }
+
+    private void ServicePolicy() {  //서비스 약관
+        Intent intent=new Intent(this, ServicePolicyActivity.class);
         startActivity(intent);
     }
 }

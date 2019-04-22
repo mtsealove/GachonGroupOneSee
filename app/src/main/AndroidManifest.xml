@@ -17,7 +17,8 @@
         android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Note.SendNoteActivity"></activity>
+        <activity android:name=".etc.ServicePolicyActivity"></activity>
+        <activity android:name=".Note.SendNoteActivity" />
         <activity android:name=".Note.NoteDetailActivity" />
         <activity android:name=".Note.NoteListActivity" />
         <activity android:name=".Manager.RequirementsLogDetialActivity" />

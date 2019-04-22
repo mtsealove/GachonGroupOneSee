@@ -186,17 +186,18 @@
                 android:text="@string/public_notice"
                 android:textSize="20sp" />
 
-            <Button
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-6dp"
-                android:background="@drawable/list_background"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingVertical="15dp"
-                android:text="@string/service_legal"
-                android:textSize="20sp" />
+                <Button
+                    android:id="@+id/servicePolicyBtn"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-6dp"
+                    android:background="@drawable/list_background"
+                    android:gravity="left|center_vertical"
+                    android:paddingVertical="15dp"
+                    android:paddingLeft="20dp"
+                    android:text="@string/service_legal"
+                    android:textSize="20sp" />
 
                 <Button
                     android:visibility="gone"
