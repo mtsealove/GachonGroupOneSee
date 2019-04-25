@@ -296,4 +296,8 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
         Intent intent=new Intent(this, ServicePolicyActivity.class);
         startActivity(intent);
     }
+
+    public void close(View v) {
+        finish();
+    }
 }

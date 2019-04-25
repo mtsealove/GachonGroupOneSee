@@ -62,7 +62,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         final DatabaseReference reference=database.getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 final String userGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
                 final LayoutInflater inflater=LayoutInflater.from(context);
                 layout.removeAllViews();    //모든 댓글 뷰 제거
@@ -97,22 +97,27 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                         public boolean onLongClick(View v) {    //댓글을 길게 눌렀을 때
                             final AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             final ArrayList<String> arrayList=new ArrayList<>();
+                            String authorGroup=dataSnapshot.child("Account").child(userIDs.get(finalI)).child("group").getValue(String.class);
 
                             if (userID.equals(userIDs.get(finalI))||userGroup.equals("관리자")) {
                                 arrayList.add("삭제하기");
                                 arrayList.add("수정하기");  //자신의 댓글이면 삭제 가능
                             }
-                            else {
+                            else if (dataSnapshot.child("Account").child(userIDs.get(finalI)).exists()&&!authorGroup.equals("관리자")){
                                 arrayList.add("신고하기");  //다른이의 댓글이면 신고 기능
-                                arrayList.add("쪽기 보내기");    //쪽지 가능
+                                arrayList.add("쪽지 보내기");    //쪽지 가능
                             }
+                            if(userGroup.equals("관리자")&&dataSnapshot.child("Account").child(userIDs.get(finalI)).exists())
+                                arrayList.add("쪽지 보내기");
+                            if(arrayList.size()==0) arrayList.add("취소");
 
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             final ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
                             builder.setView(listView);  //화면에 리스트 형식으로 삭제/신고 표시
                             final AlertDialog dialog=builder.create();
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            if(arrayList.size()!=0)
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {  //삭제/신고 클릭 시
                                     switch (arrayList.get(position)) {
@@ -156,11 +161,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                             });
                                             alertDialog.show();
                                             break;
-                                        case "쪽기 보내기":  //쪽지
+                                        case "쪽지 보내기":  //쪽지
                                             Intent NoteIntent=new Intent(context, SendNoteActivity.class);
                                             NoteIntent.putExtra("Sender", userID);
                                             NoteIntent.putExtra("Receiver", userIDs.get(finalI));
                                             context.startActivity(NoteIntent);
+                                            dialog.cancel();
+                                            break;
+                                        case "취소":
                                             dialog.cancel();
                                             break;
                                     }
@@ -188,7 +196,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
         final DatabaseReference reference=database.getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 final String userGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
                 final LayoutInflater inflater=LayoutInflater.from(context);
                 //데이터가 업데이트 되면 모든 뷰를 추가하기 때문에 모든 뷰 삭제
@@ -226,20 +234,27 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                         public boolean onLongClick(View v) {
                             final AlertDialog.Builder builder=new AlertDialog.Builder(context);
                             final ArrayList<String> arrayList=new ArrayList<>();
+                            String authorGroup=dataSnapshot.child("Account").child(userIDs.get(finalI)).child("group").getValue(String.class);
 
                             if (userID.equals(userIDs.get(finalI))||userGroup.equals("관리자")) {
                                 arrayList.add("삭제하기");  //자신
                                 arrayList.add("수정하기");
                             }
-                            else {
+                            else if(dataSnapshot.child("Account").child(userIDs.get(finalI)).exists()&&!authorGroup.equals("관리자")){
                                 arrayList.add("신고하기"); //다른이
-                                arrayList.add("쪽기 보내기");    //쪽지 가능
+                                arrayList.add("쪽지 보내기");    //쪽지 가능
                             }
+                            if(userGroup.equals("관리자")&&dataSnapshot.child("Account").child(userIDs.get(finalI)).exists())
+                                arrayList.add("쪽지 보내기");
+
+                            if(arrayList.size()==0) arrayList.add("취소");
+
                             ArrayAdapter adapter=new ArrayAdapter(context, R.layout.dropown_item_custom, arrayList);
                             ListView listView=new ListView(context);
                             listView.setAdapter(adapter);
                             builder.setView(listView);
                             final AlertDialog dialog=builder.create();
+
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -282,11 +297,14 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                             });
                                             alertDialog.show();
                                             break;
-                                        case "쪽기 보내기":  //쪽지
+                                        case "쪽지 보내기":  //쪽지
                                             Intent NoteIntent=new Intent(context, SendNoteActivity.class);
                                             NoteIntent.putExtra("Sender", userID);
                                             NoteIntent.putExtra("Receiver", userIDs.get(finalI));
                                             context.startActivity(NoteIntent);
+                                            dialog.cancel();
+                                            break;
+                                        case "취소":
                                             dialog.cancel();
                                             break;
                                     }

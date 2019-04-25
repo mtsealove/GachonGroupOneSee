@@ -161,6 +161,7 @@ public class BoardActivity extends AppCompatActivity { //게시글 글 보기 �
                 break;
             case "PublicNotice":
                 boardNameKR="공지사항";
+                noteBtn.setVisibility(View.GONE);   //공지사항에는 쪽지 봇보내게
                 break;
         }
 

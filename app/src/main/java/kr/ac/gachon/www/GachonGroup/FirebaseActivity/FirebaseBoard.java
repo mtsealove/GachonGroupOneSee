@@ -199,6 +199,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class); //관리자 파악을 위해
                 final String author=dataSnapshot.child(boardName).child(boardID).child("author").getValue(String.class);
+                String authorGroup=dataSnapshot.child("Account").child(author).child("group").getValue(String.class);   //글쓴이의 동아리
                 if(author.equals(userID)||UserGroup.equals("관리자")) {    //자신의 글 또는 관리자이면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진의 경로
                     for(DataSnapshot snapshot: dataSnapshot.child(boardName).child(boardID).child("Photos").getChildren()) {
@@ -241,7 +242,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                             });
                         }
                     });
-                } else {
+                } else if(authorGroup!=null&&(!authorGroup.equals("관리자"))){  //글쓴이가 관리자가 아니라면
                     noteBtn.setVisibility(View.VISIBLE);    //쪽지
                     noteBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -268,8 +269,9 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class);
-                final String author=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class);
+                String UserGroup=dataSnapshot.child("Account").child(userID).child("group").getValue(String.class); //본인이 관리자인지 알기 위해
+                final String author=dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("author").getValue(String.class);   //글쓴이
+                String authorGroup=dataSnapshot.child("Account").child(author).child("group").getValue(String.class);   //글쓴이의 동아리
                 if(author.equals(userID)||UserGroup.equals("관리자")) {   //자신의 글 또는 관리자라면
                     final ArrayList<String> FilePath=new ArrayList<>(); //사진 경로
                     for(DataSnapshot snapshot: dataSnapshot.child("Groups").child(groupName).child(boardName).child(boardID).child("Photos").getChildren()) {
@@ -314,7 +316,7 @@ public class FirebaseBoard extends AppCompatActivity {  //firebase를 이용한 
                             });
                         }
                     });
-                } else {
+                } else if(authorGroup!=null&&(!authorGroup.equals("관리자"))){  //관리자한테는 못보내게
                     noteBtn.setVisibility(View.VISIBLE);    //쪽지
                     noteBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
