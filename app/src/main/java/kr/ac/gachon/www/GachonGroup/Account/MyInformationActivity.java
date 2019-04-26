@@ -154,8 +154,9 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
             //userLayout.setVisibility(View.GONE);
             //managerLayout.setVisibility(View.VISIBLE);
 
-            joinRequestLogBtn.setVisibility(View.GONE);
-            myGroupBtn.setVisibility(View.GONE);
+            noteLayout.setVisibility(View.GONE);    //쪽지 안보이게
+            joinRequestLogBtn.setVisibility(View.GONE); //가입요청 안보이게
+            myGroupBtn.setVisibility(View.GONE);    //내 동아리 안보이게
             requirementsBtn.setText("문의사항 조회");
             requirementsBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,7 +165,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
                     startActivity(intent1);
                 }
             });
-            accuseLogBtn.setVisibility(View.VISIBLE);
+            accuseLogBtn.setVisibility(View.VISIBLE);   //신고목록 보이게
             accuseLogBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -172,7 +173,7 @@ public class MyInformationActivity extends AppCompatActivity { //내 정보 액�
                     startActivity(intent1);
                 }
             });
-            removeAccountBtn.setVisibility(View.GONE);
+            removeAccountBtn.setVisibility(View.GONE);  //회원탈퇴 안보이게
         }
     }
 
