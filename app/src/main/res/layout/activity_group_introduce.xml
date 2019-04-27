@@ -61,22 +61,23 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="479dp"
+            android:layout_height="match_parent"
             android:layout_above="@id/functionLayout"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="-66dp"
+            android:layout_marginBottom="20dp"
             android:scrollbars="none">
 
             <TextView
+                android:layout_marginHorizontal="15dp"
                 android:id="@+id/introduceTV"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
                 android:lineSpacingMultiplier="1.5"
                 android:text="소개"
                 android:textColor="#000000"
                 android:textSize="17sp" />
         </ScrollView>
+
         <LinearLayout
             android:id="@+id/functionLayout"
             android:layout_width="match_parent"
@@ -90,7 +91,7 @@
 
             <Button
                 android:layout_marginHorizontal="10dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/functionBtn"
                 android:paddingHorizontal="20dp"
                 android:layout_width="wrap_content"
@@ -110,10 +111,8 @@
                 android:text="@string/remove"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </LinearLayout>
 
     </RelativeLayout>
-
-
 </LinearLayout>

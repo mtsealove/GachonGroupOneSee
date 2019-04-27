@@ -65,4 +65,8 @@ public class AccuseLogDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void close(View v){
+        finish();
+    }
 }

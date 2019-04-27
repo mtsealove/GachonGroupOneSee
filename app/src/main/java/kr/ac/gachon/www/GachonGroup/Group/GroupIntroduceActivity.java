@@ -45,10 +45,10 @@ public class GroupIntroduceActivity extends AppCompatActivity {  //동아리 소
         firebaseView.setStringTextView(introduceTV, "Groups", group, "introduce", "소개글이 없습니다"); //동아리에 해당하는 소개글 표시
         firebaseView.setStringTextView(locationTV, "Groups", group, "location", "위치 정보가 없습니다"); //동아리에 해당하는 위치 표시
 
-        if(is_manager&&group.equals(userGroup)) {   //관리자이며 사용자의 동아리인경우
+        if((is_manager&&group.equals(userGroup))||userGroup.equals("관리자")) {   //관리자이며 사용자의 동아리인경우//또는 애플리케이션 관리자인경우
             functionBtn.setVisibility(View.VISIBLE);    //수정/등록 활성화
-            firebaseView.setButtonText(group, functionBtn);
-            removeBtn.setVisibility(View.VISIBLE);
+            firebaseView.setButtonText(group, functionBtn); //수정인지 등록인지 판단
+            removeBtn.setVisibility(View.VISIBLE);  //삭제버튼 활성화
             functionBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

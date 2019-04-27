@@ -279,14 +279,14 @@ public class PostActivity extends AppCompatActivity { //게시글 작성
     };
     View.OnClickListener TempUpdateListener=new View.OnClickListener() {    //일반게시판 수정/임시저장
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) {   //일반 게시판 업데이트 임시저장
             firebasePost.Update(boardName, title, content, boardID, removeFile, filePath, true);
             finish();
         }
     };
     View.OnClickListener TempGroupUpdateListener=new View.OnClickListener() {   //동아리게시판 수정/임시저장
         @Override
-        public void onClick(View v) {
+        public void onClick(View v) {   //동아리게시판 임시저장 업데이트
             firebasePost.Update(groupName, boardName, title, content, boardID, removeFile, filePath, true);
             finish();
         }

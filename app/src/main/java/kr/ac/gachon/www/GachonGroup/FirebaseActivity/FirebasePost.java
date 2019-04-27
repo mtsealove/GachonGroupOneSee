@@ -1,6 +1,7 @@
 package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -659,6 +660,9 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
     //일반 게시판 임시저장 체크
     public void CheckTempBoard(final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
+        final ProgressDialog progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("로딩중입니다");
+        progressDialog.show();
         DatabaseReference reference=database.getReference().child(boardName);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -669,6 +673,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                     //ID가 일치하며 임시 글인 경우
                     try {
                     if(userID.equals(ID)&&temp!=null) {
+                        progressDialog.cancel();
                         final Alert alert=new Alert(context);
                         alert.MsgDialogChoice("임시저장한 내용을\n불러오시겠습니까?", new View.OnClickListener() {
                             @Override
@@ -689,7 +694,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                 PostActivity.boardID=boardId;    //게시글 ID 설정
                             }
                         });
-
+                        break;
                     }} catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -705,7 +710,10 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
 
     //동아리 게시판 임시저장 체크
     public void CheckTempBoard(final String GroupName, final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
-        DatabaseReference reference=database.getReference().child(GroupName).child(boardName);
+        final ProgressDialog progressDialog=new ProgressDialog(context);
+        progressDialog.setMessage("로딩중입니다");
+        progressDialog.show();
+        DatabaseReference reference=database.getReference().child("Groups").child(GroupName).child(boardName);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -714,6 +722,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                     String temp=snapshot.child("temp").getValue(String.class);
                     //ID가 일치하며 임시 글인 경우
                     if(userID.equals(ID)&&temp!=null) {
+                        progressDialog.cancel();
                         final Alert alert=new Alert(context);
                         alert.MsgDialogChoice("임시저장한 내용을\n불러오시겠습니까?", new View.OnClickListener() {
                             @Override
@@ -734,7 +743,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                                 PostActivity.boardID=boardId;    //게시글 ID 설정
                             }
                         });
-
+                        break;
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package kr.ac.gachon.www.GachonGroup.FirebaseActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -109,7 +110,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
     }
 
 
-    int time;   //제한시간
+    int time=0;   //제한시간
     private void VerifyCode() { //인증번호 확인 메서드
         time=300; //제한시간 5분
         //레이아웃 inflate
@@ -143,7 +144,6 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                 });
             }
         };
-        timer.schedule(timerTask, 0, 1000); //1초에 한 번 시간 변경
 
         //인증번호 입력 다이얼로그 생성
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
@@ -151,6 +151,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
         final AlertDialog dialog=builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
         dialog.show();
+        timer.schedule(timerTask, 0, 1000); //1초에 한 번 시간 변경
 
         //확인 버튼리스너 설정
         okay.setOnClickListener(new View.OnClickListener() {
@@ -295,6 +296,10 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
 
     //ID를 기반으로 다른 정보를 Account클래스에 저장(계정 복사)
     public void GetAccount(final String ID, final Account account) {
+        final ProgressDialog progressDialog=new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("로딩중입니다");
+        progressDialog.show();
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -308,6 +313,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                 String phone=dataSnapshot.child("Account").child(ID).child("phone").getValue(String.class);
                 boolean is_manager=dataSnapshot.child("Account").child(ID).child("is_manager").getValue(Boolean.class);
                 account.CopyAccount(new Account(name, ID, email, major, StudentNumber, group, password, phone, is_manager));
+                progressDialog.cancel();
             }
 
             @Override
