@@ -142,6 +142,7 @@ public class HomeActivity extends AppCompatActivity { //로그인 후 나타나�
         Intent intent=new Intent(HomeActivity.this, FederationNoticeActivity.class);
         intent.putExtra("userID", ID);
         intent.putExtra("group", account.group);
+        intent.putExtra("is_manager", account.is_manager);
         startActivity(intent);
     }
     private void QnA() { //QnA바로가기

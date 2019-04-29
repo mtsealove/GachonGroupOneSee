@@ -134,6 +134,7 @@ public class SearchActivity extends AppCompatActivity { //검색 액티비티
                     intent.putExtra("value", value);
                     intent.putExtra("userID", userID);
                     intent.putExtra("group", userGroup);
+                    intent.putExtra("is_manager", is_manager);
                     startActivity(intent);
                     finish();
                     break;

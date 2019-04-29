@@ -84,7 +84,7 @@ public class GroupInformationBoardActivity extends AppCompatActivity { //정보�
 
     //글 작성 메서드
     private void Post() {
-        if(account.group.equals(groupName)&&account.is_manager) { //해당 동아리 소속이며 관리자일 경우만 작성 가능
+        if((account.group.equals(groupName)&&account.is_manager)||account.group.contains("관리자")) { //해당 동아리 소속이며 관리자일 경우만 작성 가능
             Intent intent = new Intent(GroupInformationBoardActivity.this, PostActivity.class);
             intent.putExtra("boardName", BoardName);
             intent.putExtra("userID", userID);

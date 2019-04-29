@@ -662,6 +662,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
     public void CheckTempBoard(final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
         final ProgressDialog progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("로딩중입니다");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         DatabaseReference reference=database.getReference().child(boardName);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -678,20 +679,20 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                         alert.MsgDialogChoice("임시저장한 내용을\n불러오시겠습니까?", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String content=snapshot.child("content").getValue(String.class);    //내용
-                                String title=snapshot.child("title").getValue(String.class);    //제목
-                                String boardId=Integer.toString(snapshot.child("id").getValue(Integer.class));  //게시글 번호
+                                String content = snapshot.child("content").getValue(String.class);    //내용
+                                String title = snapshot.child("title").getValue(String.class);    //제목
+                                String boardId = Integer.toString(snapshot.child("id").getValue(Integer.class));  //게시글 번호
                                 titleET.setText(title); //제목 표시
                                 contentET.setText(content); //내용 표시
-                                ArrayList<String> photos=new ArrayList<>(); //사진
-                                FirebaseImage firebaseImage=new FirebaseImage(context);
-                                for(DataSnapshot photoSnap: snapshot.child("Photos").getChildren()) {
+                                ArrayList<String> photos = new ArrayList<>(); //사진
+                                FirebaseImage firebaseImage = new FirebaseImage(context);
+                                for (DataSnapshot photoSnap : snapshot.child("Photos").getChildren()) {
                                     photos.add(photoSnap.child("FilePath").getValue(String.class)); //사진 경로 받아오기
                                     firebaseImage.getTempBoardPhotos(linearLayout, photoSnap.child("FilePath").getValue(String.class)); //경로에 포함된 사핀 표시
                                 }
                                 Alert.dialog.cancel();
-                                PostActivity.temp=true;  //임시저장됨을 알림
-                                PostActivity.boardID=boardId;    //게시글 ID 설정
+                                PostActivity.temp = true;  //임시저장됨을 알림
+                                PostActivity.boardID = boardId;    //게시글 ID 설정
                             }
                         });
                         break;
@@ -699,6 +700,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                         e.printStackTrace();
                     }
                 }
+                progressDialog.cancel();
             }
 
             @Override
@@ -712,6 +714,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
     public void CheckTempBoard(final String GroupName, final String boardName, final String ID, final EditText titleET, final EditText contentET, final LinearLayout linearLayout) {
         final ProgressDialog progressDialog=new ProgressDialog(context);
         progressDialog.setMessage("로딩중입니다");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         DatabaseReference reference=database.getReference().child("Groups").child(GroupName).child(boardName);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -746,6 +749,7 @@ public class FirebasePost extends AppCompatActivity {   //firebase를 이용한 
                         break;
                     }
                 }
+                progressDialog.cancel();
             }
 
             @Override

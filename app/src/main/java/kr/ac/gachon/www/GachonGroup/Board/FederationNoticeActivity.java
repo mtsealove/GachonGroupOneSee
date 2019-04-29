@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseList;
 import kr.ac.gachon.www.GachonGroup.R;
@@ -19,7 +20,8 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
     private String ID, value, group;
     public static Activity _FederationNoticeActivity;
     FirebaseList firebaseList;
-    FirebaseAccount firebaseAccount;
+    boolean is_manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +32,13 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         ID=intent.getStringExtra("userID");
         value=intent.getStringExtra("value"); //검색 값
         group=intent.getStringExtra("group"); //사용자 동아리(연합회인지 확인)
+        is_manager=intent.getBooleanExtra("is_manager", false);  //관리자인지 확인
         boardLV= findViewById(R.id.boardLV);
         searchBtn=findViewById(R.id.searchBtn);
         postBtn=findViewById(R.id.postBtn);
 
         firebaseList=new FirebaseList(FederationNoticeActivity.this);
+
 
         init(); //초기화
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +53,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         intent.putExtra("BoardName", BoardName); //게시판 이름 전송
         intent.putExtra("userGroup", group); //사용자 동아리 전송
         intent.putExtra("userID", ID);  //사용자 ID 전송
+        intent.putExtra("is_manager", is_manager);  //관리자인지 전송
         startActivity(intent);
     }
 
@@ -60,7 +65,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
         else firebaseList.setListView(ID, boardLV, BoardName, value);
 
         //연합회일 경우 모든 작성 버튼 활성화
-        if(group.contains("연합회")) {
+        if(group.contains("연합회")&&is_manager) {
             postBtn.setVisibility(View.VISIBLE);
             postBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,6 +100,7 @@ public class FederationNoticeActivity extends AppCompatActivity { //연합회 �
             Intent intent=new Intent(FederationNoticeActivity.this, FederationNoticeActivity.class);
             intent.putExtra("userID", ID);
             intent.putExtra("group", group);
+            intent.putExtra("is_manager", is_manager);
             startActivity(intent);
             finish();
         } else super.onBackPressed();
