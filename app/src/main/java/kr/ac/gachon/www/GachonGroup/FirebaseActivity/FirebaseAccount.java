@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +29,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Board.HomeActivity;
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.Account.FindIdActivity;
@@ -183,12 +183,14 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                     if (snapshot.child("phone").getValue(String.class).equals(account.phone))
                         account.is_manager = true;
                     //비밀번호 암호화
+                    /*
                     try {
                         AES256Util aes256Util = new AES256Util();
                         account.password=aes256Util.encrypt(account.password);
                     } catch (GeneralSecurityException e) {
                         e.printStackTrace();
                     }
+                    */
                 }
 
                 //DB에 모든 정보 저장
@@ -199,7 +201,9 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                 reference.child("Account").child(ID).child("major").setValue(account.getMajor());
                 reference.child("Account").child(ID).child("group").setValue(account.getGroup());
                 reference.child("Account").child(ID).child("name").setValue(account.getName());
-                reference.child("Account").child(ID).child("password").setValue(account.getPassword());
+                String password=account.getPassword();
+
+                reference.child("Account").child(ID).child("password").setValue(password);
                 reference.child("Account").child(ID).child("phone").setValue(account.getPhone());
 
             }
@@ -262,12 +266,10 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                     if(snapshot.child("ID").getValue(String.class).equals(ID)) {    //입력한 ID 일치하는 ID찾기
                         if(snapshot.child("email").getValue(String.class).equals(email)) {  //입력한 ID의 이메일과 사용자가 입력한 이메일이 일치하는지 확인
                             PW=snapshot.child("password").getValue(String.class);   //비밀번호 저장
-                            AES256Util aes256Util=new AES256Util();
                             break;
                         } else Toast.makeText(context, "메일 주소가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
                     }
-                }
-                if(PW==null) Toast.makeText(context, "ID가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                } if(PW==null) Toast.makeText(context, "ID가 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 else {
                     String verifyCode=gmailSender.CreateVerifyCode();   //인증번호 생성
                     try {   //인증번호 메일로 발송
@@ -277,8 +279,8 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
                                 email);
                         Toast.makeText(context, "인증번호가 발송되었습니다" ,Toast.LENGTH_SHORT).show();
                         FindIdActivity.VerifyCode=verifyCode;   //비밀번호 찾기 액티비티의 인증번호 변경
-                        AES256Util aes256Util=new AES256Util();
-                        PW=aes256Util.decrypt(aes256Util.decrypt(PW));  //비밀번호 복호화
+                        //AES256Util aes256Util=new AES256Util();
+                        //PW=aes256Util.decrypt(PW);  //비밀번호 복호화
                         FindIdActivity.password=PW;
                         FindIdActivity.check_4_PW_btn.setVisibility(View.VISIBLE);  //인증번호 입력 버튼 활성화
                     } catch (Exception e) {
@@ -323,7 +325,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
         });
     }
 
-    public void Login(final String ID, final String PW) {   //로그인
+    public void Login(final String ID,final String PW) {   //로그인
         DatabaseReference reference=database.getReference();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -414,6 +416,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
     public void UpdateAccountData(final String ID, final String child, String value) {
         DatabaseReference reference=database.getReference();
         if(child.equals("password")) {  //비밀번호일 경우 입력받은 값을 암호화
+            /*
             try {
                 AES256Util aes256Util=new AES256Util();
                 value=aes256Util.encrypt(value);
@@ -422,6 +425,7 @@ public class FirebaseAccount extends AppCompatActivity {    //Firebase를 이용
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }
+            */
         }
         reference.child("Account").child(ID).child(child).setValue(value);  //DB 업데이트
     }

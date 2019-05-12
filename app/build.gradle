@@ -32,17 +32,21 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.firebase:firebase-database:16.0.1'   //구글 firebase 라이브러리
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    //구글 firebase 라이브러리
     implementation files('libs/activation.jar')
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'  //이미지 로드 라이브러리 glide
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    //이미지 로드 라이브러리 glide
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-    implementation 'com.github.prolificinteractive:material-calendarview:1.4.3' //메테리얼 디자인 달력 라이브러리
+    implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+    //메테리얼 디자인 달력 라이브러리
     implementation files('libs/commons-codec-1.10.jar')
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'  //이미지 줌인 라이브러리
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    //이미지 줌인 라이브러리
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
-    implementation 'gun0912.ted:tedpermission:2.0.0'   //권한 라이브러리 tedpermission
-
+    implementation 'gun0912.ted:tedpermission:2.0.0'
+    //권한 라이브러리 tedpermission
 }

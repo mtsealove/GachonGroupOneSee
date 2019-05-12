@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,15 +75,17 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
     private void Login() {
         String ID=ID_et.getText().toString();
         String password=PW_et.getText().toString();
+        /*
         AES256Util aes256Util= null;
         try {
             aes256Util = new AES256Util();
-            password=aes256Util.encrypt(aes256Util.encrypt(password)); //비밀번호 암호화, 데이터베이스에 암호화 된 상태로 저장되어있기 때문
+            password=aes256Util.encrypt(password); //비밀번호 암호화, 데이터베이스에 암호화 된 상태로 저장되어있기 때문
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
+        */
 
         //아이디, 비밀번호 미입력 체크
         if(ID.length()==0) Toast.makeText(LoginActivity.this, "ID를 입력해 주세요", Toast.LENGTH_SHORT).show();
@@ -91,7 +94,8 @@ public class LoginActivity extends AppCompatActivity { //로그인 액티비티
             pendingLayout.setVisibility(View.VISIBLE);  //잠시만요
             FirebaseAccount firebaseAccount=new FirebaseAccount(LoginActivity.this);
             firebaseAccount.Login(ID, password); //로그인
-                write_ID(ID, password); //단말에 ID, 비밀번호 저장
+
+            write_ID(ID, password); //단말에 ID, 비밀번호 저장
         }
     }
 

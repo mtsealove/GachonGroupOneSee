@@ -20,12 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-import kr.ac.gachon.www.GachonGroup.Account.AES256Util;
 import kr.ac.gachon.www.GachonGroup.Group.GroupMenuActivity;
 import kr.ac.gachon.www.GachonGroup.R;
 
@@ -67,6 +65,7 @@ public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 
                 if(!child.equals("StudentNumber")) {    //학번이 아닐 경우 문자열로 받음
                     String result = dataSnapshot.child("Account").child(ID).child(child).getValue(String.class);
                     if(child.equals("password")) {  //비밀번호인 경우 복호화
+                        /*
                         try {
                             AES256Util aes256Util=new AES256Util();
                             result=aes256Util.decrypt(aes256Util.decrypt(result));
@@ -75,6 +74,7 @@ public class FirebaseView extends AppCompatActivity {   //firebase를 이용한 
                         } catch (GeneralSecurityException e) {
                             e.printStackTrace();
                         }
+                        */
                     }
                     editText.setText(result);
                 } else {
