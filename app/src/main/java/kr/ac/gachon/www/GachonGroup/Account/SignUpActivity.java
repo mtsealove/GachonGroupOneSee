@@ -2,22 +2,30 @@ package kr.ac.gachon.www.GachonGroup.Account;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.InputMismatchException;
 
 import kr.ac.gachon.www.GachonGroup.Entity.Account;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseAccount;
+import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseImage;
 import kr.ac.gachon.www.GachonGroup.FirebaseActivity.FirebaseView;
 import kr.ac.gachon.www.GachonGroup.R;
 import kr.ac.gachon.www.GachonGroup.etc.Alert;
@@ -38,10 +46,13 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
     //인증번호, 중복확인 버튼
     Button sendVerifyBTN;
     Button checkReuseBTN;
+    //프로필 사진
+    ImageView profileIcon;
 
     private String major = "";
     private String group = "";
     private String domainStr;
+    private Uri filePath;   //프로필 사진 경로
 
     Alert alert;
     FirebaseAccount firebaseAccount;
@@ -65,6 +76,7 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
         checkReuseBTN =findViewById(R.id.check_id_reuse_btn);
         sendVerifyBTN =findViewById(R.id.send_verify_btn);
         domainSP=findViewById(R.id.domainSP);
+        profileIcon=findViewById(R.id.profileIcon);
 
         checkReuseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +140,12 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
             }
         });
         //가능하면 단말의 번호를 입력
+        profileIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditImage();
+            }
+        });
     }
 
 
@@ -213,10 +231,38 @@ public class SignUpActivity extends AppCompatActivity { //회원가입 액티비
                 public void onClick(View v) {
                     Account account = new Account(name, ID, email, major, stdNumber, group, password, finalMyNumber1, false);
                     firebaseAccount.CreateAccount(account);
+                    if(filePath!=null) {    //이미지를 선택했다면
+                        FirebaseImage firebaseImage=new FirebaseImage(SignUpActivity.this);
+                        firebaseImage.UploadProfileImage(filePath, ID); //이미지 업로드
+                    }
                     alert.MsgDialogEnd("회원가입이\n완료되었습니다");
                     Alert.dialog.cancel();
                 }
             });
+        }
+    }
+
+
+    private void EditImage() { //이미지 업로드
+        Intent intent=new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT); //이미지 업로드를 위한 인텐트
+        startActivityForResult(Intent.createChooser(intent, "프로필 이미지를 선택하세요"), 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //request코드가 0이고 OK를 선택했고 data에 뭔가가 들어 있다면
+        if(requestCode == 0 && resultCode == RESULT_OK){
+            filePath = data.getData();
+            try {
+                //선택한 이미지를 프로필 사진에 표시
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                profileIcon.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
